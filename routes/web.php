@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthorizeNetController;;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Walmart\Alerts\RatingRaviewController;
 use App\Http\Controllers\Walmart\Alerts\OnTimeDeliveryController;
 use App\Http\Controllers\Walmart\Alerts\OnTimeShipmentController;
@@ -55,6 +56,7 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
     Route::prefix('dashboard')->group(function () {
+
 
         Route::prefix('marketplace')->group(function () {
 

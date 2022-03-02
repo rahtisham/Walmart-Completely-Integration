@@ -42,7 +42,7 @@ class CheckoutController extends Controller
             if($subscription == 'option4'){
                 $amount = 79;
             }
-
+            // Get aurgament from Appeal lab website
             return view('checkout.checkout' , ['amount' => $amount]);
 
         }

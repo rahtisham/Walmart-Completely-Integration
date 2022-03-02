@@ -824,6 +824,13 @@
                         <li><a href="{{ route('dashboard.marketplace') }}">Walmart</a></li>
                     </ul>
                 </li>
+
+                <li>
+                    <a href="{{ route('profile.show') }}">
+                        <i class="flaticon-381-controls-3"></i>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                </li>
 {{--                <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">--}}
 {{--                        <i class="flaticon-381-internet"></i>--}}
 {{--                        <span class="nav-text">Bootstrap</span>--}}

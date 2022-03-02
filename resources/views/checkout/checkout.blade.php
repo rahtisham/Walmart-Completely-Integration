@@ -413,7 +413,7 @@
                                     </div>
                                     <div class="col-md-6 py-3">
                                         {{--                                    <label class="card-labels" for="card-exp">Amount</label>--}}
-                                        <input type="text" id="amount" name="amount" class="form-control fname card-exp name-form" value="${{ $amount }}"  readonly>
+                                        <input type="text" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
                                         @error('amount')
                                         <span class="text-danger"> {{ $message }}</span>
                                         @enderror
