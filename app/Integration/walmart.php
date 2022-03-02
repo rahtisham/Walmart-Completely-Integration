@@ -4,11 +4,11 @@ namespace App\Integration;
 
 class Walmart{
 
-    public static function getToken($client_id,$secret){
+    public static function getToken($client_id,$client_secret){
 
         $url = "https://marketplace.walmartapis.com/v3/token";
         $uniqid = uniqid();
-        $authorization_key = base64_encode($client_id.":".$secret);
+        $authorization_key = base64_encode($client_id.":".$client_secret);
 
         $ch = curl_init();
         $options = array(
@@ -48,13 +48,13 @@ class Walmart{
 
     }
 
-    public static function getItemTotal($client_id , $secret , $token)
+    public static function getItemTotal($client_id , $client_secret , $token)
     {
 
         // Item api for gettig the total_records
         $url = "https://marketplace.walmartapis.com/v3/items?limit=2";
         $requestID = uniqid();
-        $authorization = base64_encode($client_id.":".$secret);
+        $authorization = base64_encode($client_id.":".$client_secret);
 
         $curl = curl_init();
 

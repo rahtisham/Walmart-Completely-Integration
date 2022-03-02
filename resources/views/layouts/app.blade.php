@@ -39,6 +39,13 @@
         max-width: 190px !important;
         margin-top: 0px;
     }
+    .btn-primary {
+        color: #fff;
+        background-color: #03c6ad !important;
+        border-color: #03c6ad;
+        border: 1px solid #03c6ad;
+    }
+
 </style>
 <body class="font-sans antialiased">
 <x-jet-banner />
@@ -53,7 +60,7 @@
     <div class="nav-header">
         <a href="#" class="brand-logo">
 {{--            <img class="logo-abbr" src="{{ asset('AppealLab/images/logo1.png') }}" alt="">--}}
-{{--                                <img class="logo-compact" src="{{ asset('AppealLab/images/logo-text.png') }}" alt="">--}}
+{{--            <img class="logo-compact" src="{{ asset('AppealLab/images/logo-text.png') }}" alt="">--}}
             <img class="brand-title" style="width: 100%;" src="{{ asset('AppealLab/images/logoa.png') }}" alt="">
         </a>
 
@@ -827,7 +834,7 @@
 
                 <li>
                     <a href="{{ route('profile.show') }}">
-                        <i class="flaticon-381-controls-3"></i>
+                        <i class="fa fa-user"></i>
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
@@ -945,7 +952,7 @@
       Content body start
       ***********************************-->
         <div class="content-body" style="margin-top: 0px !important;">
-            <div class="min-h-screen bg-gray-100">
+            <div class="min-h-screen">
                 <!-- <div class="content-body"> -->
 
             {{ $slot }}

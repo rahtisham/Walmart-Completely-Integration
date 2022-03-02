@@ -41,7 +41,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="lname" name="lname" placeholder="Last Name" class="form-control lname name-form" value="{{ old('lname') }}" autofocus autocomplete="last_name"/>
+                                <x-jet-input type="text" id="lname" name="lname" placeholder="Last Name" class="marginTop form-control lname name-form" value="{{ old('lname') }}" autofocus autocomplete="last_name"/>
                                 @error('lname')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -56,7 +56,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="city" name="city" placeholder="City" class="form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
+                                <x-jet-input type="text" id="city" name="city" placeholder="City" class="marginTop form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
                                 @error('city')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -71,7 +71,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <select id="country" name="country" class="" style="width: 100%; border: 1px solid #ced4da;">
+                                <select id="country" name="country" class="marginTop" style="width: 100%; border: 1px solid #ced4da;">
                                     <option value="">Select Country</option>
                                     <option value="Afganistan">Afghanistan</option>
                                     <option value="Albania">Albania</option>
@@ -325,7 +325,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <x-jet-input type="text" id="state" name="state" placeholder="State" class="form-control name-form" value="{{ old('state') }}" autofocus autocomplete="state" />
+                                <x-jet-input type="text" id="state" name="state" placeholder="State" class="marginTop form-control name-form" value="{{ old('state') }}" autofocus autocomplete="state" />
                                 @error('state')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -457,21 +457,20 @@
                     <div class="last-sec-heading">We Respect Your privacy & Information</div>
 
                     <div class="container py-4">
-                        <div class="row">
+                        <div class="row alignCenter">
                             <div class="three-column col-sm-4">
-                                <img src=".\images\privacy.png" alt="" width="50%">
+                                <img src="{{ asset('images\privacy.png') }}" alt="" class="txtCenter">
                                 <p class="py-3 three-col-text">We Protect Your Privacy</p>
 
                             </div>
                             <div class="three-column col-sm-4">
-                                <img src=".\images\ribbon.png" alt="" width="50%">
+                                <img src="{{ asset('images\ribbon.png') }}" alt="" class="txtCenter">
                                 <p class="py-3 three-col-text">100% Satisfaction Guaranteed</p>
 
                             </div>
                             <div class="three-column col-sm-4">
-                                <img src=".\images\secure.png" alt="" width="50%">
+                                <img src="{{ asset('images\secure.png') }}" alt="" class="txtCenter">
                                 <p class="py-3 three-col-text">Your Information Is Secure</p>
-
                             </div>
                         </div>
                     </div>
@@ -585,79 +584,27 @@
 
     </style>
 
-    {{--    <x-jet-authentication-card>--}}
-    {{--        <x-slot name="logo">--}}
-    {{--            <x-jet-authentication-card-logo />--}}
-    {{--        </x-slot>--}}
 
-
-
-
-
-    {{--        <form method="POST" action="{{ route('register') }}">--}}
-    {{--            @csrf--}}
-
-    {{--            <div>--}}
-    {{--                <label for="name" value="{{ __('Name') }}" />--}}
-    {{--                <input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" />--}}
-    {{--                @error('name')--}}
-    {{--                <span class="text-danger"> {{ $message }}</span>--}}
-    {{--                @enderror--}}
-    {{--            </div>--}}
-
-    {{--            <div class="mt-4">--}}
-    {{--                <label for="email" value="{{ __('Email') }}" />--}}
-    {{--                <input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" />--}}
-    {{--                @error('email')--}}
-    {{--                <span class="text-danger"> {{ $message }}</span>--}}
-    {{--                @enderror--}}
-    {{--            </div>--}}
-
-    {{--            <div class="mt-4">--}}
-    {{--                <label for="password" value="{{ __('Password') }}" />--}}
-    {{--                <input id="password" class="block mt-1 w-full" type="password" name="password" autocomplete="new-password" />--}}
-    {{--                @error('password')--}}
-    {{--                <span class="text-danger"> {{ $message }}</span>--}}
-    {{--                @enderror--}}
-    {{--            </div>--}}
-
-    {{--            <div class="mt-4">--}}
-    {{--                <label for="password_confirmation" value="{{ __('Confirm Password') }}" />--}}
-    {{--                <input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" autocomplete="new-password" />--}}
-    {{--                @error('password_confirmation')--}}
-    {{--                <span class="text-danger"> {{ $message }}</span>--}}
-    {{--                @enderror--}}
-    {{--            </div>--}}
-
-
-    {{--            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())--}}
-    {{--                <div class="mt-4">--}}
-    {{--                    <x-jet-label for="terms">--}}
-    {{--                        <div class="flex items-center">--}}
-    {{--                            <x-jet-checkbox name="terms" id="terms"/>--}}
-
-    {{--                            <div class="ml-2">--}}
-    {{--                                {!! __('I agree to the :terms_of_service and :privacy_policy', [--}}
-    {{--                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of Service').'</a>',--}}
-    {{--                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy Policy').'</a>',--}}
-    {{--                                ]) !!}--}}
-    {{--                            </div>--}}
-    {{--                        </div>--}}
-    {{--                    </x-jet-label>--}}
-    {{--                </div>--}}
-    {{--            @endif--}}
-
-    {{--            <div class="flex items-center justify-end mt-4">--}}
-    {{--                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">--}}
-    {{--                    {{ __('Already registered?') }}--}}
-    {{--                </a>--}}
-
-    {{--                <x-jet-button class="ml-4">--}}
-    {{--                    {{ __('Register') }}--}}
-    {{--                </x-jet-button>--}}
-    {{--            </div>--}}
-    {{--        </form>--}}
-    {{--    </x-jet-authentication-card>--}}
 </x-guest-layout>
+
+
+<style>
+    @media screen and (max-width: 767px) {
+        .marginTop
+        {
+            margin-top: 15px;
+        }
+    }
+    .txtCenter
+    {
+        width: 40%;
+        display: inline;
+    }
+    .alignCenter
+    {
+        text-align: center;
+        justify-content: center;
+    }
+</style>
 
 

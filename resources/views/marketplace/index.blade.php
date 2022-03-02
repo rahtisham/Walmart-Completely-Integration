@@ -1,6 +1,6 @@
 <x-app-layout>
 
-    <div class="container" style="margin-top: 0px;">
+    <div class="container mobileVersion">
         <div class="page-titles" style="background-color: rgba(243, 244, 246, var(--tw-bg-opacity));">
             <ol class="breadcrumb" style="background-color: rgba(243, 244, 246, var(--tw-bg-opacity));">
                 <li class="breadcrumb-item"><a href="javascript:void(0)"><h4>Marketplace</h4></a></li>
@@ -71,7 +71,11 @@
 </x-app-layout>
 
 <style>
-   .content-body {
+    .mobileVersion{
+        margin-top: 120px !important;
+    }
+
+    .content-body {
         padding-top: 1.5rem !important;
     }
     .bg-image-walmart

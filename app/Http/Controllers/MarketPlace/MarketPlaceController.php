@@ -44,7 +44,7 @@ class MarketPlaceController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'clientName' => 'required|alpha',
+            'clientName' => 'required',
             'clientID' => 'required',
             'clientSecretID' => 'required',
         ],

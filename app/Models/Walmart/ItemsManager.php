@@ -27,4 +27,10 @@ class ItemsManager extends Model
         return $this->belongsTo(WalmartMarketPlace::class , 'm_id' , 'id');
     }
 
+    public static function updateStatus($itemManagerId , $status)
+    {
+        $manager = ItemsManager::where('id' , $itemManagerId)->update(['status' => $status]);
+        return $manager;
+    }
+
 }
