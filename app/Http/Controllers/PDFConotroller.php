@@ -22,6 +22,9 @@ class PDFConotroller extends Controller
 //        ];
 //
 //        Mail::to('ahtisham@amzonestep.com')->send(new PDFsending($pdf));
+
+//        $pdf = PDF::loadView('myPDF', $data);
+//         $pdf->download('itsolutionstuff.pdf');
     }
 
     public function generatePDF()
@@ -35,11 +38,9 @@ class PDFConotroller extends Controller
 
         ];
 
+        Mail::to('ahtisham@amzonestep.com')->send(new PDFsending($data));
 
-         $pdf = PDF::loadView('myPDF', $data);
-         $pdf->download('itsolutionstuff.pdf');
-
-        Mail::to('ahtisham@amzonestep.com')->send(new PDFsending($pdf));
+        echo "Email Sended";
 
     }
 

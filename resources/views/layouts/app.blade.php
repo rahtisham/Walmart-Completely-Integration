@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Appeal Lab') }}</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -19,7 +19,7 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
 
     <!-- AppealLab script and css classes -->
-    <link rel="icon" type="{{ asset('image/png') }}" sizes="16x16" href="{{ asset('AppealLab/images/favicon.png') }}">
+    <link rel="icon" type="{{ asset('image/png') }}" sizes="16x16" href="{{ asset('AppealLab/images/logo1.png') }}">
     <link rel="stylesheet" href="{{ asset('AppealLab/js/ajax.js') }}">
     <link rel="stylesheet" href="{{ asset('AppealLab/vendor/chartist/css/chartist.min.css') }}">
     <link href="{{ asset('AppealLab/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">

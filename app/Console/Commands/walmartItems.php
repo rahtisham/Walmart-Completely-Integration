@@ -9,17 +9,17 @@ use App\Mail\SendMail;
 use App\Models\Walmart\Items;
 use App\Models\User;
 use App\Models\WalmartMarketPlace;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail;;
 use Illuminate\Support\Facades\Config;
 
-class WalmartGetOrders extends Command
+class walmartItems extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:getOrder';
+    protected $signature = 'command:walmartItems';
 
     /**
      * The console command description.
@@ -45,7 +45,6 @@ class WalmartGetOrders extends Command
      */
     public function handle()
     {
-
         $items = ItemsManager::count();
         for ($i=0; $i<=$items;  $i++)
         {
@@ -244,12 +243,10 @@ class WalmartGetOrders extends Command
                 }
                 // End of total items condition
 
-                $manager = ItemsManager::updateStatus($itemManager->id, "Completed");
+                $manager = ItemsManager::updateStatus($itemManager->id, "complete");
 
             }
 
         }
-
     }
-
 }

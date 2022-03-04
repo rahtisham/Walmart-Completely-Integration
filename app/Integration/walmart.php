@@ -92,7 +92,7 @@ class Walmart{
 
     }
 
-    public static function getItemOrder($client_id , $secret , $token , $createdStartDate)
+    public static function getItemOrder($client_id , $client_secret , $token , $createdStartDate)
     {
 
         $url = "https://marketplace.walmartapis.com/v3/orders?limit=200"; // Walmart Orders
@@ -105,7 +105,7 @@ class Walmart{
 //          $url = "https://marketplace.walmartapis.com/v3/insights/items/listingQuality/score"; // Walmart An Order
 
             $requestID = uniqid();
-            $authorization = base64_encode($client_id.":".$secret);
+            $authorization = base64_encode($client_id.":".$client_secret);
 
 
             $curl = curl_init();
@@ -142,13 +142,13 @@ class Walmart{
 
     }
 
-    public static function getItemAnOrder($client_id , $secret , $token , $order_purchade_id)
+    public static function getItemAnOrder($client_id , $client_secret , $token , $order_purchade_id)
     {
 
         $url = "https://marketplace.walmartapis.com/v3/orders/".$order_purchade_id; // Walmart An Order
 
         $requestID = uniqid();
-        $authorization = base64_encode($client_id.":".$secret);
+        $authorization = base64_encode($client_id.":".$client_secret);
 
 
         $curl = curl_init();
@@ -185,13 +185,13 @@ class Walmart{
 
     }
 
-    public static function getItemRatingReview($client_id , $secret , $token)
+    public static function getItemRatingReview($client_id , $client_secret , $token)
     {
 
         // Item api for gettig the total_records
         $url = "https://marketplace.walmartapis.com/v3/insights/items/listingQuality/score";
         $requestID = uniqid();
-        $authorization = base64_encode($client_id.":".$secret);
+        $authorization = base64_encode($client_id.":".$client_secret);
 
         $curl = curl_init();
 

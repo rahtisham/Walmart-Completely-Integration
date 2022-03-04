@@ -48,6 +48,8 @@ Route::get('registration-form', function () {
     return view('payment');
 });
 
+Route::get('/testing', [PDFConotroller::class, 'generatePDF'])->name('testing');
+
 Route::get('/register', [CheckoutController::class, 'login'])->name('register');
 Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
 Route::post('/create', [CheckoutController::class, 'create'])->name('create');
