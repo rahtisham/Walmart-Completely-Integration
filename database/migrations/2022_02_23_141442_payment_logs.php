@@ -33,6 +33,6 @@ class PaymentLogs extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('payment_logs');
     }
 }

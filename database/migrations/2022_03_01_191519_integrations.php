@@ -35,5 +35,6 @@ class Integrations extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('integrations');
     }
 }
