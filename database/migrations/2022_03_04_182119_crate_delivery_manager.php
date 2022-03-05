@@ -15,9 +15,9 @@ class CrateDeliveryManager extends Migration
     {
         Schema::create('delivery_manager', function (Blueprint $table) {
             $table->id();
-            $table->string('m_id')->nullable();
-            $table->string('status')->nullable();
+            $table->bigInteger('m_id')->nullable();
             $table->string('module')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
@@ -30,5 +30,7 @@ class CrateDeliveryManager extends Migration
     public function down()
     {
         //
+
+        Schema::dropIfExists('delivery_manager');
     }
 }

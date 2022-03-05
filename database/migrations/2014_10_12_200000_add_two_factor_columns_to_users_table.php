@@ -42,9 +42,11 @@ return new class extends Migration
             $table->dropColumn([
                 'two_factor_secret',
                 'two_factor_recovery_codes',
-            ] + Fortify::confirmsTwoFactorAuthentication() ? [
-                'two_factor_confirmed_at',
-            ] : []);
+            ]);
+
+//            Fortify::confirmsTwoFactorAuthentication() ? [
+//                'two_factor_confirmed_at',
+//            ] : []);
         });
     }
 };

@@ -15,6 +15,7 @@ class PaymentLogs extends Migration
     {
         Schema::create('payment_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id')->nullable();
             $table->float('amount',8,2);
             $table->string('response_code')->nullable();
             $table->string('transaction_id')->nullable();

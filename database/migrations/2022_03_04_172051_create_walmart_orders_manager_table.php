@@ -15,7 +15,7 @@ class CreateWalmartOrdersManagerTable extends Migration
     {
         Schema::create('walmart_orders_manager', function (Blueprint $table) {
             $table->id();
-            $table->string('m_id')->nullable();
+            $table->bigInteger('m_id')->nullable();
             $table->string('status')->nullable();
             $table->string('module')->nullable();
             $table->timestamps();

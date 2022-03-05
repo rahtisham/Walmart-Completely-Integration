@@ -15,7 +15,7 @@ class ShippingManager extends Migration
     {
         Schema::create('shipping_manager', function (Blueprint $table) {
             $table->id();
-            $table->string('m_id')->nullable();
+            $table->bigInteger('m_id')->nullable();
             $table->string('status')->nullable();
             $table->string('module')->nullable();
             $table->timestamps();
@@ -29,6 +29,6 @@ class ShippingManager extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('shipping_manager');
     }
 }

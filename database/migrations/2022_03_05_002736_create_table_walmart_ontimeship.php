@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWalmartitemsmanagerTable extends Migration
+class CreateTableWalmartOntimeship extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateWalmartitemsmanagerTable extends Migration
      */
     public function up()
     {
-        Schema::create('walmartitemsmanager', function (Blueprint $table) {
+        Schema::create('walmart_ontimeship', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('m_id');
-            $table->string('module')->nullable();
+            $table->bigInteger('order_id');
+            $table->string('actualShipDate')->nullable();
+            $table->string('estimatedShipDate')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });
@@ -29,6 +30,6 @@ class CreateWalmartitemsmanagerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('walmartitemsmanager');
+        Schema::dropIfExists('walmart_ontimeship');
     }
 }

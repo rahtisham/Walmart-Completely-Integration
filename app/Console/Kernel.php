@@ -35,9 +35,9 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('command:WalmartAnOrder')->everyMinute();
         $schedule->command('command:walmartDelivery')->everyMinute();
         $schedule->command('command:WalmartShipping')->everyMinute();
-        $schedule->command('command:WalmartCarrierPerformance')->everyMinute();
-        $schedule->command('command:RegionalPerformance')->everyMinute();
-        $schedule->command('command:WalmartRatingReview')->everyMinute();
+//        $schedule->command('command:WalmartCarrierPerformance')->everyMinute();
+//        $schedule->command('command:RegionalPerformance')->everyMinute();
+//        $schedule->command('command:WalmartRatingReview')->everyMinute();
 //        $schedule->command('clean:log')->everyMinute();
     }
 
