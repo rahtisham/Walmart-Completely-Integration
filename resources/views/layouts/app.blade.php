@@ -585,7 +585,7 @@
                 <div class="collapse navbar-collapse justify-content-between">
                     <div class="header-left">
                         <div class="dashboard_bar">
-                            Walmart Market Place
+                            Walmart Marketplace
                         </div>
                     </div>
                     <ul class="navbar-nav header-right">
@@ -825,7 +825,7 @@
 {{--                </li>--}}
                 <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                         <i class="flaticon-381-controls-3"></i>
-                        <span class="nav-text">Market Place</span>
+                        <span class="nav-text">Marketplace</span>
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{ route('dashboard.marketplace') }}">Walmart</a></li>
