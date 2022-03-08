@@ -21,9 +21,13 @@ class PaymentController extends Controller
 
         /* Create a merchantAuthenticationType object with authentication details
           retrieved from the constants file */
+//        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+//        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
+//        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
-        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+        $merchantAuthentication->setName('7LfUeM3n5r');
+        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
 
         // Set the transaction's refId
         $refId = 'ref' . time();

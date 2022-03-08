@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\WalmartMarketPlace;
 use App\Models\Walmart\ItemsManager;
+use App\Models\Walmart\Items;
 use Illuminate\Support\Facades\Validator;
 
 class MarketPlaceController extends Controller
@@ -171,4 +172,18 @@ class MarketPlaceController extends Controller
         }
 
     }
+
+    public function editView(Request $request , $id)
+    {
+
+        $marketPlace = WalmartMarketPlace::where('user_id' , $id)->first();
+
+//        $regulatoryCompliance = Items::where('user_id' , $id)
+//                                            ->where('alert_type' , 'regulatory_compliance')
+//                                            ->get()->count();
+
+
+        return view('marketplace.edit-view' , compact('marketPlace'));
+    }
+
 }

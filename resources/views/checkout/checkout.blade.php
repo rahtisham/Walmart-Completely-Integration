@@ -483,7 +483,20 @@
                 <div class="row">
                     <div class="col-md-9 pull-left" style="display: flex;">
                         <img src="{{ asset('AppealLab/images/checkout.jpg') }}">
-                        <p class="txtColor">Account Protection - Walmart WFS <br><span class="txtColor">${{ $amount }}/month</span></p>
+                        <p class="txtColor">
+                            @if($platform == "walmart_option1")
+                                <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale $97/month</span>
+                            @endif
+                            @if($platform == "walmart_option2" )
+                                <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale $97/month</span>
+                            @endif
+                            @if($platform == "amazon_option1")
+                                <br><span class="txtColor">Account Protection - Amazon Dropshipping + Amazon FBA Wholesale $97/month</span>
+                            @endif
+                            @if($platform == "amazon_option2")
+                                <br><span class="txtColor">Account Protection - Amazon Dropshipping + Amazon FBA Wholesale $97/month</span>
+                            @endif
+                        </p>
                     </div>
                     <div class="col-md-3 pull-right justify-content-center">
                         <p class="txtColor">${{ $amount }}</p>

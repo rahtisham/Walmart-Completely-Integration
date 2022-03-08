@@ -136,6 +136,7 @@ class walmartItems extends Command
 
                                             $walmartAlerts = [
                                                 'm_id' => $mid,
+                                                'user_id' => $user_session_id,
                                                 'sku' => $items['sku'] ? $items['sku'] : '',
                                                 'product_name' => isset($items['productName']) ? $items['productName'] : '',
                                                 'reason' => $unpublishedReasons,

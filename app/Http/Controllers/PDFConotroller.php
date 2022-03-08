@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PDFsending;
+use App\Mail\RegisteredNotification;
 use PDF;
 
 class PDFConotroller extends Controller
@@ -38,7 +39,7 @@ class PDFConotroller extends Controller
 
         ];
 
-        Mail::to('ahtisham@amzonestep.com')->send(new PDFsending($data));
+        Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($data));
 
         echo "Email Sended";
 

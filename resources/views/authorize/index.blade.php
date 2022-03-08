@@ -45,24 +45,24 @@
                                                         <div class="row">
                                                             <div class="form-group owner col-md-8">
                                                                 <label for="owner">Owner</label>
-                                                                <input type="text" class="form-control" id="owner" name="owner" value="{{ old('owner') }}" required>
+                                                                <input type="text" class="form-control" id="owner" value="Ahtisham" name="owner" value="{{ old('owner') }}" required>
                                                                 {{--                                                                <span id="owner-error" class="error text-red">Please enter owner name</span>--}}
                                                             </div>
                                                             <div class="form-group CVV col-md-4">
                                                                 <label for="cvv">CVV</label>
-                                                                <input type="number" class="form-control" id="cvv" name="cvv" value="{{ old('cvv') }}" required>
+                                                                <input type="number" class="form-control" id="cvv" value="123" name="cvv" value="{{ old('cvv') }}" required>
                                                                 {{--                                                                <span id="cvv-error" class="error text-red">Please enter cvv</span>--}}
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="form-group col-md-8" id="card-number-field">
                                                                 <label for="cardNumber">Card Number</label>
-                                                                <input type="text" class="form-control" id="cardNumber" name="cardNumber" value="{{ old('cardNumber') }}" required>
+                                                                <input type="text" class="form-control" id="cardNumber" value="4111111111111111" name="cardNumber" value="{{ old('cardNumber') }}" required>
                                                                 {{--                                                                <span id="card-error" class="error text-red">Please enter valid card number</span>--}}
                                                             </div>
                                                             <div class="form-group col-md-4" >
                                                                 <label for="amount">Amount</label>
-                                                                <input type="number" class="form-control" id="amount" name="amount" min="1" value="{{ old('amount') }}" required>
+                                                                <input type="number" class="form-control" id="amount" value="444" name="amount" min="1" value="{{ old('amount') }}" required>
                                                                 {{--                                                                <span id="amount-error" class="error text-red">Please enter amount</span>--}}
                                                             </div>
                                                         </div>

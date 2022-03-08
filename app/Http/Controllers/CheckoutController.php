@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PaymentLogs;
 use App\Models\User;
+use App\Mail\RegisteredNotification;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
 use net\authorize\api\contract\v1 as AnetAPI;
@@ -30,20 +32,26 @@ class CheckoutController extends Controller
         }else{
 
             $amount = '';
-            if($subscription == 'option1'){
+            $platform = '';
+            if($subscription == 'walmart_option1'){
+                $amount = 97;
+                $platform = "walmart_option1";
+            }
+            if($subscription == 'walmart_option2'){
                 $amount = 147;
+                $platform = "walmart_option2";
             }
-            if($subscription == 'option2'){
-                $amount = 197;
+            if($subscription == 'amazon_option1'){
+                $amount = 97;
+                $platform = "amazon_option1";
             }
-            if($subscription == 'option3'){
-                $amount = 50;
-            }
-            if($subscription == 'option4'){
-                $amount = 79;
+            if($subscription ==  'amazon_option2')
+            {
+                $amount = 147;
+                $platform = "amazon_option2";
             }
             // Get aurgament from Appeal lab website
-            return view('checkout.checkout' , ['amount' => $amount]);
+            return view('checkout.checkout' , ['amount' => $amount , 'platform' => $platform]);
 
         }
 
@@ -95,8 +103,10 @@ class CheckoutController extends Controller
         $paymentLog = "";
 
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
-        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+//        $merchantAuthentication->setName(env('MERCHANT_LOGIN_ID'));
+//        $merchantAuthentication->setTransactionKey(env('MERCHANT_TRANSACTION_KEY'));
+        $merchantAuthentication->setName('7LfUeM3n5r');
+        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
 
         // Set the transaction's refId
         $refId = 'ref' . time();
@@ -209,7 +219,20 @@ class CheckoutController extends Controller
 
         $user = User::store($userData);
 
-         PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
+         $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
+
+         $registredNotification =
+                         [
+                             'name' => $user->name,
+                             'lname' => $user->last_name,
+                             'email' => $user->email,
+                             'name_on_card' => $payment->name_on_Card,
+                             'amount' => $payment->amount,
+                             'address' => $user->address,
+                             'contact' => $user->contact
+                         ];
+
+        Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 

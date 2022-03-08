@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth'] , function(){
             Route::get('/plate-form', [MarketPlaceController::class, 'plateForm'])->name('dashboard.select-marketplace');
             Route::get('walmart', [MarketPlaceController::class, 'walmartRegister'])->name('dashboard.select-marketplace.register');
             Route::post('walmart/add', [MarketPlaceController::class, 'walmartIntegration'])->name('dashboard.marketplace.walmart.integration');
+            Route::get('/edit_view/{id}', [MarketPlaceController::class, 'editView'])->name('edit_View');
             Route::get('/thank-you', [MarketPlaceController::class, 'thankYouPage'])->name('thank-you');
         });
 
