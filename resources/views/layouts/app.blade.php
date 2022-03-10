@@ -830,13 +830,13 @@
 {{--                        <li><a href="{{ route('dashboard.marketplace') }}">Walmart</a></li>--}}
 {{--                    </ul>--}}
 {{--                </li>--}}
-
                 <li>
                     <a href="{{ route('dashboard.marketplace') }}">
                         <i class="flaticon-381-controls-3"></i>
                         <span class="nav-text">Walmart</span>
                     </a>
                 </li>
+
                 {{-- <li>
                     <a href="{{ route('profile.show') }}">
                         <i class="fa fa-user"></i>

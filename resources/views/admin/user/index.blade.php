@@ -1,29 +1,20 @@
 <!-- Latest compiled and minified CSS -->
-<x-guest-layout>
-    @php
-        $months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
-    @endphp
+<x-app-layout>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="container">
         <div class="row">
             <div class="col-md-7 py-3">
 
-                <img src="{{ asset('AppealLab/images/logoa.png') }}" alt="" width="242px">
-
-                <div class="support-text py-4">
-                    <p class="px-0">Need support?</p>
-                    <p class="px-3 mail-to"><a href="mailto:hello@appeallab.com"><i class="fa fa-envelope px-2"></i>hello@appeallab.com</a></p>
-                </div>
-
                 <h4 class="info-h1 py-1">YOUR INFORMATION</h4>
-                @if(Session::has('cardError'))
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <strong>Transaction Failed !</strong>  {{ Session::get('cardError') }}
+                @if(Session::has('success'))
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <strong>Transaction Failed !</strong>  {{ Session::get('success') }}
                         <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
                         </button>
                     </div>
                 @endif
-                <form method="POST" action="{{ route('create') }}">
+                <form method="POST" action="{{ route('admin.user-registration_add') }}">
                     @csrf
                     <div class="form-div">
                         <div class="form-group">
@@ -354,10 +345,6 @@
                             @enderror
                         </div>
 
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                            {{ __('Already registered?') }}
-                        </a>
-
 
                         @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                             <div class="mt-4">
@@ -378,72 +365,6 @@
 
                     </div>
 
-                    <div class="payment-sec py-3">
-                        <h4 class="info-h1 py-1">PAYMENT INFORMATION</h4>
-                        <p class="payment-para">All transactions are secure and encrypted. Credit card information is never
-                            stored on our servers.</p>
-                        <div class="card" style="width:100%;">
-                            <div class="card-header">
-                                <h6 style="font-weight: 400;">Credit Card</h6>
-                            </div>
-
-                            <div class="container py-3">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        {{--                                    <label class="card-labels" for="card-num">Owner Name</label>--}}
-                                        <input type="text" id="owner" name="owner"  placeholder="Owner Name" class="form-control card-num name-form" value="{{ old('owner') }}">
-                                        @error('owner')
-                                        <span class="text-danger"> {{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-12 mt-3">
-                                        {{--                                    <label class="card-labels" for="card-num">Card Number</label>--}}
-                                        <input type="number" id="cardNumber" name="cardNumber" placeholder="1234 1234 1234 1234" class="form-control card-num name-form" value="{{ old('cardNumber') }}">
-                                        @error('cardNumber')
-                                        <span class="text-danger"> {{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-md-12 py-3">
-                                        {{--                                    <label class="card-labels" for="card-cvc">Card Code (CVC)</label>--}}
-                                        <input type="number" id="cvv" name="cvv" placeholder="CVC" class="form-control lname card-cvc name-form" value="{{ old('cvv') }}" >
-                                        <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
-                                        @error('cvv')
-                                        <span class="text-danger"> {{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-6" id="expiration-date">
-                                        <label>Expiration Date</label><br/>
-                                        <select class="form-control" id="expiration-month" name="expiration-month" style="float: left; width: 100px; margin-right: 10px;">
-                                            @foreach($months as $k=>$v)
-                                                <option value="{{ $k }}" {{ old('expiration-month') == $k ? 'selected' : '' }}>{{ $v }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select class="form-control" id="expiration-year" name="expiration-year"  style="float: left; width: 100px;">
-
-                                            @for($i = date('Y'); $i <= (date('Y') + 15); $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="payment-para">Your personal data will be used to process your order, support your experience
-                        throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="agreement" value="check" id="agreement">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            I have read and agree to the website's <a href="#">terms and conditions*</a>
-                        </label><br>
-                        @error('agreement')
-                        <span class="text-danger"> {{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <div class="flex items-center justify-end">
                         <x-jet-button class="btn-form-submit my-4 text-center">
                             {{ __('Subscribe Now') }}
@@ -452,171 +373,16 @@
 
                 </form>
 
-                <div class="last-sec py-3">
-                    <div class="last-sec-heading">We Respect Your privacy & Information</div>
 
-                    <div class="container py-4">
-                        <div class="row alignCenter">
-                            <div class="three-column col-sm-4">
-                                <img src="{{ asset('images\privacy.png') }}" alt="" class="txtCenter">
-                                <p class="py-3 three-col-text">We Protect Your Privacy</p>
-
-                            </div>
-                            <div class="three-column col-sm-4">
-                                <img src="{{ asset('images\ribbon.png') }}" alt="" class="txtCenter">
-                                <p class="py-3 three-col-text">100% Satisfaction Guaranteed</p>
-
-                            </div>
-                            <div class="three-column col-sm-4">
-                                <img src="{{ asset('images\secure.png') }}" alt="" class="txtCenter">
-                                <p class="py-3 three-col-text">Your Information Is Secure</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div> <!-- end od col-sm-7 -->
-
-            <div class="col-md-5 bgColor">
-
-                <div class="row">
-                    <div class="col-md-9 pull-left" style="display: flex;">
-                        <img src="{{ asset('AppealLab/images/checkout.jpg') }}">
-                        <p class="txtColor">
-                            @if($platform == "walmart_option1")
-                                <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale $97/month</span>
-                            @endif
-                            @if($platform == "walmart_option2" )
-                                <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale $147/month</span>
-                            @endif
-                            @if($platform == "amazon_option1")
-                                <br><span class="txtColor">Account Protection - Amazon Dropshipping + Amazon FBA Wholesale $97/month</span>
-                            @endif
-                            @if($platform == "amazon_option2")
-                                <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale $147/month</span>
-                            @endif
-                        </p>
-                    </div>
-                    <div class="col-md-3 pull-right justify-content-center">
-                        <p class="txtColor">${{ $amount }}</p>
-                    </div>
-                </div> <!--end of row-->
-
-                <hr>
-
-
-                <hr>
-
-                <div class="bg-light clearfix">
-                    <div class="pull-left txtColor"><h5>Subtotal</h5></div>
-                    <div class="pull-right txtColor"><h5>${{ $amount }}</h5></div>
-                </div>
-
-                <hr>
-
-                <div class="bg-light clearfix">
-                    <div class="pull-left txtColor"><h5>Total</h5></div>
-                    <div class="pull-right txtColor"><h5>${{ $amount }}</h5></div>
-                </div>
-
-                <hr>
-
-                <div class="mainCent">
-
-                    <h5 class="txtColor">WHY BUY FROM US</h5>
-
-                    <h6 class="mg txt txtColor"><i class="fa fa-check" style="color: cornflowerblue; margin-top: 10px;"></i> 100% Safe and Secure</h6><br>
-                    <h6 class="mg txtColor"><i class="fa fa-check" style="color: cornflowerblue;"></i> 2+ years experience</h6><br>
-                    <h6 class="mg txtColor"><i class="fa fa-check" style="color: cornflowerblue;"></i> Hundreds of accounts reinstated</h6><br>
-                    <h6 class="mg txtColor"><i class="fa fa-check" style="color: cornflowerblue;"></i> Fastest delivery time in the industry</h6><br>
-                </div>
-                <h5 class="hdTXT txtColor">WHAT THEY'RE SAYING</h5>
-
-                <h6 class="mgTop txtColor"><b>Fast & reliable</b></h6>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-
-                <p class="txtColor">
-                    My account was suspended on Walmart and I couldn't
-                    find anyone to help because of how new the platform
-                    is. Appeal lab was able to assist me with my ODR appeal
-                    so that I could begin selling again.
-                </p>
-                <h6>Christine M.</h6>
-
-                <h6 class="mgTop txtColor"><b>up and running again</b></h6>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-                <i class="fa fa-star" style="color: orange;"></i>
-
-                <p class="txtColor">
-                    I have a dropshipping account and was suspended but was able to get it back up because of your appeals.
-                </p>
-                <h6>Adam P.</h6>
-
-            </div> <!-- end of col-md-5 -->
-        </div> <!--end of row -->
+            <div class="col-md-5 bgColor"></div> <!--end of row -->
+        </div><!--end of row-->
     </div> <!--end of container -->
 
-    <style>
-        .txtColor
-        {
-            color: #737373;
-        }
-        .bgColor
-        {
-            background: linear-gradient(90deg, #FFFFFF 0%, #F7F7F7 0%);
-            padding: 25px;
-        }
-        .mainCent
-        {
-            margin-top: 50px;
-        }
-        .check
-        {
-            color: red;
-        }
-        .txt
-        {
-            margin-top: 20px !important;
-        }
-        .mg
-        {
-            margin-top: -12px;
-        }
-        .mgTop
-        {
-            margin-top: 21px;
-        }
 
-    </style>
+</x-app-layout>
 
 
-</x-guest-layout>
-
-
-<style>
-    @media screen and (max-width: 767px) {
-        .marginTop
-        {
-            margin-top: 15px;
-        }
-    }
-    .txtCenter
-    {
-        width: 40%;
-        display: inline;
-    }
-    .alignCenter
-    {
-        text-align: center;
-        justify-content: center;
-    }
-</style>
 
 

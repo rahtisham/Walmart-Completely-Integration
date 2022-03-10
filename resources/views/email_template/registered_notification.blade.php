@@ -22,43 +22,35 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="mr-5">Registration Has Been Successfully</h1>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
-{{--                        <td>{{ $registredNotification['name'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['name'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Last Name</th>
-{{--                        <td>{{ $registredNotification['lname'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['lname'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Email</th>
-{{--                        <td>{{ $registredNotification['email'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['email'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Name on Cart</th>
-{{--                        <td>{{ $registredNotification['name_on_card'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['name_on_card'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Amount</th>
-{{--                        <td>${{ $registredNotification['amount'] }}</td>--}}
-                        <th>testig</th>
+                        <td>${{ $registredNotification['amount'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Address</th>
-{{--                        <td>{{ $registredNotification['address'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['address'] }}</td>
                     </tr>
                     <tr>
                         <th scope="col">Contact</th>
-{{--                        <td>{{ $registredNotification['contact'] }}</td>--}}
-                        <th>testig</th>
+                        <td>{{ $registredNotification['contact'] }}</td>
                     </tr>
                     </thead>
                   </table>

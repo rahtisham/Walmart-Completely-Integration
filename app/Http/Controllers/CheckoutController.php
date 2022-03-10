@@ -85,6 +85,7 @@ class CheckoutController extends Controller
             // 'amount' => ['required', 'max:255'],
             'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'password_confirmation' => 'required',
+            'agreement' => 'required',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ],[
             'email.required' => 'Email is required',
@@ -103,6 +104,7 @@ class CheckoutController extends Controller
             'cardNumber.required' => 'Card number is required',
             'owner.required' => 'Card holder name is required',
             'password.required' => 'Password is required',
+            'agreement.required' => 'Agreement is required',
             'password_confirmation.required' => 'Confirm password is required',
         ])->validate();
 
@@ -251,7 +253,7 @@ class CheckoutController extends Controller
                              'contact' => $user->contact
                          ];
 
-        Mail::to($user->email)->send(new RegisteredNotification($registredNotification));
+        Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 

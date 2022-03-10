@@ -7,12 +7,15 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PDFsending;
 use App\Mail\RegisteredNotification;
 use PDF;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class PDFConotroller extends Controller
 {
 
     public function index()
     {
+
         return view('myPDF');
 //        $pdf = [];
 //        $pdf[] = [
@@ -32,16 +35,21 @@ class PDFConotroller extends Controller
 
     {
 
-        $data = [
 
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
+//            Role::create(['name' => 'Edit']);
+//            return "insert";
 
-        ];
 
-        // Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($data));
-
-        return view('email_template.registered_notification');
+//        $data = [
+//
+//            'title' => 'Welcome to ItSolutionStuff.com',
+//            'date' => date('m/d/Y')
+//
+//        ];
+//
+//        // Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($data));
+//
+//        return view('email_template.registered_notification');
 
     }
 

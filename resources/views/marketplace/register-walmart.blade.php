@@ -7,8 +7,11 @@
         {
             height: auto !important;
         }
+        .content-body .container {
+            margin-top: 0px !important;
+        }
     </style>
-    <div class="container" style="margin-top: 100px;">
+    <div class="container">
         <div class="page-titles">
             <!-- <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
@@ -74,11 +77,6 @@
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
                                                 <p><span style="color: #03c6ad;">Step 2 </span>: Enter in your store front name </p>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-3">
-                                            <div class="form-group">
-                                                <a href="{{ url('dashboard') }}" class="btn btn-primary shadow btn-xs">Go to Dashboard</a>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-3">

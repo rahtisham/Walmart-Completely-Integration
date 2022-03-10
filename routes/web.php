@@ -19,6 +19,7 @@ use App\Http\Controllers\Walmart\Alerts\ShippingPerformanceController;
 use App\Http\Controllers\Walmart\Alerts\OrderStatusCheckController;
 use App\Http\Controllers\Walmart\Alerts\ItemsController;
 use App\Http\Controllers\MarketPlace\MarketPlaceController;
+use App\Http\Controllers\admin\UserRegistrationController;
 
 
 
@@ -47,6 +48,7 @@ Route::get('/', [MarketPlaceController::class, 'home'])->name('home');
 Route::get('registration-form', function () {
     return view('payment');
 });
+
 
 Route::get('/testing', [PDFConotroller::class, 'generatePDF'])->name('testing');
 
@@ -128,9 +130,20 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('pay' , [PaymentController::class , 'pay'])->name('pay');
         Route::post('/dopay/online' , [PaymentController::class , 'handleonlinepay'])->name('dopay.online');
 
-    });
 
-});
+        Route::prefix('admin')->group(function () {
+            Route::get('/user-registration', [UserRegistrationController::class, 'index'])->name('admin.user-registration');
+            Route::post('/user-registration_add', [UserRegistrationController::class, 'create'])->name('admin.user-registration_add');
+        });
+
+
+    }); // End of dashboard prefix
+
+
+}); //End of middleware
+
+
+
 
 
 //
