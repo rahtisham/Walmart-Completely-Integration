@@ -15,6 +15,13 @@ use net\authorize\api\controller as AnetController;
 
 class CheckoutController extends Controller
 {
+
+    // public function expiry(Request $request)
+    // {
+    //     return 'wqelkkrj';
+
+    // }
+
     public function login()
     {
         if(auth()->user()){
@@ -70,12 +77,12 @@ class CheckoutController extends Controller
             'country' => ['required', 'alpha', 'max:255'],
             'state' => ['required', 'alpha', 'max:255'],
             'contact' => ['required', 'string', 'max:255'],
-            'owner' => ['required', 'alpha', 'max:255'],
+            'owner' => ['required', 'max:255'],
             'cardNumber' => ['required', 'min:16' , 'max:16'],
             'expiration-year' => ['required', 'string', 'max:255'],
             'expiration-month' => ['required', 'string', 'max:255'],
             'cvv' => ['required', 'max:3', 'min:3'],
-            'amount' => ['required', 'max:255'],
+            // 'amount' => ['required', 'max:255'],
             'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'password_confirmation' => 'required',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
@@ -90,7 +97,7 @@ class CheckoutController extends Controller
             'state.required' => 'State is required',
             'contact.required' => 'Phone number is required',
             'postal.required' => 'Postal code is required',
-            'amount.required' => 'Amount is required',
+            // 'amount.required' => 'Amount is required',
             'country.required' => 'Country is required',
             'cvv.required' => 'CVV is required',
             'cardNumber.required' => 'Card number is required',
@@ -122,11 +129,23 @@ class CheckoutController extends Controller
         $paymentOne = new AnetAPI\PaymentType();
         $paymentOne->setCreditCard($creditCard);
 
+        // Set the customer's Bill To address
+        $customerAddress = new AnetAPI\CustomerAddressType();
+        $customerAddress->setFirstName("Ellen");
+        $customerAddress->setLastName("Johnson");
+        $customerAddress->setCompany("Souveniropolis");
+        $customerAddress->setAddress("14 Main Street");
+        $customerAddress->setCity("Pecan Springs");
+        $customerAddress->setState("TX");
+        $customerAddress->setZip("44628");
+        $customerAddress->setCountry("USA");
+
         // Create a TransactionRequestType object and add the previous objects to it
         $transactionRequestType = new AnetAPI\TransactionRequestType();
         $transactionRequestType->setTransactionType("authCaptureTransaction");
         $transactionRequestType->setAmount($request['amount']);
         $transactionRequestType->setPayment($paymentOne);
+        $transactionRequestType->setBillTo($customerAddress);
 
         // Assemble the complete transaction request
         $requests = new AnetAPI\CreateTransactionRequest();
@@ -219,20 +238,20 @@ class CheckoutController extends Controller
 
         $user = User::store($userData);
 
-         $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
+        $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
 
-         $registredNotification =
+        $registredNotification =
                          [
                              'name' => $user->name,
                              'lname' => $user->last_name,
                              'email' => $user->email,
-                             'name_on_card' => $payment->name_on_Card,
-                             'amount' => $payment->amount,
+                             'name_on_card' => $paymentLog->name_on_card,
+                             'amount' => $paymentLog->amount,
                              'address' => $user->address,
                              'contact' => $user->contact
                          ];
 
-        Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($registredNotification));
+        Mail::to($user->email)->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 

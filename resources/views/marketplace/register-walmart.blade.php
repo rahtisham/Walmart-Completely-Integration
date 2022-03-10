@@ -33,7 +33,7 @@
                     <div class="card-body">
 
                         <div id="smartwizard" class="form-wizard order-create">
-                            <ul class="nav nav-wizard">
+                            <ul class="nav nav-wizard" style="box-shadow: none !important;">
                                 <li><a class="nav-link" href="#wizard_Service">
                                         <span>1</span>
                                     </a></li>
@@ -68,12 +68,12 @@
                                     <div class="row">
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
-                                                <p>Step 1: Navigate to walmart Seller Centrol</p>
+                                                <p><span style="color: #03c6ad;">Step 1 </span>: Go here and login using the same email/password to access your Walmart account : <a style="color: #03c6ad;" href="https://developer.walmart.com/account/generateKey">https://developer.walmart.com/account/generateKey</a> </p>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
-                                                <p>a) Login to Walmart Developer Portal</p>
+                                                <p><span style="color: #03c6ad;">Step 2 </span>: Enter in your store front name </p>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-3">
@@ -83,17 +83,17 @@
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
-                                                <p>b Get the Production keys (My API Key) in keys section</p>
+                                                <p><span style="color: #03c6ad;">Step 3 </span>: Go to 'My API Key' and copy the Client ID. Paste it on Appeal Lab</p>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
-                                                <p>Step 2: Copy and Paste the Credentials</p>
+                                                <p><span style="color: #03c6ad;">Step 4 </span>: Go to 'My API Key' and click on the 'eye' to show your secret phrase, then click on copy. Paste it on Appeal Lab. </p>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <div class="form-group">
-                                                <p>Copy and paste the Client ID and Client Secret from the Walmart developerr centerr to the corresponding fields:</p>
+                                                <p><span style="color: #03c6ad;">Step 5 </span>:  Click connect - You are now done and your account is connected and will now start receiving alerts.</p>
                                             </div>
                                         </div>
                                     </div>

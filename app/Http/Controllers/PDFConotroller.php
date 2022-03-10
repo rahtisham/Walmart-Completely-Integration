@@ -39,9 +39,9 @@ class PDFConotroller extends Controller
 
         ];
 
-        Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($data));
+        // Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($data));
 
-        echo "Email Sended";
+        return view('email_template.registered_notification');
 
     }
 

@@ -51,6 +51,8 @@ Route::get('registration-form', function () {
 Route::get('/testing', [PDFConotroller::class, 'generatePDF'])->name('testing');
 
 Route::get('/register', [CheckoutController::class, 'login'])->name('register');
+
+
 Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
 Route::post('/create', [CheckoutController::class, 'create'])->name('create');
 
@@ -62,6 +64,7 @@ Route::group(['middleware' => 'auth'] , function(){
 
         Route::prefix('marketplace')->group(function () {
 
+            // Route::post('expiry', [CheckoutController::class, 'expiry'])->name('expiry');
             Route::get('/', [MarketPlaceController::class, 'index'])->name('dashboard.marketplace');
             Route::get('/plate-form', [MarketPlaceController::class, 'plateForm'])->name('dashboard.select-marketplace');
             Route::get('walmart', [MarketPlaceController::class, 'walmartRegister'])->name('dashboard.select-marketplace.register');

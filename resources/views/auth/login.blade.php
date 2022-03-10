@@ -55,3 +55,10 @@
         </form>
     </x-jet-authentication-card>
 </x-guest-layout>
+
+
+<style>
+    .alert-dismissible {
+    padding-right: 1rem !important;
+}
+</style>
