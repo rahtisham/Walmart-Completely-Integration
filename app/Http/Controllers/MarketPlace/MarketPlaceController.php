@@ -11,15 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MarketPlaceController extends Controller
 {
-    public function home()
-    {
-        if(auth()->user()){
-            return redirect('dashboard/marketplace');
-        }else{
-            return redirect('/login');
-        }
 
-    }
 
     public function index()
     {
@@ -57,7 +49,7 @@ class MarketPlaceController extends Controller
             );
 
         if ($validator->fails()) {
-            return redirect('dashboard/marketplace/walmart')
+            return redirect('user/marketplace/walmart')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -89,11 +81,11 @@ class MarketPlaceController extends Controller
                 ];
                 $market = WalmartMarketPlace::updateWalmartStore($integration, $marketPlace[0]->id);
 
-                return redirect('dashboard/marketplace/walmart')->with(['success' => 'Walmart Market Place Has Been Updated Successfully.']);
+                return redirect('user/marketplace/walmart')->with(['success' => 'Walmart Market Place Has Been Updated Successfully.']);
 
             }else{
 
-                return redirect('dashboard/marketplace/walmart')->with(['error' => 'Invalid Walmart Credentials']);
+                return redirect('user/marketplace/walmart')->with(['error' => 'Invalid Walmart Credentials']);
             }
         }
         else
@@ -122,7 +114,7 @@ class MarketPlaceController extends Controller
 
             }else{
 
-                return redirect('dashboard/marketplace/walmart')->with(['error' => 'Invalid Walmart Credentials']);
+                return redirect('user/marketplace/walmart')->with(['error' => 'Invalid Walmart Credentials']);
             }
 
 

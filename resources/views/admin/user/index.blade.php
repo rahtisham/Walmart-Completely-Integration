@@ -1,24 +1,33 @@
 <!-- Latest compiled and minified CSS -->
-<x-app-layout>
+<x-admin-layout>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .form-control {
+            border-radius: 1.25rem;
+            background: none !important;
+            border: 1px solid #f0f1f5;
+            color: #B1B1B1;
+            height: 56px;
+        }
+    </style>
     <div class="container">
         <div class="row">
-            <div class="col-md-7 py-3">
+            <div class="col-md-7 py-3 card">
 
-                <h4 class="info-h1 py-1">YOUR INFORMATION</h4>
+                <h4 class="info-h1 py-1">USER REGISTRATION FORM</h4>
                 @if(Session::has('success'))
                     <div class="alert alert-success alert-dismissible fade show">
-                        <strong>Transaction Failed !</strong>  {{ Session::get('success') }}
+                        <strong></strong>  {{ Session::get('success') }}
                         <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
                         </button>
                     </div>
                 @endif
-                <form method="POST" action="{{ route('admin.user-registration_add') }}">
+                <form method="POST" action="{{ url('dashboard/admin/user-registration-add') }}">
                     @csrf
                     <div class="form-div">
                         <div class="form-group">
-                            <x-jet-input id="email" class="form-control email-form" type="email" name="email" placeholder="Enter Email" value="{{ old('email') }}" autofocus autocomplete="name" />
+                            <input id="email" class="form-control" type="email" name="email" placeholder="Enter Email" value="{{ old('email') }}" autofocus autocomplete="name" />
                             @error('email')
                             <span class="text-danger"> {{ $message }}</span>
                             @enderror
@@ -26,13 +35,13 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <x-jet-input type="text" name="fname" placeholder="First Name" class="form-control fname name-form" value="{{ old('fname') }}" autofocus autocomplete="name"/>
+                                <input type="text" name="fname" placeholder="First Name" class="form-control fname name-form" value="{{ old('fname') }}" autofocus autocomplete="name"/>
                                 @error('fname')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="lname" name="lname" placeholder="Last Name" class="marginTop form-control lname name-form" value="{{ old('lname') }}" autofocus autocomplete="last_name"/>
+                                <input type="text" id="lname" name="lname" placeholder="Last Name" class="marginTop form-control lname name-form" value="{{ old('lname') }}" autofocus autocomplete="last_name"/>
                                 @error('lname')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -41,13 +50,13 @@
 
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="address" name="address" placeholder="Street Address" class="form-control name-form" value="{{ old('address') }}" autofocus autocomplete="address"/>
+                                <input type="text" id="address" name="address" placeholder="Street Address" class="form-control name-form" value="{{ old('address') }}" autofocus autocomplete="address"/>
                                 @error('address')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="city" name="city" placeholder="City" class="marginTop form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
+                                <input type="text" id="city" name="city" placeholder="City" class="marginTop form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
                                 @error('city')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -56,13 +65,13 @@
 
                         <div class="row mt-3">
                             <div class="col-md-4">
-                                <x-jet-input type="number" id="postal" name="postal" placeholder="Postcode / Zip" class="form-control name-form" value="{{ old('postal') }}" autofocus autocomplete="postal" />
+                                <input type="number" id="postal" name="postal" placeholder="Postcode / Zip" class="form-control name-form" value="{{ old('postal') }}" autofocus autocomplete="postal" />
                                 @error('postal')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <select id="country" name="country" class="marginTop" style="width: 100%; border: 1px solid #ced4da;">
+                                <select id="country" name="country" class="marginTop form-control" style="width: 100%;">
                                     <option value="">Select Country</option>
                                     <option value="Afganistan">Afghanistan</option>
                                     <option value="Albania">Albania</option>
@@ -316,7 +325,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <x-jet-input type="text" id="state" name="state" placeholder="State" class="marginTop form-control name-form" value="{{ old('state') }}" autofocus autocomplete="state" />
+                                <input type="text" id="state" name="state" placeholder="State" class="marginTop form-control name-form" value="{{ old('state') }}" autofocus autocomplete="state" />
                                 @error('state')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
@@ -325,21 +334,21 @@
 
 
                         <div class="form-group mt-3">
-                            <x-jet-input type="number" id="contact" name="contact" placeholder="Phone Number" class="form-control name-form" value="{{ old('contact') }}" autofocus autocomplete="contact"  />
+                            <input type="number" id="contact" name="contact" placeholder="Phone Number" class="form-control name-form" value="{{ old('contact') }}" autofocus autocomplete="contact"  />
                             @error('contact')
                             <span class="text-danger"> {{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <x-jet-input type="password" id="password" name="password" placeholder="Password" class="form-control name-form" autocomplete="new-password" />
+                            <input type="password" id="password" name="password" placeholder="Password" class="form-control name-form" autocomplete="new-password" />
                             @error('password')
                             <span class="text-danger"> {{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <x-jet-input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" class="form-control name-form" autocomplete="new-password" />
+                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" class="form-control name-form" autocomplete="new-password" />
                             @error('password_confirmation')
                             <span class="text-danger"> {{ $message }}</span>
                             @enderror
@@ -348,7 +357,7 @@
 
                         @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                             <div class="mt-4">
-                                <x-jet-label for="terms">
+                                <label for="terms">
                                     <div class="flex items-center">
                                         <x-jet-checkbox name="terms" id="terms"/>
 
@@ -359,16 +368,16 @@
                                             ]) !!}
                                         </div>
                                     </div>
-                                </x-jet-label>
+                                </label>
                             </div>
                         @endif
 
                     </div>
 
                     <div class="flex items-center justify-end">
-                        <x-jet-button class="btn-form-submit my-4 text-center">
-                            {{ __('Subscribe Now') }}
-                        </x-jet-button>
+                        <button class="btn-form-submit my-4 text-center btn btn-primary">
+                            {{ __('Submit Now') }}
+                        </button>
                     </div>
 
                 </form>
@@ -381,7 +390,7 @@
     </div> <!--end of container -->
 
 
-</x-app-layout>
+</x-admin-layout>
 
 
 

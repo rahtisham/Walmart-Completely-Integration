@@ -34,18 +34,20 @@
                                         {{ session('error_msg') }}
                                     </div>
                                 @endif
+
+
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6 card p-4" style="border-radius: 5px; padding: 10px;">
 
                                         <div class="panel panel-primary">
                                             <div class="creditCardForm">
                                                 <div class="payment">
-                                                    <form id="payment-card-info" method="post" action="{{ route('dopay.online') }}">
+                                                    <form id="payment-card-info" method="post" action="{{ route('dashboard.dopay.online') }}">
                                                         @csrf
                                                         <div class="row">
                                                             <div class="form-group owner col-md-8">
                                                                 <label for="owner">Owner</label>
-                                                                <input type="text" class="form-control" id="owner" value="Ahtisham" name="owner" value="{{ old('owner') }}" required>
+                                                                <input type="text" class="form-control" id="owner" name="owner" value="{{ old('owner') }}" required>
                                                                 {{--                                                                <span id="owner-error" class="error text-red">Please enter owner name</span>--}}
                                                             </div>
                                                             <div class="form-group CVV col-md-4">

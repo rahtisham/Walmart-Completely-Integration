@@ -11,7 +11,7 @@
                     <img class="mg5" src="{{ asset('AppealLab/images/walmart-logo.png') }}" width="60px" alt="">
                     <p class="main-content__body" data-lead-id="main-content-body">Your Walmart Store has Been Submit Successfully Registered. Enjoy peace of mind knowing that your Walmart store is protected in case of an account suspension.</p>
                     <br>
-                    <a href="{{ route('dashboard.marketplace') }}" class="btn btn-lg btn-primary btnStyle">BACK TO HOMEPAGE</a>
+                    <a href="{{ url('user/marketplace') }}" class="btn btn-lg btn-primary btnStyle">BACK TO HOMEPAGE</a>
                 </div>
             </div>
             <div class="col-md-2"></div>

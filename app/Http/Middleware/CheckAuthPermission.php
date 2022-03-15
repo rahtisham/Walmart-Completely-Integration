@@ -3,26 +3,37 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CheckAuthPermission
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|RedirectResponse
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param \string $CheckAuthPermission
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next  , string $CheckAuthPermission)
     {
-//        if($CheckAuthPermission == "admin" && auth()->user()->roles == 1) {
-//            abort(404);
-//        }
-//        if($CheckAuthPermission == "user" && auth()->user()->roles == 2) {
-//            abort(404);
-//        }
-//        return $next($request);
+        if(Auth()->check()) {
+
+            if ($CheckAuthPermission == "user" && auth()->user()->roles != 1) {
+                abort('404');
+            }
+
+            if ($CheckAuthPermission == "admin" && auth()->user()->roles != 2) {
+                abort('404');
+            }
+            if ($CheckAuthPermission == "password" && auth()->user()->roles != 3) {
+                abort('404');
+            }
+            return $next($request);
+
+        }
+
+
     }
 }

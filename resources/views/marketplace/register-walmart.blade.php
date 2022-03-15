@@ -99,7 +99,7 @@
                                 <div id="wizard_Time" class="tab-pane" role="tabpanel">
                                     <h4 id="result"></h4>
 
-                                    <form method="post" action="{{ route('dashboard.marketplace.walmart.integration') }}">
+                                    <form method="post" action="{{ url('user/marketplace/walmart/integration') }}">
                                         @csrf
                                         <div class="row">
                                             <div class="col-lg-12 mb-3">

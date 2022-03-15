@@ -23,7 +23,7 @@
         <div class="row justify-content-center p-2">
             <div class="col-xl-2"></div>
             <div class="col-xl-6">
-                <a href="{{ url('dashboard/marketplace/walmart') }}">
+                <a href="{{ url('user/marketplace/walmart') }}">
                     <div class="card HoverCard bg-image-walmart">
                         <div class="card-header">
                             <button type="button" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-check" aria-hidden="true"></i></button>

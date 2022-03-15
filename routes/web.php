@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+//use Inertia\Inertia;
 use App\Http\Controllers\PDFConotroller;
 use App\Http\Controllers\AuthorizeNetController;;
 use App\Http\Controllers\PaymentController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\Walmart\Alerts\OrderStatusCheckController;
 use App\Http\Controllers\Walmart\Alerts\ItemsController;
 use App\Http\Controllers\MarketPlace\MarketPlaceController;
 use App\Http\Controllers\admin\UserRegistrationController;
+use App\Http\Controllers\admin\UserController;
 
 
 
@@ -34,50 +35,67 @@ use App\Http\Controllers\admin\UserRegistrationController;
 |
 */
 //
-//Route::get('/', function () {
-//    return Inertia::render('Welcome', [
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-//    ]);
-//});
-Route::get('/', [MarketPlaceController::class, 'home'])->name('home');
+
+
 
 
 Route::get('registration-form', function () {
     return view('payment');
 });
 
-
-Route::get('/testing', [PDFConotroller::class, 'generatePDF'])->name('testing');
-
-Route::get('/register', [CheckoutController::class, 'login'])->name('register');
+    //Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
+    Route::get('/register', [CheckoutController::class, 'login'])->name('register');
 
 
-Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
-Route::post('/create', [CheckoutController::class, 'create'])->name('create');
+    Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
+    Route::post('/create', [CheckoutController::class, 'create'])->name('create');
+
+
 
 Route::group(['middleware' => 'auth'] , function(){
 
 
-    Route::prefix('dashboard')->group(function () {
-
+    Route::group(['middleware' => 'CheckAuthPermission:user' , 'prefix' => 'user' , 'as' => 'user'], function(){
+        Route::get('user', [PDFConotroller::class, 'user'])->name('user');
+        Route::get('subscriptionn', [PDFConotroller::class, 'createSubscription'])->name('user.subscriptionn');
 
         Route::prefix('marketplace')->group(function () {
-
-            // Route::post('expiry', [CheckoutController::class, 'expiry'])->name('expiry');
-            Route::get('/', [MarketPlaceController::class, 'index'])->name('dashboard.marketplace');
-            Route::get('/plate-form', [MarketPlaceController::class, 'plateForm'])->name('dashboard.select-marketplace');
-            Route::get('walmart', [MarketPlaceController::class, 'walmartRegister'])->name('dashboard.select-marketplace.register');
-            Route::post('walmart/add', [MarketPlaceController::class, 'walmartIntegration'])->name('dashboard.marketplace.walmart.integration');
+            Route::get('/', [MarketPlaceController::class, 'index'])->name('marketplace');
+            Route::get('/plate-form', [MarketPlaceController::class, 'plateForm'])->name('user.select-marketplace');
+            Route::get('walmart', [MarketPlaceController::class, 'walmartRegister'])->name('user.select-marketplace.register');
+            Route::post('walmart/integration', [MarketPlaceController::class, 'walmartIntegration'])->name('user.marketplace.walmart.integration');
             Route::get('/edit_view/{id}', [MarketPlaceController::class, 'editView'])->name('edit_View');
             Route::get('/thank-you', [MarketPlaceController::class, 'thankYouPage'])->name('thank-you');
         });
 
+    }); // End of user access
 
-        Route::get('/pdf' , [PDFConotroller::class , 'index'])->name('dashboard.pdf');
-        Route::get('generatepdf', [PDFConotroller::class, 'generatePDF'])->name('dashboard.generatepdf');
+    Route::group(['middleware' => 'CheckAuthPermission:password' , 'prefix' => 'password' , 'as' => 'password'], function(){
+
+        Route::get('update-password', [UserController::class, 'show'])->name('password.update-password');
+        Route::post('password-updated', [UserController::class, 'store'])->name('password.password-updated');
+
+    }); // end of admin access
+
+
+    Route::prefix('dashboard')->group(function () {
+
+        Route::get('/', [DashboardController::class, 'home'])->name('home');
+
+        Route::group(['middleware' => 'CheckAuthPermission:admin' , 'prefix' => 'admin' , 'as' => 'admin'], function(){
+
+            Route::get('/', [PDFConotroller::class, 'dash'])->name('dashboard.admin.dash');
+            Route::get('user-registration', [UserRegistrationController::class, 'index'])->name('dashboard.admin.user-registration');
+            Route::post('user-registration-add', [UserRegistrationController::class, 'create'])->name('dashboard.admin.user-registration-add');
+
+            Route::get('user-view', [UserController::class, 'index'])->name('dashboard.admin.user-view');
+
+        }); // end of admin access
+
+
+
+
+
 
 
 
@@ -128,13 +146,7 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
         Route::get('pay' , [PaymentController::class , 'pay'])->name('pay');
-        Route::post('/dopay/online' , [PaymentController::class , 'handleonlinepay'])->name('dopay.online');
-
-
-        Route::prefix('admin')->group(function () {
-            Route::get('/user-registration', [UserRegistrationController::class, 'index'])->name('admin.user-registration');
-            Route::post('/user-registration_add', [UserRegistrationController::class, 'create'])->name('admin.user-registration_add');
-        });
+        Route::post('/dopay/online' , [PaymentController::class , 'createSubscriptions'])->name('dashboard.dopay.online');
 
 
     }); // End of dashboard prefix
@@ -144,9 +156,6 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
 
-
-
-//
 //Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //    return Inertia::render('Dashboard');
 //})->name('dashboard');

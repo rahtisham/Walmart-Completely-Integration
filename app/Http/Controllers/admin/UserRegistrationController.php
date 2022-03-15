@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
+use App\Mail\updatePassword;
 
 class UserRegistrationController extends Controller
 {
@@ -28,7 +30,7 @@ class UserRegistrationController extends Controller
             'country' => ['required', 'alpha', 'max:255'],
             'state' => ['required', 'alpha', 'max:255'],
             'contact' => ['required', 'string', 'max:255'],
-            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'password' => 'required',
             'password_confirmation' => 'required',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ],[
@@ -53,6 +55,7 @@ class UserRegistrationController extends Controller
             'last_name' => $request['lname'],
             'address' => $request['address'],
             'city' => $request['city'],
+            'roles' => "3",
             'postal' => $request['postal'],
             'country' => $request['country'],
             'state' => $request['state'],
@@ -61,7 +64,21 @@ class UserRegistrationController extends Controller
         ];
 
         $user = User::store($userData);
+        $user->email;
+        $newPassword =  $request->get('password');
+
+            $userDetails = [
+
+                'email'  => $user->email,
+                'password'  => $newPassword
+
+            ];
+
+        Mail::to($user->email)->send(new updatePassword($userDetails));
 
         return redirect()->back()->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+
     }
+
+//|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/
 }
