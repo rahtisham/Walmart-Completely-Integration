@@ -31,6 +31,7 @@ class PDFConotroller extends Controller
     public  function dash()
     {
         return view('admin.index');
+
     }
 
 

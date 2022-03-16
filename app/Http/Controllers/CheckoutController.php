@@ -14,6 +14,7 @@ use Laravel\Jetstream\Jetstream;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 
+
 class CheckoutController extends Controller
 {
 
