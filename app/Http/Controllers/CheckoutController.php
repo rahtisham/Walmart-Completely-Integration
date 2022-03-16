@@ -18,15 +18,15 @@ use net\authorize\api\controller as AnetController;
 class CheckoutController extends Controller
 {
 
-//    public function login()
-//    {
-//        if(auth()->user()){
-//            return redirect('dashboard/marketplace');
-//        }else{
-//            return view('auth.login');
-//        }
-//
-//    }
+   public function home()
+   {
+       if(auth()->user()){
+           return redirect('dashboard/marketplace');
+       }else{
+           return view('auth.login');
+       }
+
+   }
 
     public function index($subscription)
     {
@@ -217,7 +217,6 @@ class CheckoutController extends Controller
         Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
-
 
 
 

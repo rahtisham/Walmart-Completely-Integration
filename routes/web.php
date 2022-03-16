@@ -45,7 +45,7 @@ Route::get('registration-form', function () {
 
     //Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
     Route::get('/register', [CheckoutController::class, 'login'])->name('register');
-
+    Route::get('/', [DashboardController::class, 'home'])->name('home');
 
     Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
     Route::post('/create', [CheckoutController::class, 'create'])->name('create');
@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'] , function(){
 
     Route::prefix('dashboard')->group(function () {
 
-        Route::get('/', [DashboardController::class, 'home'])->name('home');
+
 
         Route::group(['middleware' => 'CheckAuthPermission:admin' , 'prefix' => 'admin' , 'as' => 'admin'], function(){
 
