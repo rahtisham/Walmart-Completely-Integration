@@ -21,13 +21,13 @@
 												</svg>
 											</span>
                                     <div class="media-body">
-                                        <p class="fs-14 mb-2">Weekly Progress</p>
-                                        <span class="title text-black font-w600">42%</span>
+                                        <p class="fs-14 mb-2">Number Of Users</p>
+                                        <span class="title text-black font-w600">42</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
                                     <div class="progress-bar bg-success" style="width: 42%; height:5px;" role="progressbar">
-                                        <span class="sr-only">42% Complete</span>
+                                        <span class="sr-only">42</span>
                                     </div>
                                 </div>
                             </div>
@@ -46,13 +46,13 @@
 												</svg>
 											</span>
                                     <div class="media-body">
-                                        <p class="fs-14 mb-2">Weekly Progress</p>
-                                        <span class="title text-black font-w600">42km</span>
+                                        <p class="fs-14 mb-2">Number Of Walmart Account</p>
+                                        <span class="title text-black font-w600">42</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
                                     <div class="progress-bar bg-secondary" style="width: 82%; height:5px;" role="progressbar">
-                                        <span class="sr-only">42% Complete</span>
+                                        <span class="sr-only">42</span>
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="card avtivity-card">
+                        {{-- <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
 											<span class="activity-icon bgl-danger mr-md-4 mr-3">
@@ -83,10 +83,10 @@
                                 </div>
                             </div>
                             <div class="effect bg-danger"></div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-sm-6">
-                        <div class="card avtivity-card">
+                        {{-- <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
 											<span class="activity-icon bgl-warning  mr-md-4 mr-3">
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                             <div class="effect bg-warning"></div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

@@ -31,6 +31,20 @@ class DashboardController extends Controller
 
     }
 
+    public function admin()
+    {
+        if(auth()->user()){
+
+            if(auth()->user()->roles == 2)
+            {
+                return redirect('dashboard/admin');
+            }
+
+        }else{
+            return redirect('/login');
+        }
+    }
+
     public function client()
     {
       return view('client');

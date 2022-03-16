@@ -21,6 +21,7 @@ use App\Http\Controllers\Walmart\Alerts\ItemsController;
 use App\Http\Controllers\MarketPlace\MarketPlaceController;
 use App\Http\Controllers\admin\UserRegistrationController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\AdminController;
 
 
 
@@ -80,21 +81,17 @@ Route::group(['middleware' => 'auth'] , function(){
 
     Route::prefix('dashboard')->group(function () {
 
-
+        Route::get('/', [DashboardController::class, 'admin'])->name('admin');
 
         Route::group(['middleware' => 'CheckAuthPermission:admin' , 'prefix' => 'admin' , 'as' => 'admin'], function(){
 
-            Route::get('/', [PDFConotroller::class, 'dash'])->name('dashboard.admin.dash');
+            Route::get('/', [AdminController::class, 'index'])->name('dashboard.admin.index');
             Route::get('user-registration', [UserRegistrationController::class, 'index'])->name('dashboard.admin.user-registration');
             Route::post('user-registration-add', [UserRegistrationController::class, 'create'])->name('dashboard.admin.user-registration-add');
 
             Route::get('user-view', [UserController::class, 'index'])->name('dashboard.admin.user-view');
 
         }); // end of admin access
-
-
-
-
 
 
 
