@@ -36,7 +36,7 @@
                                     <th>Country</th>
                                     <th>State</th>
                                     <th>Postal Code</th>
-                                    <th>Action</th>
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -57,12 +57,12 @@
                                         <td>{{ $user['country'] }}</td>
                                         <td>{{ $user['state'] }}</td>
                                         <td>{{ $user['postal'] }}</td>
-                                        <td>
+                                        {{-- <td>
                                             <div class="d-flex">
                                                 <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
                                                 <a href="#" class="btn btn-danger shadow btn-xs sharp"><i class="fa fa-trash"></i></a>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </table>
