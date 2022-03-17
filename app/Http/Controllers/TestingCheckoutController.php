@@ -27,20 +27,20 @@ class TestingCheckoutController extends Controller
             $amount = '';
             $platform = '';
             if($subscription == 'walmart_option1'){
-                $amount = 97;
+                $amount = 97.00;
                 $platform = "walmart_option1";
             }
             if($subscription == 'walmart_option2'){
-                $amount = 147;
+                $amount = 147.00;
                 $platform = "walmart_option2";
             }
             if($subscription == 'amazon_option1'){
-                $amount = 97;
+                $amount = 97.00;
                 $platform = "amazon_option1";
             }
             if($subscription ==  'amazon_option2')
             {
-                $amount = 147;
+                $amount = 147.00;
                 $platform = "amazon_option2";
             }
             // Get aurgament from Appeal lab website
