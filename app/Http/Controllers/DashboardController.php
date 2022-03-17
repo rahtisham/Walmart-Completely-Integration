@@ -31,6 +31,28 @@ class DashboardController extends Controller
 
     }
 
+    public function redirection()
+    {
+        if(auth()->user()){
+
+            if(auth()->user()->roles == 1)
+            {
+                return redirect('user/marketplace');
+            }
+            if(auth()->user()->roles == 2)
+            {
+                return redirect('dashboard/admin');
+            }
+            if(auth()->user()->roles == 3)
+            {
+                return redirect('password/update-password');
+            }
+
+        }else{
+            return redirect('/login');
+        }
+    }
+
     public function admin()
     {
         if(auth()->user()){
@@ -44,6 +66,8 @@ class DashboardController extends Controller
             return redirect('/login');
         }
     }
+
+
 
     public function client()
     {

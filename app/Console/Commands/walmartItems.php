@@ -245,6 +245,7 @@ class walmartItems extends Command
                 // End of total items condition
 
                 $manager = ItemsManager::updateStatus($itemManager->id, "complete");
+                \Log::info("Regional Performance Done");
 
             }
 

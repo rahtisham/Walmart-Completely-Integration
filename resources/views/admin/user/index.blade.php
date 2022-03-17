@@ -16,13 +16,7 @@
             <div class="col-md-7 py-3 card">
 
                 <h4 class="info-h1 py-1">USER REGISTRATION FORM</h4>
-                @if(Session::has('success'))
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <strong></strong>  {{ Session::get('success') }}
-                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                        </button>
-                    </div>
-                @endif
+
                 <form method="POST" action="{{ url('dashboard/admin/user-registration-add') }}">
                     @csrf
                     <div class="form-div">
@@ -391,6 +385,12 @@
 
 
 </x-admin-layout>
+
+<style>
+    .form-control {
+    border-radius: 0.35rem !important;
+    }
+</style>
 
 
 

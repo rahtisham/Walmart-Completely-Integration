@@ -22,7 +22,7 @@
 											</span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Number Of Users</p>
-                                        <span class="title text-black font-w600">42</span>
+                                        <span class="title text-black font-w600">{{ $NumberOfUsers }}</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
@@ -47,7 +47,7 @@
 											</span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Number Of Walmart Account</p>
-                                        <span class="title text-black font-w600">42</span>
+                                        <span class="title text-black font-w600">{{ $NumberOfMarketPlace }}</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">

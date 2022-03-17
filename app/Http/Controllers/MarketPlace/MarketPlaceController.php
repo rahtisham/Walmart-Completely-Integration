@@ -8,6 +8,8 @@ use App\Models\WalmartMarketPlace;
 use App\Models\Walmart\ItemsManager;
 use App\Models\Walmart\Items;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Walmart\ShippingManager;
+use App\Models\Walmart\OrderManager;
 
 class MarketPlaceController extends Controller
 {
@@ -107,7 +109,23 @@ class MarketPlaceController extends Controller
                 ];
                 $market = WalmartMarketPlace::createWalmartStore($integration);
 
-                $test = ItemsManager::create_manager($market->id);
+                $itemManager = ItemsManager::create_manager($market->id);
+
+                $shippingManagerRegionalPerformance = ShippingManager::create_regional_performance_manager($market->id);
+
+                $shippingManagerOnTimeDelivery = ShippingManager::create_on_time_delivery_manager($market->id);
+
+                $shippingManagerOnTimeShipping = ShippingManager::create_on_time_shipping_manager($market->id);
+
+                $shippingManagerCarrierPerformance = ShippingManager::create_carrier_performance_manager($market->id);
+
+                $shippingManagerRatingReview = ShippingManager::create_rating_review_manager($market->id);
+
+                $anOrder = OrderManager::create_an_order_manager($market->id);
+
+                $allOrder = OrderManager::create_all_order_manager($market->id);
+
+
 
                 return view('marketplace.thank-you');
 //                return redirect('dashboard/marketplace/walmart')->with(['success' => 'Walmart Market Place Has Been Registered Successfully.']);

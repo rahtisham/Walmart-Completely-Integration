@@ -214,6 +214,7 @@ class CheckoutController extends Controller
                     'contact' => $user->contact
                 ];
 
+
         Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);

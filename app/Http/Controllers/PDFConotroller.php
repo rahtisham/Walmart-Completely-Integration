@@ -28,7 +28,10 @@ class PDFConotroller extends Controller
     }
 
 
-
+    public  function dash()
+    {
+        return view('admin.index');
+    }
 
 
 
@@ -140,7 +143,7 @@ class PDFConotroller extends Controller
         {
 
 //            return $response->getSubscriptionId();
-             return "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
+//             return "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
             $paymentlog = [
                 'amount' => $request['amount'],
             ];

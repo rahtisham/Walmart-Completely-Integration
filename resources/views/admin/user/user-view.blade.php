@@ -19,7 +19,16 @@
                     <div class="card-header">
                         <h4 class="card-title">
                             <a href="{{ url('dashboard/admin/user-registration') }}" class="btn rounded btn-primary">Create New User</a>
-                        </h4>
+                        </h4><br>
+
+                        @if(Session::has('success'))
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <strong></strong>  {{ Session::get('success') }}
+                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                                </button>
+                            </div>
+                        @endif
+
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

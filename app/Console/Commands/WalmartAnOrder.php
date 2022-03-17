@@ -129,6 +129,7 @@ class WalmartAnOrder extends Command
                 // End of foreach loop
 
                 $manager = OrderManager::updateStatusAnOrder($anOrderManager->id, "Completed");
+                \Log::info("Regional Performance Done");
             }
         }
     }

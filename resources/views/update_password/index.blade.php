@@ -14,8 +14,8 @@
                                     <form action="{{ url('password/password-updated') }}" method="post">
                                         @csrf
                                         <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>Old Password</strong></label>
-                                            <input type="password" name="current_password" class="form-control" placeholder="Old Password">
+                                            <label class="mb-1 text-white"><strong>Current Password</strong></label>
+                                            <input type="password" name="current_password" class="form-control" placeholder="Current Password">
                                         </div>
                                         <div class="form-group">
                                             <label class="mb-1 text-white"><strong>New Password</strong></label>
@@ -26,7 +26,7 @@
                                             <input type="password" name="new_confirm_password" placeholder="Confirm Password" class="form-control" >
                                         </div>
                                         <div class="text-center mt-4">
-                                            <button type="submit" class="btn bg-white text-primary btn-block">Update Password</button>
+                                            <button type="submit" class="btn bg-white text-primary btn-block">RESET PASSWORD</button>
                                         </div>
                                     </form>
                                 </div>
@@ -38,3 +38,16 @@
         </div>
     </div>
 </x-updatepassword-layout>
+
+<style>
+    .form-control {
+    border-radius: 0.35rem !important;
+    }
+
+    .authincation-content {
+    background: #03c6ad !important;
+    }
+    .btn {
+    border-radius: 0.35rem !important;
+    }
+</style>

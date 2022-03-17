@@ -76,7 +76,7 @@ class UserRegistrationController extends Controller
 
         Mail::to($user->email)->send(new updatePassword($userDetails));
 
-        return redirect()->back()->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+        return redirect('dashboard/admin/user-view')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 
     }
 

@@ -29,4 +29,28 @@ class OrderManager extends Model
         $manager = OrderManager::where('id' , $anOrderManagerId)->update(['status' => $status]);
         return $manager;
     }
+
+    public static function create_an_order_manager($marketPlaceID)
+    {
+        OrderManager::create([
+
+            'm_id' => $marketPlaceID,
+            'status' => 'Pending',
+            'module' => 'An_Order',
+
+        ]);
+    }
+
+    public static function create_all_order_manager($marketPlaceID)
+    {
+        OrderManager::create([
+
+            'm_id' => $marketPlaceID,
+            'status' => 'Pending',
+            'module' => 'All_Order',
+
+        ]);
+    }
+
+
 }
