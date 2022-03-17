@@ -42,7 +42,7 @@
                                         <div class="panel panel-primary">
                                             <div class="creditCardForm">
                                                 <div class="payment">
-                                                    <form id="payment-card-info" method="post" action="{{ route('dashboard.dopay.online') }}">
+                                                    <form id="payment-card-info" method="post" action="{{ route('create-subscription') }}">
                                                         @csrf
                                                         <div class="row">
                                                             <div class="form-group owner col-md-8">
@@ -64,7 +64,7 @@
                                                             </div>
                                                             <div class="form-group col-md-4" >
                                                                 <label for="amount">Amount</label>
-                                                                <input type="number" class="form-control" id="amount" value="444" name="amount" min="1" value="{{ old('amount') }}" required>
+                                                                <input type="number" class="form-control" id="amount" value="44.00" name="amount" min="1" value="{{ old('amount') }}" required>
                                                                 {{--                                                                <span id="amount-error" class="error text-red">Please enter amount</span>--}}
                                                             </div>
                                                         </div>

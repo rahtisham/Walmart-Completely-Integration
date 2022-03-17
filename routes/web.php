@@ -22,6 +22,7 @@ use App\Http\Controllers\MarketPlace\MarketPlaceController;
 use App\Http\Controllers\admin\UserRegistrationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\TestingCheckoutController;
 
 
 
@@ -48,17 +49,22 @@ Route::get('registration-form', function () {
     Route::get('/register', [CheckoutController::class, 'login'])->name('register');
     Route::get('/', [DashboardController::class, 'redirection'])->name('redirection');
 
+    Route::get('testing-checkout/{subscribtion}', [TestingCheckoutController::class, 'index'])->name('testing-checkout');
+    Route::post('create-subscription', [TestingCheckoutController::class, 'SubscriptionCreateTesting'])->name('create-subscription');
+
+    //For Testing checkout page
+
     Route::get('/checkout/{subscribtion}', [CheckoutController::class, 'index'])->name('checkouts');
-    Route::post('/create', [CheckoutController::class, 'create'])->name('create');
+    Route::post('/create', [CheckoutController::class, 'SubscriptionCreate'])->name('create');
 
 
 
 Route::group(['middleware' => 'auth'] , function(){
 
 
+    Route::get('/pay' , [PaymentController::class , 'pay'])->name('pay');
+
     Route::group(['middleware' => 'CheckAuthPermission:user' , 'prefix' => 'user' , 'as' => 'user'], function(){
-        Route::get('user', [PDFConotroller::class, 'user'])->name('user');
-        Route::get('subscriptionn', [PDFConotroller::class, 'createSubscription'])->name('user.subscriptionn');
 
         Route::prefix('marketplace')->group(function () {
             Route::get('/', [MarketPlaceController::class, 'index'])->name('marketplace');
@@ -67,6 +73,9 @@ Route::group(['middleware' => 'auth'] , function(){
             Route::post('walmart/integration', [MarketPlaceController::class, 'walmartIntegration'])->name('user.marketplace.walmart.integration');
             Route::get('/edit_view/{id}', [MarketPlaceController::class, 'editView'])->name('edit_View');
             Route::get('/thank-you', [MarketPlaceController::class, 'thankYouPage'])->name('thank-you');
+
+
+
         });
 
     }); // End of user access
@@ -142,8 +151,7 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('authorize', [AuthorizeNetController::class, 'index'])->name('dashboard.authorize');
 
 
-        Route::get('pay' , [PaymentController::class , 'pay'])->name('pay');
-        Route::post('/dopay/online' , [PaymentController::class , 'createSubscriptions'])->name('dashboard.dopay.online');
+
 
 
     }); // End of dashboard prefix

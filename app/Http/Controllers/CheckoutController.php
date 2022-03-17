@@ -18,15 +18,15 @@ use net\authorize\api\controller as AnetController;
 class CheckoutController extends Controller
 {
 
-   public function home()
-   {
-       if(auth()->user()){
-           return redirect('dashboard/marketplace');
-       }else{
-           return view('auth.login');
-       }
+//    public function home()
+//    {
+//        if(auth()->user()){
+//            return redirect('dashboard/marketplace');
+//        }else{
+//            return view('auth.login');
+//        }
 
-   }
+//    }
 
     public function index($subscription)
     {
@@ -62,7 +62,7 @@ class CheckoutController extends Controller
 
 
 
-    public function create(Request $request)
+    public function SubscriptionCreate(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
