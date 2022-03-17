@@ -61,7 +61,6 @@ Route::get('registration-form', function () {
 
 Route::group(['middleware' => 'auth'] , function(){
 
-
     Route::get('/pay' , [PaymentController::class , 'pay'])->name('pay');
 
     Route::group(['middleware' => 'CheckAuthPermission:user' , 'prefix' => 'user' , 'as' => 'user'], function(){
@@ -73,7 +72,6 @@ Route::group(['middleware' => 'auth'] , function(){
             Route::post('walmart/integration', [MarketPlaceController::class, 'walmartIntegration'])->name('user.marketplace.walmart.integration');
             Route::get('/edit_view/{id}', [MarketPlaceController::class, 'editView'])->name('edit_View');
             Route::get('/thank-you', [MarketPlaceController::class, 'thankYouPage'])->name('thank-you');
-
 
 
         });
@@ -101,7 +99,6 @@ Route::group(['middleware' => 'auth'] , function(){
             Route::get('user-view', [UserController::class, 'index'])->name('dashboard.admin.user-view');
 
         }); // end of admin access
-
 
 
 

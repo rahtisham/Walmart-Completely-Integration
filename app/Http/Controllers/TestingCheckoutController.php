@@ -139,7 +139,7 @@ class TestingCheckoutController extends Controller
         $subscription->setPayment($payment);
 
         $order = new AnetAPI\OrderType();
-        $order->setInvoiceNumber("123435456");
+        $order->setInvoiceNumber("5556765");
         $order->setDescription("Description of the subscription");
         $subscription->setOrder($order);
 
@@ -160,8 +160,7 @@ class TestingCheckoutController extends Controller
         if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
         {
 
-            return $response->getSubscriptionId();
-
+            // return $response->getSubscriptionId();
             $paymentlog = [
                 'amount' => $request->amount,
                 'subscription' => $response->getSubscriptionId()
@@ -177,39 +176,39 @@ class TestingCheckoutController extends Controller
         }
 
 
-        // $userData = [
-        //     'name' => $request->fname,
-        //     'email' => $request->email,
-        //     'last_name' => $request->lname,
-        //     'address' => $request->address,
-        //     'city' => $request->city,
-        //     'roles' => "1",
-        //     'postal' => $request->postal,
-        //     'country' => $request->country,
-        //     'state' => $request->state,
-        //     'contact' => $request->contact,
-        //     'password' => Hash::make($request->password),
-        // ];
+        $userData = [
+            'name' => $request->fname,
+            'email' => $request->email,
+            'last_name' => $request->lname,
+            'address' => $request->address,
+            'city' => $request->city,
+            'roles' => "1",
+            'postal' => $request->postal,
+            'country' => $request->country,
+            'state' => $request->state,
+            'contact' => $request->contact,
+            'password' => Hash::make($request->password),
+        ];
 
-        // $user = User::store($userData);
+        $user = User::store($userData);
 
-        // $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
+        $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
 
-        // $registredNotification =
-        //         [
-        //             'name' => $user->name,
-        //             'lname' => $user->last_name,
-        //             'email' => $user->email,
-        //             'name_on_card' => $paymentLog->name_on_card,
-        //             'amount' => $paymentLog->amount,
-        //             'address' => $user->address,
-        //             'contact' => $user->contact
-        //         ];
+        $registredNotification =
+                [
+                    'name' => $user->name,
+                    'lname' => $user->last_name,
+                    'email' => $user->email,
+                    'name_on_card' => $paymentLog->name_on_card,
+                    'amount' => $paymentLog->amount,
+                    'address' => $user->address,
+                    'contact' => $user->contact
+                ];
 
 
-        // Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
+        Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
-        // return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+        return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 
 
 
