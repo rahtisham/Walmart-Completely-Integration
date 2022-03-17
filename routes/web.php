@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('update-password', [UserController::class, 'show'])->name('password.update-password');
         Route::post('password-updated', [UserController::class, 'store'])->name('password.password-updated');
 
-    }); // end of admin access
+    }); // end of admin access route
 
 
     Route::prefix('dashboard')->group(function () {
