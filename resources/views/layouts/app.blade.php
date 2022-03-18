@@ -754,8 +754,8 @@
                             <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                                 <img src="{{ asset('AppealLab/images/profile/user.png') }}" width="20" alt=""/>
                                 <div class="header-info">
-                                    <span class="text-black"><strong>{{ auth()->user()->name; }}</strong></span>
-                                   <p class="fs-12 mb-0">{{ auth()->user()->last_name; }}</p>
+                                    <span class="text-black"><strong>{{ auth()->user()->name }}</strong></span>
+                                   <p class="fs-12 mb-0">{{ auth()->user()->last_name }}</p>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">

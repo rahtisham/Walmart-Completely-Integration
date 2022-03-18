@@ -70,6 +70,7 @@ class TestingCheckoutController extends Controller
             'expiration-year' => ['required', 'string', 'max:255'],
             'expiration-month' => ['required', 'string', 'max:255'],
             'cvv' => ['required', 'max:3', 'min:3'],
+            // 'amount' => ['required', 'max:255'],
             'password' => 'required',
             'password_confirmation' => 'required',
             'agreement' => 'required',
@@ -85,6 +86,7 @@ class TestingCheckoutController extends Controller
             'state.required' => 'State is required',
             'contact.required' => 'Phone number is required',
             'postal.required' => 'Postal code is required',
+            // 'amount.required' => 'Amount is required',
             'country.required' => 'Country is required',
             'cvv.required' => 'CVV is required',
             'cardNumber.required' => 'Card number is required',
@@ -137,7 +139,7 @@ class TestingCheckoutController extends Controller
         $subscription->setPayment($payment);
 
         $order = new AnetAPI\OrderType();
-        $order->setInvoiceNumber("5556765");
+        $order->setInvoiceNumber("34242343355");
         $order->setDescription("Description of the subscription");
         $subscription->setOrder($order);
 
@@ -158,7 +160,7 @@ class TestingCheckoutController extends Controller
         if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
         {
 
-            // return $response->getSubscriptionId();
+            $response->getSubscriptionId();
             $paymentlog = [
                 'amount' => $request->amount,
                 'subscription' => $response->getSubscriptionId()
