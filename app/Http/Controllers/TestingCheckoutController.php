@@ -20,40 +20,36 @@ class TestingCheckoutController extends Controller
 
     public function index($subscription)
     {
-        if(auth()->user()){
+        if (auth()->user()) {
             return redirect('user/marketplace');
-        }else{
+        } else {
 
             $amount = '';
             $platform = '';
-            if($subscription == 'walmart_option1'){
-                $amount = 98.00;
+            if ($subscription == 'walmart_option1') {
+                $amount = 97.00;
                 $platform = "walmart_option1";
             }
-            if($subscription == 'walmart_option2'){
+            if ($subscription == 'walmart_option2') {
                 $amount = 147.00;
                 $platform = "walmart_option2";
             }
-            if($subscription == 'amazon_option1'){
+            if ($subscription == 'amazon_option1') {
                 $amount = 97.00;
                 $platform = "amazon_option1";
             }
-            if($subscription ==  'amazon_option2')
-            {
+            if ($subscription ==  'amazon_option2') {
                 $amount = 147.00;
                 $platform = "amazon_option2";
             }
             // Get aurgament from Appeal lab website
-            return view('checkout.test', ['amount' => $amount , 'platform' => $platform]);
-
+            return view('checkout.test', ['amount' => $amount, 'platform' => $platform]);
         }
-
     }
 
 
     public function SubscriptionCreateTesting(Request $request)
     {
-
 
         $validator = Validator::make($request->all(), [
             'fname' => 'required', 'alpha', 'max:255',
@@ -66,7 +62,7 @@ class TestingCheckoutController extends Controller
             'state' => ['required', 'alpha', 'max:255'],
             'contact' => ['required', 'string', 'max:255'],
             'owner' => ['required', 'max:255'],
-            'cardNumber' => ['required', 'min:16' , 'max:16'],
+            'cardNumber' => ['required', 'min:16', 'max:16'],
             'expiration-year' => ['required', 'string', 'max:255'],
             'expiration-month' => ['required', 'string', 'max:255'],
             'cvv' => ['required', 'max:3', 'min:3'],
@@ -75,7 +71,7 @@ class TestingCheckoutController extends Controller
             'password_confirmation' => 'required',
             'agreement' => 'required',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ],[
+        ], [
             'email.required' => 'Email is required',
             'fname.required' => 'First name is required',
             'fname.alpha' => 'First name must only contain letters',
@@ -96,84 +92,7 @@ class TestingCheckoutController extends Controller
             'password_confirmation.required' => 'Confirm password is required',
         ])->validate();
 
-        $paymentLog = "";
-        $intervalLength = 30;
-
-        $startDate = new Carbon();
-
-        /* Create a merchantAuthenticationType object with authentication details
-           retrieved from the constants file */
-        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName('7LfUeM3n5r');
-        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
-
-        // Set the transaction's refId
-        $refId = 'ref' . time();
-        $cardNumber = preg_replace('/\s+/', '', $request['cardNumber']);
-
-        // Subscription Type Info
-        $subscription = new AnetAPI\ARBSubscriptionType();
-        $subscription->setName("Sample Subscription");
-
-        $interval = new AnetAPI\PaymentScheduleType\IntervalAType();
-        $interval->setLength($intervalLength);
-        $interval->setUnit("days");
-
-        $paymentSchedule = new AnetAPI\PaymentScheduleType();
-        $paymentSchedule->setInterval($interval);
-        $paymentSchedule->setStartDate($startDate);
-        $paymentSchedule->setTotalOccurrences("12");
-        $paymentSchedule->setTrialOccurrences("1");
-
-        $subscription->setPaymentSchedule($paymentSchedule);
-        $subscription->setAmount($request['amount']);
-        $subscription->setTrialAmount("0.00");
-
-        $creditCard = new AnetAPI\CreditCardType();
-        $creditCard->setCardNumber($cardNumber);
-        $creditCard->setExpirationDate($request['expiration-year'] . "-" . $request['expiration-month']);
-        $creditCard->setCardCode($request['cvv']);
-
-        $payment = new AnetAPI\PaymentType();
-        $payment->setCreditCard($creditCard);
-        $subscription->setPayment($payment);
-
-        $order = new AnetAPI\OrderType();
-        $order->setInvoiceNumber("34242343355");
-        $order->setDescription("Description of the subscription");
-        $subscription->setOrder($order);
-
-        $billTo = new AnetAPI\NameAndAddressType();
-        $billTo->setFirstName($request['fname']);
-        $billTo->setLastName($request['lname']);
-
-        $subscription->setBillTo($billTo);
-
-        $requestSubscribtion = new AnetAPI\ARBCreateSubscriptionRequest();
-        $requestSubscribtion->setmerchantAuthentication($merchantAuthentication);
-        $requestSubscribtion->setRefId($refId);
-        $requestSubscribtion->setSubscription($subscription);
-        $controller = new AnetController\ARBCreateSubscriptionController($requestSubscribtion);
-
-        $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
-
-        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
-        {
-
-            $response->getSubscriptionId();
-            $paymentlog = [
-                'amount' => $request->amount,
-                'subscription' => $response->getSubscriptionId()
-            ];
-
-            $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
-        }
-        else
-        {
-            echo "ERROR :  Invalid response\n";
-            $errorMessages = $response->getMessages()->getMessage();
-            echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
-        }
+        $createSubscribtion = $this->createSubscription($request);
 
 
         $userData = [
@@ -192,27 +111,110 @@ class TestingCheckoutController extends Controller
 
         $user = User::store($userData);
 
-        $payment = PaymentLogs::where('id' , $paymentLog->id)->update(['user_id' => $user->id]);
+        $payment = PaymentLogs::where('id', $createSubscribtion->id)->update(['user_id' => $user->id]);
 
         $registredNotification =
-                [
-                    'name' => $user->name,
-                    'lname' => $user->last_name,
-                    'email' => $user->email,
-                    'name_on_card' => $paymentLog->name_on_card,
-                    'amount' => $paymentLog->amount,
-                    'address' => $user->address,
-                    'contact' => $user->contact
-                ];
+            [
+                'name' => $user->name,
+                'lname' => $user->last_name,
+                'email' => $user->email,
+                'name_on_card' => $createSubscribtion->name_on_card,
+                'amount' => $createSubscribtion->amount,
+                'address' => $user->address,
+                'contact' => $user->contact
+            ];
 
 
         Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
         return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+    }
 
 
+    public function createSubscription($data){
+
+        $paymentLog = "";
+        $intervalLength = 30;
+        $invoice = strtotime("now");
+
+
+        $startDate = new Carbon();
+        // For date Time
+
+        /* Create a merchantAuthenticationType object with authentication details
+           retrieved from the constants file */
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName('7LfUeM3n5r');
+        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
+
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+        $cardNumber = preg_replace('/\s+/', '', $data['cardNumber']);
+
+        // Subscription Type Info
+        $subscription = new AnetAPI\ARBSubscriptionType();
+        $subscription->setName("Sample Subscription");
+
+        $interval = new AnetAPI\PaymentScheduleType\IntervalAType();
+        $interval->setLength($intervalLength);
+        $interval->setUnit("days");
+
+        $paymentSchedule = new AnetAPI\PaymentScheduleType();
+        $paymentSchedule->setInterval($interval);
+        $paymentSchedule->setStartDate($startDate);
+        $paymentSchedule->setTotalOccurrences("12");
+        $paymentSchedule->setTrialOccurrences("1");
+
+        $subscription->setPaymentSchedule($paymentSchedule);
+        $subscription->setAmount($data['amount']);
+        $subscription->setTrialAmount("0.00");
+
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber($cardNumber);
+        $creditCard->setExpirationDate($data['expiration-year'] . "-" . $data['expiration-month']);
+        $creditCard->setCardCode($data['cvv']);
+
+        $payment = new AnetAPI\PaymentType();
+        $payment->setCreditCard($creditCard);
+        $subscription->setPayment($payment);
+
+        $order = new AnetAPI\OrderType();
+        $order->setInvoiceNumber("3243243434". $invoice);
+        $order->setDescription("Description of the subscription");
+        $subscription->setOrder($order);
+
+        $billTo = new AnetAPI\NameAndAddressType();
+        $billTo->setFirstName($data['fname']);
+        $billTo->setLastName($data['lname']);
+
+        $subscription->setBillTo($billTo);
+
+        $request = new AnetAPI\ARBCreateSubscriptionRequest();
+        $request->setmerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setSubscription($subscription);
+        $controller = new AnetController\ARBCreateSubscriptionController($request);
+
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok")) {
+
+            $response->getSubscriptionId();
+            $paymentlog = [
+                'amount' => $data->amount,
+                'subscription' => $response->getSubscriptionId()
+            ];
+
+            return $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
+        } else {
+            echo "ERROR :  Invalid response\n";
+            $errorMessages = $response->getMessages()->getMessage();
+            echo "Response : " . $errorMessages[0]->getCode() . "  " . $errorMessages[0]->getText() . "\n";
+        }
 
     }
+
+
 
 
 
