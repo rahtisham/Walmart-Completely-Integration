@@ -44,26 +44,31 @@ class CheckoutController extends Controller
 
             $amount = '';
             $platform = '';
+            $subscriptionName = '';
 
             if($subscription == 'walmart_option1'){
                 $amount = 97;
                 $platform = "walmart_option1";
+                $subscriptionName = "Walmart Dropshipping + Walmart Wholesale";
             }
             if($subscription == 'walmart_option2'){
                 $amount = 147;
                 $platform = "walmart_option2";
+                $subscriptionName = "Walmart and Amazon Dropshipping + Walmart Wholesale  + Amazon FBA Wholesale";
             }
             if($subscription == 'amazon_option1'){
                 $amount = 97;
                 $platform = "amazon_option1";
+                $subscriptionName = "Account Protection - Amazon Dropshipping + Amazon FBA Wholesale";
             }
             if($subscription ==  'amazon_option2')
             {
                 $amount = 147;
                 $platform = "amazon_option2";
+                $subscriptionName = "Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale";
             }
             // Get aurgament from Appeal lab website
-            return view('checkout.checkout' , ['amount' => $amount , 'platform' => $platform]);
+            return view('checkout.checkout' , ['amount' => $amount , 'platform' => $platform , 'subscriptionName' => $subscriptionName]);
 
         }
 
@@ -538,7 +543,7 @@ class CheckoutController extends Controller
 
         // Subscription Type Info
         $subscription = new AnetAPI\ARBSubscriptionType();
-        $subscription->setName("Sample Subscription");
+        $subscription->setName($data['subscriptionName']);
 
         $interval = new AnetAPI\PaymentScheduleType\IntervalAType();
         $interval->setLength($intervalLength);
@@ -587,6 +592,9 @@ class CheckoutController extends Controller
             $response->getSubscriptionId();
             $paymentlog = [
                 'amount' => $data->amount,
+                'name_on_card' => $data->owner,
+                'message_code' => $data->platform,
+                'subscriptionName' => $data->subscriptionName,
                 'subscription' => $response->getSubscriptionId()
             ];
 

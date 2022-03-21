@@ -25,7 +25,7 @@
         <div class="row">
             @foreach($marketPlace as $walmart)
                 <div class="col-xl-4">
-                    <a href="{{ url('user/marketplace/edit_view' , $walmart['id']) }}">
+                    <a href="{{ url('user/marketplace/edit_view' , $walmart['user_id']) }}">
                         <div class="card HoverCard bg-image-walmart">
                             <div class="card-header">
                                 <button type="button" class="btn btn-success btn-xxs">Active</button>

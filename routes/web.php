@@ -22,6 +22,7 @@ use App\Http\Controllers\MarketPlace\MarketPlaceController;
 use App\Http\Controllers\admin\UserRegistrationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Controllers\TestingCheckoutController;
 
 
@@ -51,6 +52,7 @@ Route::get('registration-form', function () {
 
     Route::get('testing-checkout/{subscribtion}', [TestingCheckoutController::class, 'index'])->name('testing-checkout');
     Route::post('create-subscription', [TestingCheckoutController::class, 'SubscriptionCreateTesting'])->name('create-subscription');
+    Route::get('cancel-subscription', [TestingCheckoutController::class, 'cancelSubscription'])->name('cancel-subscription');
 
     //For Testing checkout page
 
@@ -75,6 +77,12 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
         });
+
+            Route::get('subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+            Route::post('cancel/{subscriptionId}', [SubscriptionController::class, 'cancelSubscription'])->name('cancel');
+
+            Route::get('create-subscription', [SubscriptionController::class, 'createSubscription'])->name('create-subscription');
+
 
     }); // End of user access
 

@@ -70,7 +70,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                                 </div>
-                                                <input type="text" disabled class="form-control" value="{{ $marketPlace->name }}" id="name" name="val-username" placeholder="Enter a username..">
+                                                <input type="text" disabled class="form-control" value="{{ $marketPlace['name'] }}" id="name" name="val-username" placeholder="Enter a username..">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -79,7 +79,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                                 </div>
-                                                <input type="text" disabled class="form-control" id="clientID" value="{{ $marketPlace->client_id }}" name="val-password" placeholder="Choose a safe one..">
+                                                <input type="text" disabled class="form-control" id="clientID" value="{{ $marketPlace['client_id'] }}" name="val-password" placeholder="Choose a safe one..">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -88,7 +88,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                                 </div>
-                                                <input type="text" disabled class="form-control" id="clientSecret" value="{{ $marketPlace->client_secret }}" name="val-password" placeholder="Choose a safe one..">
+                                                <input type="text" disabled class="form-control" id="clientSecret" value="{{ $marketPlace['client_secret'] }}" name="val-password" placeholder="Choose a safe one..">
                                             </div>
                                         </div>
                                     </form>

@@ -838,6 +838,12 @@
                             <span class="nav-text">Walmart</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ url('user/subscription') }}">
+                            <i class="flaticon-381-controls-3"></i>
+                            <span class="nav-text">Subscription</span>
+                        </a>
+                    </li>
                 @endif
 {{--                @if(auth()->user()->roles == 2)--}}
 {{--                    <li>--}}

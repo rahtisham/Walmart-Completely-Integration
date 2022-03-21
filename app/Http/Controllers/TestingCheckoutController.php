@@ -29,21 +29,25 @@ class TestingCheckoutController extends Controller
             if ($subscription == 'walmart_option1') {
                 $amount = 97.00;
                 $platform = "walmart_option1";
+                $subscriptionName = "Walmart Dropshipping + Walmart Wholesale";
             }
             if ($subscription == 'walmart_option2') {
                 $amount = 147.00;
                 $platform = "walmart_option2";
+                $subscriptionName = "Walmart and Amazon Dropshipping + Walmart and Amazon Dropshipping FBA Wholesale";
             }
             if ($subscription == 'amazon_option1') {
                 $amount = 97.00;
                 $platform = "amazon_option1";
+                $subscriptionName = "Amazon Dropshipping + Amazon FBA Wholesale";
             }
             if ($subscription ==  'amazon_option2') {
                 $amount = 147.00;
                 $platform = "amazon_option2";
+                $subscriptionName = "Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale";
             }
             // Get aurgament from Appeal lab website
-            return view('checkout.test', ['amount' => $amount, 'platform' => $platform]);
+            return view('checkout.test', ['amount' => $amount, 'platform' => $platform , 'subscriptionName' => $subscriptionName]);
         }
     }
 
@@ -153,7 +157,7 @@ class TestingCheckoutController extends Controller
 
         // Subscription Type Info
         $subscription = new AnetAPI\ARBSubscriptionType();
-        $subscription->setName("Sample Subscription");
+        $subscription->setName($data['subscriptionName']);
 
         $interval = new AnetAPI\PaymentScheduleType\IntervalAType();
         $interval->setLength($intervalLength);
@@ -202,6 +206,9 @@ class TestingCheckoutController extends Controller
             $response->getSubscriptionId();
             $paymentlog = [
                 'amount' => $data->amount,
+                'name_on_card' => $data->owner,
+                'message_code' => $data->platform,
+                'subscriptionName' => $data->subscriptionName,
                 'subscription' => $response->getSubscriptionId()
             ];
 
@@ -213,6 +220,45 @@ class TestingCheckoutController extends Controller
         }
 
     }
+
+
+    public function cancelSubscription($subscriptionId = 8018163)
+{
+    /* Create a merchantAuthenticationType object with authentication details
+       retrieved from the constants file */
+    $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+    $merchantAuthentication->setName('7LfUeM3n5r');
+    $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
+
+    // Set the transaction's refId
+    $refId = 'ref' . time();
+
+    $request = new AnetAPI\ARBCancelSubscriptionRequest();
+    $request->setMerchantAuthentication($merchantAuthentication);
+    $request->setRefId($refId);
+    $request->setSubscriptionId($subscriptionId);
+
+    $controller = new AnetController\ARBCancelSubscriptionController($request);
+
+    $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+    if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
+    {
+        $successMessages = $response->getMessages()->getMessage();
+        echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
+
+     }
+    else
+    {
+        echo "ERROR :  Invalid response\n";
+        $errorMessages = $response->getMessages()->getMessage();
+        echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
+
+    }
+
+    return $response;
+
+  }
 
 
 

@@ -408,6 +408,8 @@
                                         {{--                                    <label class="card-labels" for="card-cvc">Card Code (CVC)</label>--}}
                                         <input type="number" id="cvv" name="cvv" placeholder="CVC" class="form-control lname card-cvc name-form" value="123" >
                                         <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
+                                        <input type="hidden" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $platform }}"  readonly>
+                                        <input type="text" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
                                         @error('cvv')
                                         <span class="text-danger"> {{ $message }}</span>
                                         @enderror

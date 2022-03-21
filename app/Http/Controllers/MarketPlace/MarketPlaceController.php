@@ -193,7 +193,7 @@ class MarketPlaceController extends Controller
 //                                            ->get()->count();
 
 
-        return view('marketplace.edit-view' , compact('marketPlace'));
+        return view('marketplace.edit-view' , ['marketPlace' => $marketPlace]);
     }
 
 }
