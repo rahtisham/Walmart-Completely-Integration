@@ -81,10 +81,17 @@ Route::group(['middleware' => 'auth'] , function(){
             Route::get('subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
             Route::post('cancel/{subscriptionId}', [SubscriptionController::class, 'cancelSubscription'])->name('cancel');
 
-            Route::get('create-subscription', [SubscriptionController::class, 'createSubscription'])->name('create-subscription');
-
 
     }); // End of user access
+
+    Route::group(['middleware' => 'CheckAuthPermission:subscription' , 'prefix' => 'subscription' , 'as' => 'createSubscription'], function(){
+
+        Route::get('plan', [SubscriptionController::class, 'plan'])->name('plan');
+        Route::get('create-view/{subscribtion}', [SubscriptionController::class, 'subscription'])->name('create-view');
+        Route::post('subscription-create', [SubscriptionController::class, 'subscriptionAdded'])->name('subscription-create');
+
+    }); // end of admin access route
+
 
     Route::group(['middleware' => 'CheckAuthPermission:password' , 'prefix' => 'password' , 'as' => 'password'], function(){
 

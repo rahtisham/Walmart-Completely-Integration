@@ -845,6 +845,14 @@
                         </a>
                     </li>
                 @endif
+                @if (auth()->user()->roles == 4)
+                <li>
+                    <a href="{{ url('/subscription/plan') }}">
+                        <i class="flaticon-381-controls-3"></i>
+                        <span class="nav-text">Plans</span>
+                    </a>
+                </li>
+                @endif
 {{--                @if(auth()->user()->roles == 2)--}}
 {{--                    <li>--}}
 {{--                        <a href="{{ url('dashboard/admin') }}">--}}

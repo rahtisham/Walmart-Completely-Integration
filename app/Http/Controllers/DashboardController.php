@@ -24,6 +24,10 @@ class DashboardController extends Controller
             {
                 return redirect('password/update-password');
             }
+            if(auth()->user()->roles == 4)
+            {
+                return redirect('subscription/plan');
+            }
 
         }else{
             return redirect('/login');
@@ -46,6 +50,10 @@ class DashboardController extends Controller
             if(auth()->user()->roles == 3)
             {
                 return redirect('password/update-password');
+            }
+            if(auth()->user()->roles == 4)
+            {
+                return redirect('subscription/plan');
             }
 
         }else{

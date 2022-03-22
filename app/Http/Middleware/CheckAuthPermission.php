@@ -30,6 +30,9 @@ class CheckAuthPermission
             if ($CheckAuthPermission == "password" && auth()->user()->roles != 3) {
                 abort('404');
             }
+            if ($CheckAuthPermission == "subscription" && auth()->user()->roles != 4) {
+                abort('404');
+            }
             return $next($request);
 
         }

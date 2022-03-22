@@ -54,8 +54,22 @@
                                         <td>{{ $paymentLogs['subscriptionName'] }}</td>
                                         <td>
                                             <span class="badge light badge-success">
-												<i class="fa fa-circle text-success mr-1"></i>
+                                                @if ($paymentLogs['message_code'] == "walmart_option1")
+                                                    <i class="fa fa-circle text-success mr-1"></i>
                                                     Walmart
+                                                @endif
+                                                @if ($paymentLogs['message_code'] == "walmart_option2")
+                                                    <i class="fa fa-circle text-success mr-1"></i>
+                                                    Walmart
+                                                    @endif
+                                                @if ($paymentLogs['message_code'] == "amazon_option1")
+                                                    <i class="fa fa-circle text-success mr-1"></i>
+                                                    Amazon
+                                                    @endif
+                                                @if ($paymentLogs['message_code'] == "amazon_option2")
+                                                    <i class="fa fa-circle text-success mr-1"></i>
+                                                    Amazon
+                                                @endif
 											</span>
                                         </td>
                                         <td><br>
