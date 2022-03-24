@@ -450,7 +450,7 @@ class CheckoutController extends Controller
             'address' => ['required', 'string', 'max:255'],
             'city' => ['required', 'max:255'],
             'postal' => ['required', 'max:7'],
-            'country' => ['required', 'alpha', 'max:255'],
+            'country' => ['required', 'max:255'],
             'state' => ['required', 'alpha', 'max:255'],
             'contact' => ['required', 'string', 'max:255'],
             'owner' => ['required', 'max:255'],

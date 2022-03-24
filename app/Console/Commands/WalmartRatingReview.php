@@ -43,81 +43,91 @@ class WalmartRatingReview extends Command
      */
     public function handle()
     {
-        $ratingReview = ShippingManager::count();
-        for ($i=0; $i<=$ratingReview;  $i++) {
+         $ratingReviewCount = ShippingManager::where('status', 'Pending')
+                                        ->where('module', 'Rating_Review')
+                                        ->count();
+        if($ratingReviewCount > 0){
 
-            $ratingReview = ShippingManager::where('status', 'Pending')
-                ->where('module', 'Rating_Review')
-                ->first();
+            for ($i = 0; $i < $ratingReviewCount; $i++) {
+               // \Log::info($ratingReview);
 
-            $user_session_id = $ratingReview->marketPlace->user_id;
-
-            $user = User::where('id', '=', $user_session_id)->get();
-            $email = $user[0]['email'];
-
-            if ($ratingReview) {
-
-                $client_id = $ratingReview->marketPlace->client_id;
-                $client_secret = $ratingReview->marketPlace->client_secret;
-                $user_session_id = $ratingReview->marketPlace->user_id;
-
-                $token = Walmart::getToken($client_id, $client_secret);
-
-                $response = walmart::getItemRatingReview($client_id, $client_secret, $token);
+               $ratingReview = ShippingManager::where('status', 'Pending')
+                                                   ->where('module', 'Rating_Review')
+                                                   ->first();
 
 
-                $offerScore = $response['payload']['score']['offerScore'];
-                $ratingReviewScore = $response['payload']['score']['ratingReviewScore'];
-                $contentScore = $response['payload']['score']['contentScore'];
+                if ($ratingReview) {
+                    $user_id = $ratingReview->marketPlace->user_id;
+                    $m_id = $ratingReview->marketPlace->id;
 
-                $itemDefectCnt = $response['payload']['postPurchaseQuality']['itemDefectCnt'];
-                $defectRatio = $response['payload']['postPurchaseQuality']['defectRatio'];
+                    $user = User::where('id', '=', $user_id)->get();
+                    $email = $user[0]['email'];
 
-                $listingQuality = $response['payload']['listingQuality'];
-                $status = $response['status'];
+                   $client_id = $ratingReview->marketPlace->client_id;
+                   $client_secret = $ratingReview->marketPlace->client_secret;
 
-                $ratingRaview = RatingReviewModel::Create([
+                   $token = Walmart::getToken($client_id, $client_secret);
 
-                    'offerScore' => $response['payload']['score']['offerScore'],
-                    'ratingReviewScore' => $response['payload']['score']['ratingReviewScore'],
-                    'contentScore' => $response['payload']['score']['contentScore'],
-                    'itemDefectCnt' => $response['payload']['postPurchaseQuality']['itemDefectCnt'],
-                    'defectRatio' => $response['payload']['postPurchaseQuality']['defectRatio'],
-                    'listingQuality' => $response['payload']['listingQuality'],
-                    'status' => $response['status']
-
-                ]);
-
-                $walmart_rating_review = RatingReviewModel::all();
-                // Retrieve rating review percentage from database
+                   $response = walmart::getItemRatingReview($client_id, $client_secret, $token);
 
 
-                if(!empty($email))
-                {
-                    if(isset($walmart_rating_review) && count($walmart_rating_review) > 0)
-                    {
-                        $mailSenderArray = [];
-                        foreach($walmart_rating_review as $review_mail)
-                        {
-                            $mailSenderArray[] = [
+                   $offerScore = $response['payload']['score']['offerScore'];
+                   $ratingReviewScore = $response['payload']['score']['ratingReviewScore'];
+                   $contentScore = $response['payload']['score']['contentScore'];
 
-                                'offerScore' => $review_mail['offerScore'],
-                                'ratingReviewScore' => $review_mail['ratingReviewScore'],
-                                'contentScore' => $review_mail['contentScore'],
-                                'itemDefectCnt' => $review_mail['itemDefectCnt'],
-                                'defectRatio' => $review_mail['defectRatio'],
-                                'listingQuality' => $review_mail['listingQuality'],
-                                'status' => $review_mail['status'],
-                                'email' => $email
-                            ];
-                        }
-                        Mail::to($email)->send(new RatingReview($mailSenderArray));
-                    }
-                }
+                   $itemDefectCnt = $response['payload']['postPurchaseQuality']['itemDefectCnt'];
+                   $defectRatio = $response['payload']['postPurchaseQuality']['defectRatio'];
 
-                $manager = ShippingManager::updateStatus($ratingReview->id, "Completed");
-                \Log::info("Rating and Review Performance Done");
-            }
+                   $listingQuality = $response['payload']['listingQuality'];
+                   $status = $response['status'];
+
+                   $ratingRaview = RatingReviewModel::Create([
+
+                       'offerScore' => $response['payload']['score']['offerScore'],
+                       'user_id' => $user_id,
+                       'm_id' => $m_id,
+                       'ratingReviewScore' => $response['payload']['score']['ratingReviewScore'],
+                       'contentScore' => $response['payload']['score']['contentScore'],
+                       'itemDefectCnt' => $response['payload']['postPurchaseQuality']['itemDefectCnt'],
+                       'defectRatio' => $response['payload']['postPurchaseQuality']['defectRatio'],
+                       'listingQuality' => $response['payload']['listingQuality'],
+                       'status' => $response['status']
+
+                   ]);
+
+                   // Retrieve rating review percentage from database
+
+
+                   if(!empty($email))
+                   {
+                       if($ratingRaview)
+                       {
+                        $mailSenderArray[] = [
+
+                            'offerScore'        => $ratingRaview['offerScore'],
+                            'ratingReviewScore' => $ratingRaview['ratingReviewScore'],
+                            'contentScore'      => $ratingRaview['contentScore'],
+                            'itemDefectCnt'     => $ratingRaview['itemDefectCnt'],
+                            'defectRatio'       => $ratingRaview['defectRatio'],
+                            'listingQuality'    => $ratingRaview['listingQuality'],
+                            'status'            => $ratingRaview['status'],
+                            'email'             => $email
+                        ];
+                           Mail::to($email)->send(new RatingReview($mailSenderArray));
+                       }
+                   }
+
+                   $manager = ShippingManager::updateStatus($ratingReview->id, "Completed");
+                   \Log::info("Rating and Review Performance Done");
+               }
+           }
+
         }
+
+
+        ShippingManager::where('status', 'Completed')
+                        ->where('module', 'Rating_Review')
+                        ->update(['status' => 'Pending']);
+
     }
 }

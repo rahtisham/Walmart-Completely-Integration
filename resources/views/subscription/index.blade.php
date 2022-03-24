@@ -72,6 +72,12 @@
                                                 @endif
 											</span>
                                         </td>
+                                        @if ($paymentLogs['status'] == "cancel")
+                                        <td>
+                                            <button class="btn btn-xs btn-primary">Cancel</button>
+                                        </td>
+                                        @endif
+                                        @if ($paymentLogs['status'] == "active")
                                         <td><br>
                                             <form method="post" action="{{ url('user/cancel' , $paymentLogs->subscription ) }}">
                                                 @csrf
@@ -79,6 +85,7 @@
                                                 <button type="submit" class="btn btn-xs btn-danger show_confirm" data-toggle="tooltip" title='Delete'>Delete</button>
                                             </form>
                                         </td>
+                                        @endif
                                     </tr>
                                     @endforeach
                             </table>

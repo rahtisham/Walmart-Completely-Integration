@@ -91,7 +91,7 @@
 
                                                     <br/>
                                                     <div class="form-group" id="pay-now">
-                                                        <button type="submit" class="btn btn-success themeButton" id="confirm-purchase">Confirm Payment</button>
+                                                        <button type="submit" class="btn btn-primary themeButton" id="confirm-purchase">Confirm Payment</button>
                                                     </div>
                                                 </form>
                                             </div>
