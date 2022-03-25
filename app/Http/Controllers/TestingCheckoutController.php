@@ -209,6 +209,7 @@ class TestingCheckoutController extends Controller
                 'name_on_card' => $data->owner,
                 'message_code' => $data->platform,
                 'subscriptionName' => $data->subscriptionName,
+                'status' => 'active',
                 'subscription' => $response->getSubscriptionId()
             ];
 

@@ -245,7 +245,7 @@ class WalmartGetOrders extends Command
                 // End of total items condition
 
                 $manager = ItemsManager::updateStatus($itemManager->id, "Completed");
-                \Log::info("Regional Performance Done");
+                \Log::info("Get All Orders");
 
             }
 

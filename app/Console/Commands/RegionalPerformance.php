@@ -41,78 +41,90 @@ class RegionalPerformance extends Command
      */
     public function handle()
     {
-        $regionalPerformance = ShippingManager::count();
-        for ($i=0; $i<=$regionalPerformance;  $i++) {
-
-            $regionalPerformance = ShippingManager::where('status', 'Pending')
+        $regionalPerformanceCount = ShippingManager::where('status', 'Pending')
                                                 ->where('module', 'Regional_Performance')
-                                                ->first();
+                                                ->count();
 
-            $user_session_id = $regionalPerformance->marketPlace->user_id;
+        if($regionalPerformanceCount > 0){
 
-            $user = User::where('id' , '=' , $user_session_id)->get();
-            $email = $user[0]['email'];
+            for ($i = 0; $i < $regionalPerformanceCount;  $i++) {
 
-            if ($regionalPerformance) {
+                $regionalPerformance = ShippingManager::where('status', 'Pending')
+                                                    ->where('module', 'Regional_Performance')
+                                                    ->first();
 
-                $last_delivery_date = Order_details::select('order_date')
-                    ->where('order_date' , '!=' , null)
-                    ->latest('order_date')
-                    ->first();
 
-                $to = $last_delivery_date['order_date'];
-                $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
-                $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+                if ($regionalPerformance) {
 
-                $reportShipment = Order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
-                $total_number_of_row =  $reportShipment->count();
+                    $user_id = $regionalPerformance->marketPlace->user_id;
 
-                $regionalCity = [];
-                $regionalState = [];
+                    $user = User::where('id' , '=' , $user_id)->get();
+                    $email = $user[0]['email'];
 
-                $cities = Order_details::select('city')->distinct('city')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('city');
-                foreach($cities as $city)
-                {
-                    $number_of_orders =  Order_details::where('city' , $city)->get()->count();
+                    $last_delivery_date = Order_details::select('order_date')
+                                                        ->where('order_date' , '!=' , null)
+                                                        ->latest('order_date')
+                                                        ->first();
 
-                    $obtained_mark = $number_of_orders / $total_number_of_row;
-                    $percentage = $obtained_mark * 100;
+                    $to = $last_delivery_date['order_date'];
+                    $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
+                    $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
 
-                    $regionalCity[$city] = [
+                    $reportShipment = Order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
+                    $total_number_of_row =  $reportShipment->count();
 
-                        'order' => $number_of_orders,
-                        'email' => $email,
-                        'city' => $city,
-                        'percentage' => $percentage
+                    $regionalCity = [];
+                    $regionalState = [];
 
-                    ];
+                    $cities = Order_details::select('city')->distinct('city')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('city');
+                    foreach($cities as $city)
+                    {
+                        $number_of_orders =  Order_details::where('city' , $city)->get()->count();
+
+                        $obtained_mark = $number_of_orders / $total_number_of_row;
+                        $percentage = $obtained_mark * 100;
+
+                        $regionalCity[$city] = [
+
+                            'order' => $number_of_orders,
+                            'email' => $email,
+                            'city' => $city,
+                            'percentage' => $percentage
+
+                        ];
+
+                    }
+
+                    $states = Order_details::select('state')->distinct('state')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('state');
+                    foreach($states as $state)
+                    {
+                        $number_of_orders =  Order_details::where('state' , $state)->get()->count();
+
+                        $obtained_mark = $number_of_orders / $total_number_of_row;
+                        $percentage = $obtained_mark * 100;
+
+                        $regionalState[$state] = [
+
+                            'order' => $number_of_orders,
+                            'email' => $email,
+                            'city' => $state,
+                            'percentage' => $percentage
+
+                        ];
+
+                    }
+
+                    Mail::to($email)->send(new \App\Mail\regionalPerformance($regionalCity));
 
                 }
 
-                $states = Order_details::select('state')->distinct('state')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('state');
-                foreach($states as $state)
-                {
-                    $number_of_orders =  Order_details::where('state' , $state)->get()->count();
-
-                    $obtained_mark = $number_of_orders / $total_number_of_row;
-                    $percentage = $obtained_mark * 100;
-
-                    $regionalState[$state] = [
-
-                        'order' => $number_of_orders,
-                        'email' => $email,
-                        'city' => $state,
-                        'percentage' => $percentage
-
-                    ];
-
-                }
-
-                Mail::to($email)->send(new \App\Mail\regionalPerformance($regionalCity));
-
+                $manager = ShippingManager::updateStatus($regionalPerformance->id, "Completed");
+                \Log::info("Regional Performance Done");
             }
-            $manager = ShippingManager::updateStatus($regionalPerformance->id, "Completed");
-            \Log::info("Regional Performance Done");
         }
+
+        ShippingManager::where('status', 'Completed')
+                        ->where('module', 'Regional_Performance')
+                        ->update(['status' => 'Pending']);
     }
 }

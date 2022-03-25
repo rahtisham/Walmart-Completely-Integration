@@ -46,71 +46,84 @@ class WalmartDelivery extends Command
      */
     public function handle()
     {
-        $delivery = ShippingManager::count();
-        for ($i=0; $i<=$delivery;  $i++) {
+        $deliveryCount = ShippingManager::where('status', 'Pending')
+                                    ->where('module', 'On_Time_Delivery')
+                                    ->count();
 
-            $DeliveryManager = ShippingManager::where('status', 'Pending')
-                                                ->where('module', 'On_Time_Delivery')
-                                                ->first();
+        if($deliveryCount > 0){
 
-            if ($DeliveryManager) {
+            for ($i = 0; $i < $deliveryCount;  $i++) {
 
-                $user_session_id = $DeliveryManager->marketPlace->user_id;
+                $DeliveryManager = ShippingManager::where('status', 'Pending')
+                                                    ->where('module', 'On_Time_Delivery')
+                                                    ->first();
 
-                $last_delivery_date = order_details::select('actualDeliveryDate')
-                    ->where('actualDeliveryDate' , '!=' , null)
-                    ->latest('actualDeliveryDate')
-                    ->first();
+                if ($DeliveryManager) {
 
-                $to = $last_delivery_date['actualDeliveryDate'];
-                $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days");
-                $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
-//                \Log::info("Status has been updated" . $to);
+                    $user_id = $DeliveryManager->marketPlace->user_id;
 
-                $reportDelivery = order_details::whereBetween('actualDeliveryDate', [$ten_days_ago_delivery_Date , $to])->get();
+                    $last_delivery_date = order_details::select('actualDeliveryDate')
+                                                        ->where('actualDeliveryDate' , '!=' , null)
+                                                        ->latest('actualDeliveryDate')
+                                                        ->first();
 
-                $user = User::where('id' , '=' , $user_session_id)->get();
-                $email = $user[0]['email'];
+                    $to = $last_delivery_date['actualDeliveryDate'];
+                    $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days");
+                    $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
 
-                if(count($reportDelivery) > 0)
-                {
-                    $report_generate = [];
-                    foreach($reportDelivery as $report)
+                    $reportDelivery = order_details::whereBetween('actualDeliveryDate', [$ten_days_ago_delivery_Date , $to])->get();
+
+                    $user = User::where('id' , '=' , $user_id)->get();
+                    $email = $user[0]['email'];
+
+                    if(count($reportDelivery) > 0)
                     {
-                        $actualDeliveryDate = strtotime($report['actualDeliveryDate']);
-                        $estimatedDeliveryDate = strtotime($report['estimatedDeliveryDate']);
-
-                        if($actualDeliveryDate <= $estimatedDeliveryDate)
+                        $report_generate = [];
+                        foreach($reportDelivery as $report)
                         {
-                            $actualDeliveryStatus = "Excellent";
-                        }
-                        elseif($actualDeliveryDate == $estimatedDeliveryDate)
-                        {
-                            $actualDeliveryStatus = "Good";
-                        }
-                        elseif($actualDeliveryDate > $estimatedDeliveryDate)
-                        {
-                            $actualDeliveryStatus = "Poor";
+                            $actualDeliveryDate = strtotime($report['actualDeliveryDate']);
+                            $estimatedDeliveryDate = strtotime($report['estimatedDeliveryDate']);
+
+                            if($actualDeliveryDate <= $estimatedDeliveryDate)
+                            {
+                                $actualDeliveryStatus = "Excellent";
+                            }
+                            elseif($actualDeliveryDate == $estimatedDeliveryDate)
+                            {
+                                $actualDeliveryStatus = "Good";
+                            }
+                            elseif($actualDeliveryDate > $estimatedDeliveryDate)
+                            {
+                                $actualDeliveryStatus = "Poor";
+                            }
+
+                            $report_generate[] = [
+
+                                'order_id' => $report['user_id'],
+                                'actualDeliveryDate' => $report['actualDeliveryDate'],
+                                'estimatedDeliveryDate' => $report['estimatedDeliveryDate'],
+                                'email' => $email,
+                                'status' => $actualDeliveryStatus,
+                            ];
+
                         }
 
-                        $report_generate[] = [
-
-                            'order_id' => $report['user_id'],
-                            'actualDeliveryDate' => $report['actualDeliveryDate'],
-                            'estimatedDeliveryDate' => $report['estimatedDeliveryDate'],
-                            'email' => $email,
-                            'status' => $actualDeliveryStatus,
-                        ];
+                        Mail::to($email)->send(new OnTimeDeliveryAlert($report_generate));
 
                     }
 
-                    Mail::to($email)->send(new OnTimeDeliveryAlert($report_generate));
-
+                    $manager = ShippingManager::updateStatus($DeliveryManager->id, "Completed");
+                    \Log::info("Delivery On Time Done");
                 }
-
-                $manager = ShippingManager::updateStatus($DeliveryManager->id, "Completed");
-                 \Log::info("Delivery On Time Done");
             }
         }
+        else{
+            \Log::info("Product is not delivered");
+        }
+
+        ShippingManager::where('status', 'Completed')
+                            ->where('module', 'On_Time_Delivery')
+                            ->update(['status' => 'Pending']);
+
     }
 }

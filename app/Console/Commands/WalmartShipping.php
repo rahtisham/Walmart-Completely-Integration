@@ -43,74 +43,84 @@ class WalmartShipping extends Command
      */
     public function handle()
     {
-        $shipment = ShippingManager::count();
-        for ($i=0; $i<=$shipment;  $i++) {
+        $shipmentCount = ShippingManager::where('status', 'Pending')
+                                    ->where('module', 'On_Time_Shipping')
+                                    ->count();
+
+        if($shipmentCount > 0){
+            for ($i = 0; $i < $shipmentCount;  $i++) {
 
 
-            $shipment = ShippingManager::where('status', 'Pending')
-                                            ->where('module', 'On_Time_Shipping')
-                                            ->first();
+                $shipment = ShippingManager::where('status', 'Pending')
+                                                ->where('module', 'On_Time_Shipping')
+                                                ->first();
 
-            $user_session_id = $shipment->marketPlace->user_id;
-
-
-            if ($shipment) {
-
-                $last_shipment_date = Order_details::select('actualShipDate')
-                                                    ->where('actualShipDate' , '!=' , null)
-                                                    ->latest('actualShipDate')
-                                                    ->first();
-
-                $to = $last_shipment_date['actualShipDate'];
-                $addDay= strtotime($last_shipment_date['actualShipDate'] . "-10 days");
-                $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
+                $user_session_id = $shipment->marketPlace->user_id;
 
 
-                $reportShipment = Order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
+                if ($shipment) {
 
-                $user = User::where('id' , '=' , $user_session_id)->get();
-                $email = $user[0]['email'];
+                    $last_shipment_date = Order_details::select('actualShipDate')
+                                                        ->where('actualShipDate' , '!=' , null)
+                                                        ->latest('actualShipDate')
+                                                        ->first();
 
-                if(count($reportShipment) > 0)
-                {
-                    $report_generate = [];
-                    foreach($reportShipment as $report)
+                    $to = $last_shipment_date['actualShipDate'];
+                    $addDay= strtotime($last_shipment_date['actualShipDate'] . "-10 days");
+                    $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
+
+
+                    $reportShipment = Order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
+
+                    $user = User::where('id' , '=' , $user_session_id)->get();
+                    $email = $user[0]['email'];
+
+                    if(count($reportShipment) > 0)
                     {
-                        $actaulshipDate = strtotime($report['actualShipDate']);
-                        $estimatedShipDate = strtotime($report['estimatedShipDate']);
-
-                        if($actaulshipDate < $estimatedShipDate)
+                        $report_generate = [];
+                        foreach($reportShipment as $report)
                         {
-                            $actualShippingStatus = "Excellent";
-                        }
-                        elseif($actaulshipDate == $estimatedShipDate)
-                        {
-                            $actualShippingStatus = "Good";
-                        }
-                        elseif($actaulshipDate > $estimatedShipDate)
-                        {
-                            $actualShippingStatus = "Poor";
+                            $actaulshipDate = strtotime($report['actualShipDate']);
+                            $estimatedShipDate = strtotime($report['estimatedShipDate']);
+
+                            if($actaulshipDate < $estimatedShipDate)
+                            {
+                                $actualShippingStatus = "Excellent";
+                            }
+                            elseif($actaulshipDate == $estimatedShipDate)
+                            {
+                                $actualShippingStatus = "Good";
+                            }
+                            elseif($actaulshipDate > $estimatedShipDate)
+                            {
+                                $actualShippingStatus = "Poor";
+                            }
+
+                            $report_generate[] = [
+
+                                'order_id' => $report['user_id'],
+                                'actualShipDate' => $report['actualShipDate'],
+                                'estimatedShipDate' => $report['estimatedShipDate'],
+                                'email' => $email,
+                                'status' => $actualShippingStatus,
+                            ];
+
+
                         }
 
-                        $report_generate[] = [
-
-                            'order_id' => $report['user_id'],
-                            'actualShipDate' => $report['actualShipDate'],
-                            'estimatedShipDate' => $report['estimatedShipDate'],
-                            'email' => $email,
-                            'status' => $actualShippingStatus,
-                        ];
-
+                        Mail::to($email)->send(new OnTimeShipping($report_generate));
 
                     }
 
-                    Mail::to($email)->send(new OnTimeShipping($report_generate));
-
+                    $manager = ShippingManager::updateStatus($shipment->id, "Completed");
+                    \Log::info("On Time Shipment is Done");
                 }
-
-                $manager = ShippingManager::updateStatus($shipment->id, "Completed");
-                \Log::info("Shipping Delivery Done");
             }
         }
+
+        ShippingManager::where('status', 'Completed')
+                        ->where('module', 'On_Time_Shipping')
+                        ->update(['status' => 'Pending']);
+
     }
 }

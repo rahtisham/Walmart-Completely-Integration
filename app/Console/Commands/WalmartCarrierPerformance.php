@@ -42,59 +42,71 @@ class WalmartCarrierPerformance extends Command
      */
     public function handle()
     {
-        $carrierPerformance = ShippingManager::count();
-        for ($i=0; $i<=$carrierPerformance;  $i++) {
+        $carrierPerformanceCount = ShippingManager::where('status', 'Pending')
+                                            ->where('module', 'Carrier_Performance')
+                                            ->count();
 
-            $carrierPerformance = ShippingManager::where('status', 'Pending')
-                                                ->where('module', 'Carrier_Performance')
-                                                ->first();
-            $user_session_id = $carrierPerformance->marketPlace->user_id;
+        if($carrierPerformanceCount > 0){
 
-            $user = User::where('id' , '=' , $user_session_id)->get();
-            $email = $user[0]['email'];
+            for ($i = 0; $i < $carrierPerformanceCount;  $i++) {
 
-            if ($carrierPerformance) {
+                $carrierPerformanceGetData = ShippingManager::where('status', 'Pending')
+                                                    ->where('module', 'Carrier_Performance')
+                                                    ->first();
 
-                $last_delivery_date = Order_details::select('order_date')
-                    ->where('order_date' , '!=' , null)
-                    ->latest('order_date')
-                    ->first();
+                if ($carrierPerformanceGetData) {
 
-                $to = $last_delivery_date['order_date'];
-                $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
-                $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+                    $user_id = $carrierPerformanceGetData->marketPlace->user_id;
 
-                $reportShipment = Order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
-                $total_number_of_row =  $reportShipment->count();
+                    $user = User::where('id' , '=' , $user_id)->get();
+                    $email = $user[0]['email'];
 
-                $carrierPer = [];
+                    $last_delivery_date = Order_details::select('order_date')
+                                                        ->where('order_date' , '!=' , null)
+                                                        ->latest('order_date')
+                                                        ->first();
+
+                    $to = $last_delivery_date['order_date'];
+                    $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
+                    $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+
+                    $reportShipment = Order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
+                    $total_number_of_row =  $reportShipment->count();
+
+                    $carrierPer = [];
 
 
-                $carrierPerformance = Order_details::select('carrierName')->distinct('carrierName')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('carrierName');
-                foreach($carrierPerformance as $carrier)
-                {
-                    $number_of_carrier =  Order_details::where('carrierName' , $carrier)->get()->count();
+                    $carrierPerformance = Order_details::select('carrierName')->distinct('carrierName')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('carrierName');
+                    foreach($carrierPerformance as $carrier)
+                    {
+                        $number_of_carrier =  Order_details::where('carrierName' , $carrier)->get()->count();
 
-                    $obtained_mark = $number_of_carrier / $total_number_of_row;
-                    $percentage = $obtained_mark * 100;
+                        $obtained_mark = $number_of_carrier / $total_number_of_row;
+                        $percentage = $obtained_mark * 100;
 
-                    $carrierPer[$carrier] = [
+                        $carrierPer[$carrier] = [
 
-                        'numberCarrier' => $number_of_carrier,
-                        'email' => $email,
-                        'carrierName' => $carrier,
-                        'percentage' => $percentage
+                            'numberCarrier' => $number_of_carrier,
+                            'email' => $email,
+                            'carrierName' => $carrier,
+                            'percentage' => $percentage
 
-                    ];
+                        ];
+
+                    }
+
+                    Mail::to($email)->send(new carrierPerformance($carrierPer));
+
+                    $manager = ShippingManager::updateStatus($carrierPerformanceGetData->id, "Completed");
+                    \Log::info("Carrier Performance Done");
+
 
                 }
-
-                Mail::to($email)->send(new carrierPerformance($carrierPer));
-                $manager = ShippingManager::updateStatus($carrierPerformance->id, "Completed");
-                \Log::info("Carrier Performance Done");
             }
         }
 
-
+        ShippingManager::where('status', 'Completed')
+                        ->where('module', 'Carrier_Performance')
+                        ->update(['status' => 'Pending']);
     }
 }

@@ -41,96 +41,105 @@ class WalmartAnOrder extends Command
      */
     public function handle()
     {
-        $anOrder = OrderManager::count();
-        for ($i=0; $i<=$anOrder;  $i++) {
+        $anOrderCount = OrderManager::where('status', 'Pending')
+                                    ->where('module' , 'An_Order')
+                                    ->count();
 
-            $anOrderManager = OrderManager::where('status', 'Pending')
-                                            ->where('module' , 'An_Order')
-                                            ->first();
+        if($anOrderCount > 0){
 
-            $client_id = $anOrderManager->marketPlace->client_id;
-            $client_secret = $anOrderManager->marketPlace->client_secret;
-            $user_session_id = $anOrderManager->marketPlace->user_id;
-            $mid = $anOrderManager->marketPlace->id;
+            for ($i = 0; $i < $anOrderCount;  $i++) {
 
-            if ($anOrderManager) {
+                $anOrderManager = OrderManager::where('status', 'Pending')
+                                                ->where('module' , 'An_Order')
+                                                ->first();
 
-                ini_set('max_execution_time', '700');
+                $client_id = $anOrderManager->marketPlace->client_id;
+                $client_secret = $anOrderManager->marketPlace->client_secret;
+                $user_session_id = $anOrderManager->marketPlace->user_id;
+                $mid = $anOrderManager->marketPlace->id;
 
+                if ($anOrderManager) {
 
-                $order_status = '';
-                $actualShipDateTimes = '';
-                $carrierName = '';
-                $actualShippingStatus ='';
-
-                $walmart_order = Order_details::where('status', '!=', 'Delivered')->get();
-                $token = Walmart::getToken($client_id, $client_secret);
+                    ini_set('max_execution_time', '700');
 
 
+                    $order_status = '';
+                    $actualShipDateTimes = '';
+                    $carrierName = '';
+                    $actualShippingStatus ='';
 
-                foreach ($walmart_order as $order_status_databaseTable) {
+                    $walmart_order = Order_details::where('status', '!=', 'Delivered')->get();
+                    $token = Walmart::getToken($client_id, $client_secret);
 
-                    $estimatedShipDate = strtotime($order_status_databaseTable['estimatedShipDate']);
-                    $actualShipDate = strtotime($order_status_databaseTable['actualShipDate']);
 
-                    $order_purchade_id = $order_status_databaseTable['purchaseOrderId'];
-                    $response = Walmart::getItemAnOrder($client_id, $client_secret, $token, $order_purchade_id);
-                    $live_status = $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['status'];
 
-                    if($response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo'] != null){
-                        $actualShipDateTime =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['shipDateTime'];
-                        $actualShipDateTimes = date("Y-m-d", substr($actualShipDateTime, 0, 10));
+                    foreach ($walmart_order as $order_status_databaseTable) {
 
-                        $carrierName =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['carrierName']['carrier'];
+                        $estimatedShipDate = strtotime($order_status_databaseTable['estimatedShipDate']);
+                        $actualShipDate = strtotime($order_status_databaseTable['actualShipDate']);
+
+                        $order_purchade_id = $order_status_databaseTable['purchaseOrderId'];
+                        $response = Walmart::getItemAnOrder($client_id, $client_secret, $token, $order_purchade_id);
+                        $live_status = $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['status'];
+
+                        if($response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo'] != null){
+                            $actualShipDateTime =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['shipDateTime'];
+                            $actualShipDateTimes = date("Y-m-d", substr($actualShipDateTime, 0, 10));
+
+                            $carrierName =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['carrierName']['carrier'];
+                        }
+
+                        if($actualShipDate < $estimatedShipDate)
+                        {
+                            $actualShippingStatus = "Excellent";
+                        }
+                        elseif($actualShipDate == $estimatedShipDate)
+                        {
+                            $actualShippingStatus = "Good";
+                        }
+                        elseif($actualShipDate > $estimatedShipDate)
+                        {
+                            $actualShippingStatus = "Poor";
+                        }
+
+                        if($live_status == 'Acknowledged'){
+                            $order_status = 'Acknowledged101';
+                            $query = Order_details::where('purchaseOrderId', $order_purchade_id)
+                                ->update(['status' => $order_status]);
+                        }
+                        elseif($live_status == 'Created'){
+                            $order_status = 'Created101';
+                            $query = Order_details::where('purchaseOrderId', $order_purchade_id)
+                                ->update(['status' => $order_status]);
+                        }
+                        elseif($live_status == 'Shipped'){
+                            $order_status = 'Shipped101';
+
+                            $query = Order_details::where('purchaseOrderId', $order_purchade_id)
+                                ->update(['status' => $order_status ,
+                                    'actualShipDate' => $actualShipDateTimes,
+                                    'carrierName' => $carrierName,
+                                    'actualShipStatus' => $actualShippingStatus]);
+                        }
+                        elseif($live_status == 'Delivered'){
+                            $order_status = 'Delivered101';
+                            $query = Order_details::where('purchaseOrderId', $order_purchade_id)
+                                ->update(['status' => $order_status,
+                                    'actualDeliveryDate' => date('Y-m-d')]);
+                        }
+
+                        // End of if condition regarding created
                     }
 
-                    if($actualShipDate < $estimatedShipDate)
-                    {
-                        $actualShippingStatus = "Excellent";
-                    }
-                    elseif($actualShipDate == $estimatedShipDate)
-                    {
-                        $actualShippingStatus = "Good";
-                    }
-                    elseif($actualShipDate > $estimatedShipDate)
-                    {
-                        $actualShippingStatus = "Poor";
-                    }
+                    // End of foreach loop
 
-                    if($live_status == 'Acknowledged'){
-                        $order_status = 'Acknowledged101';
-                        $query = Order_details::where('purchaseOrderId', $order_purchade_id)
-                            ->update(['status' => $order_status]);
-                    }
-                    elseif($live_status == 'Created'){
-                        $order_status = 'Created101';
-                        $query = Order_details::where('purchaseOrderId', $order_purchade_id)
-                            ->update(['status' => $order_status]);
-                    }
-                    elseif($live_status == 'Shipped'){
-                        $order_status = 'Shipped101';
-
-                        $query = Order_details::where('purchaseOrderId', $order_purchade_id)
-                            ->update(['status' => $order_status ,
-                                'actualShipDate' => $actualShipDateTimes,
-                                'carrierName' => $carrierName,
-                                'actualShipStatus' => $actualShippingStatus]);
-                    }
-                    elseif($live_status == 'Delivered'){
-                        $order_status = 'Delivered101';
-                        $query = Order_details::where('purchaseOrderId', $order_purchade_id)
-                            ->update(['status' => $order_status,
-                                'actualDeliveryDate' => date('Y-m-d')]);
-                    }
-
-                    // End of if condition regarding created
+                    $manager = OrderManager::updateStatusAnOrder($anOrderManager->id, "Completed");
+                    \Log::info("Regional Performance Done");
                 }
-
-                // End of foreach loop
-
-                $manager = OrderManager::updateStatusAnOrder($anOrderManager->id, "Completed");
-                \Log::info("Regional Performance Done");
             }
         }
+        OrderManager::where('status', 'Completed')
+                        ->where('module', 'An_Order')
+                        ->update(['status' => 'Pending']);
     }
 }
