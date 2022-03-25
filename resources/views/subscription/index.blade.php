@@ -37,9 +37,8 @@
                             <table id="example" class="display min-w850">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Amount</th>
                                     <th>Card Holder Name</th>
+                                    <th>Amount</th>
                                     <th>Subscription Name</th>
                                     <th>Platform</th>
                                     <th>Action</th>
@@ -48,9 +47,8 @@
                                 <tbody>
                                     @foreach ($paymentLog as $paymentLogs)
                                     <tr>
-                                        <td>{{ $paymentLogs['id'] }}</td>
-                                        <td>{{ $paymentLogs['amount'] }}.00</td>
                                         <td>{{ $paymentLogs['name_on_card'] }}</td>
+                                        <td>{{ $paymentLogs['amount'] }}.00</td>
                                         <td>{{ $paymentLogs['subscriptionName'] }}</td>
                                         <td>
                                             <span class="badge light badge-success">
@@ -74,7 +72,7 @@
                                         </td>
                                         @if ($paymentLogs['status'] == "cancel")
                                         <td>
-                                            <button class="btn btn-xs btn-primary">Cancel</button>
+                                            <button class="btn btn-xs btn-primary">Canceled</button>
                                         </td>
                                         @endif
                                         @if ($paymentLogs['status'] == "active")
