@@ -845,6 +845,18 @@
                             <span class="nav-text">User</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ url('dashboard/admin/subscription') }}">
+                            <i class="flaticon-381-controls-3"></i>
+                            <span class="nav-text">Subscription</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('dashboard/admin/plans-view') }}">
+                            <i class="flaticon-381-controls-3"></i>
+                            <span class="nav-text">Plans</span>
+                        </a>
+                    </li>
                 @endif
 
                 {{-- <li>

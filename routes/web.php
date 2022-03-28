@@ -113,6 +113,11 @@ Route::group(['middleware' => 'auth'] , function(){
 
             Route::get('user-view', [UserController::class, 'index'])->name('dashboard.admin.user-view');
 
+            Route::get('subscription', [SubscriptionController::class, 'subscriptionView'])->name('dashboard.admin.subscription');
+
+            Route::get('plans-view', [SubscriptionController::class, 'planView'])->name('dashboard.admin.plans-view');
+            Route::post('create-plan', [SubscriptionController::class, 'createPlan'])->name('dashboard.admin.create-plan');
+
         }); // end of admin access
 
 

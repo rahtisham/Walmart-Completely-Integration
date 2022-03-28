@@ -24,6 +24,12 @@ class SubscriptionController extends Controller
         return view('subscription.index' , ['paymentLog' => $paymentLog]);
     }
 
+    public function subscriptionView()
+    {
+        $subscriptions = PaymentLogs::all();
+        return view('admin.subscription.index' , ['subscriptions' => $subscriptions]);
+    }
+
     public function cancelSubscription($subscriptionId)
     {
 
@@ -63,7 +69,7 @@ class SubscriptionController extends Controller
 
         }
 
-        return $response;
+        // return $response;
 
       }
 
@@ -73,35 +79,81 @@ class SubscriptionController extends Controller
           $plans = plans::all();
           return view('subscription.plan' , ['plans' => $plans]);
       }
+      // For Cancel subsciption
+
+      public function planView()
+      {
+        $plans = plans::all();
+        return view('admin.plans.index' , ['plans' => $plans]);
+      }
+      // For admin access
+
+      public function createPlan(Request $request)
+      {
+        $validator = Validator::make($request->all(), [
+            'plan' => ['required', 'min:10' , 'max:45'],
+            'marketplace' => ['required', 'string'],
+            'amount' => ['required', 'string', 'max:255'],
+        ], [
+            'plan.required' => 'Plan is required',
+            'marketplace.required' => 'Marketplace is required',
+            'amount.required' => 'Amount name is required',
+        ])->validate();
+
+        $plan = [
+
+            'planName' => $request['plan'],
+            'marketPlace' => $request['marketplace'],
+            'amount' => $request['amount'],
+
+        ];
+
+        $store = plans::store($plan);
+        if($store)
+        {
+            return "Inserted";
+        }
+        else{
+            return "didn't inserted";
+        }
+
+          return back()->with('success' , 'Plan Has Been Created');
+
+      }
 
       public function subscription($subscription)
       {
         if (!empty($subscription)) {
 
-            $amount = '';
-            $platform = '';
-            if ($subscription == 'walmart_option1') {
-                $amount = 97.00;
-                $platform = "walmart_option1";
-                $subscriptionName = "Walmart Account Protection Insurance";
-            }
-            if ($subscription == 'walmart_option2') {
-                $amount = 147.00;
-                $platform = "walmart_option2";
-                $subscriptionName = "Walmart & Amazon Account Protection Insurance";
-            }
-            if ($subscription == 'amazon_option1') {
-                $amount = 97.00;
-                $platform = "amazon_option1";
-                $subscriptionName = "Amazon Account Protection Insurance";
-            }
-            if ($subscription ==  'amazon_option2') {
-                $amount = 147.00;
-                $platform = "amazon_option2";
-                $subscriptionName = "Amazon & Walmart Account Protection Insurance";
-            }
+            $marketPlace = plans::where('marketPlace' , $subscription)->get();
+            $subscriptionName = $marketPlace[0]['planName'];
+            $amount = $marketPlace[0]['amount'];
+            $marketPlace = $marketPlace[0]['marketPlace'];
+
+            // $amount = '';
+            // $platform = '';
+            // if ($subscription == 'walmart_option1') {
+            //     $amount = 97.00;
+            //     $platform = "walmart_option1";
+            //     $subscriptionName = "Walmart Account Protection Insurance";
+            // }
+            // if ($subscription == 'walmart_option2') {
+            //     $amount = 147.00;
+            //     $platform = "walmart_option2";
+            //     $subscriptionName = "Walmart & Amazon Account Protection Insurance";
+            // }
+            // if ($subscription == 'amazon_option1') {
+            //     $amount = 97.00;
+            //     $platform = "amazon_option1";
+            //     $subscriptionName = "Amazon Account Protection Insurance";
+            // }
+            // if ($subscription ==  'amazon_option2') {
+            //     $amount = 147.00;
+            //     $platform = "amazon_option2";
+            //     $subscriptionName = "Amazon & Walmart Account Protection Insurance";
+            // }
             // Get aurgament from Appeal lab website
-            return view('subscription.create-subscription', ['amount' => $amount, 'platform' => $platform , 'subscriptionName' => $subscriptionName]);
+            return view('subscription.create-subscription', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
         }
 
       }
@@ -109,17 +161,19 @@ class SubscriptionController extends Controller
       public function subscriptionAdded(Request $request)
       {
 
-        // return $request->cardNumber;
+
         $validator = Validator::make($request->all(), [
             'owner' => ['required', 'max:255'],
             'cardNumber' => ['required', 'min:16', 'max:16'],
             'expiration-year' => ['required', 'string', 'max:255'],
             'expiration-month' => ['required', 'string', 'max:255'],
             'cvv' => ['required', 'max:3', 'min:3'],
+            'subscriptionName' => ['required', 'string'],
         ], [
             'cvv.required' => 'CVV is required',
             'cardNumber.required' => 'Card number is required',
             'owner.required' => 'Card holder name is required',
+            'subscriptionName.required' => 'Subscription name is required',
         ])->validate();
 
         $createSubscribtion = $this->createSubscription($request);
@@ -211,6 +265,7 @@ class SubscriptionController extends Controller
                 'name_on_card' => $data->owner,
                 'message_code' => $data->platform,
                 'subscriptionName' => $data->subscriptionName,
+                'status' => 'active',
                 'subscription' => $response->getSubscriptionId()
             ];
 

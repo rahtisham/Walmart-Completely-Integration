@@ -9,4 +9,10 @@ class plans extends Model
 {
     protected $table = "plans";
     protected $guarded = [];
+
+    public static function store($store)
+    {
+        $plans = plans::create($store);
+        return $plans;
+    }
 }

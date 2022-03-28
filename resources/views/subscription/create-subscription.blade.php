@@ -29,6 +29,9 @@
 
 
                             <div class="row">
+                                {{-- @error('subscriptionName')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror --}}
                                 <div class="col-xs-12 col-md-6 card p-4" style="border-radius: 5px; padding: 10px;">
 
                                     <div class="panel panel-primary">
@@ -61,9 +64,9 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group col-md-4" >
-                                                            <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
-                                                            <input type="hidden" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $platform }}"  readonly>
-                                                            <input type="hidden" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
+                                                            <input type="text" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
+                                                            <input type="text" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $marketPlace }}"  readonly>
+                                                            <input type="text" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
                                                             {{--<span id="amount-error" class="error text-red">Please enter amount</span>--}}
                                                         </div>
                                                     </div>

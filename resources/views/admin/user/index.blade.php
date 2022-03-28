@@ -326,10 +326,20 @@
                             </div>
                         </div>
 
-
                         <div class="form-group mt-3">
                             <input type="number" id="contact" name="contact" placeholder="Phone Number" class="form-control name-form" value="{{ old('contact') }}" autofocus autocomplete="contact"  />
                             @error('contact')
+                            <span class="text-danger"> {{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <select id="roles" name="roles" class="marginTop form-control">
+                                <option value="">Select a User</option>
+                                <option value="3">User</option>
+                                <option value="2">Admin</option>
+                            </select>
+                             @error('roles')
                             <span class="text-danger"> {{ $message }}</span>
                             @enderror
                         </div>
@@ -369,7 +379,7 @@
                     </div>
 
                     <div class="flex items-center justify-end">
-                        <button class="btn-form-submit my-4 text-center btn btn-primary">
+                        <button type="submit" id="btnFetch" class="btn-form-submit my-4 text-center btn btn-primary">
                             {{ __('Submit Now') }}
                         </button>
                     </div>
@@ -394,4 +404,19 @@
 
 
 
+{{-- <script>
 
+    $(document).ready(function() {
+        $("#btnFetch").click(function() {
+
+            // disable button
+            $(this).attr('disabled',true);
+            // add spinner to button
+            event.preventDefault();
+            $(this).html(
+            `<i class="fa fa-spinner fa-spin"></i> Loading`
+            );
+
+        });
+    });
+</script> --}}

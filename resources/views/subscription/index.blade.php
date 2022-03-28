@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            Cancel Subscription
+                            Subscriptions
                         </h4><br>
 
                         @if(Session::has('success'))
@@ -39,8 +39,9 @@
                                 <tr>
                                     <th>Card Holder Name</th>
                                     <th>Amount</th>
-                                    <th>Subscription Name</th>
-                                    <th>Platform</th>
+                                    <th>Subscription</th>
+                                    <th>Marketplace</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -51,28 +52,49 @@
                                         <td>{{ $paymentLogs['amount'] }}.00</td>
                                         <td>{{ $paymentLogs['subscriptionName'] }}</td>
                                         <td>
+                                            @if ($paymentLogs['message_code'] == "walmart_option1")
                                             <span class="badge light badge-success">
-                                                @if ($paymentLogs['message_code'] == "walmart_option1")
-                                                    <i class="fa fa-circle text-success mr-1"></i>
-                                                    Walmart
+                                                <i class="fa fa-circle text-success mr-1"></i>
+                                                Walmart
+                                            </span>
+                                            @endif
+                                            @if ($paymentLogs['message_code'] == "walmart_option2")
+                                            <span class="badge light badge-success">
+                                                <i class="fa fa-circle text-success mr-1"></i>
+                                                Walmart
+                                            </span>
                                                 @endif
-                                                @if ($paymentLogs['message_code'] == "walmart_option2")
-                                                    <i class="fa fa-circle text-success mr-1"></i>
-                                                    Walmart
-                                                    @endif
-                                                @if ($paymentLogs['message_code'] == "amazon_option1")
-                                                    <i class="fa fa-circle text-success mr-1"></i>
-                                                    Amazon
-                                                    @endif
-                                                @if ($paymentLogs['message_code'] == "amazon_option2")
-                                                    <i class="fa fa-circle text-success mr-1"></i>
-                                                    Amazon
+                                            @if ($paymentLogs['message_code'] == "amazon_option1")
+                                            <span class="badge light badge-info">
+                                                <i class="fa fa-circle text-info mr-1"></i>
+                                                Amazon
+                                            </span>
                                                 @endif
-											</span>
+                                            @if ($paymentLogs['message_code'] == "amazon_option2")
+                                            <span class="badge light badge-info">
+                                                <i class="fa fa-circle text-info mr-1"></i>
+                                                Amazon
+                                            </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($paymentLogs['status'] == "cancel")
+                                            <span class="badge light badge-warning">
+                                                <i class="fa fa-circle text-warning mr-1"></i>
+                                                {{ $paymentLogs['status'] }}
+                                            </span>
+                                            @endif
+
+                                            @if ($paymentLogs['status'] == "active")
+                                            <span class="badge light badge-primary">
+                                                <i class="fa fa-circle text-primary mr-1"></i>
+                                                {{ $paymentLogs['status'] }}
+                                            </span>
+                                            @endif
                                         </td>
                                         @if ($paymentLogs['status'] == "cancel")
                                         <td>
-                                            <button class="btn btn-xs btn-primary">Canceled</button>
+                                            -------
                                         </td>
                                         @endif
                                         @if ($paymentLogs['status'] == "active")
@@ -80,7 +102,7 @@
                                             <form method="post" action="{{ url('user/cancel' , $paymentLogs->subscription ) }}">
                                                 @csrf
                                                 {{-- <input name="_method" type="hidden" value="DELETE"> --}}
-                                                <button type="submit" class="btn btn-xs btn-danger show_confirm" data-toggle="tooltip" title='Delete'>Delete</button>
+                                                <button type="submit" class="btn btn-xs btn-danger show_confirm" data-toggle="tooltip" title='Delete'>Cancel</button>
                                             </form>
                                         </td>
                                         @endif

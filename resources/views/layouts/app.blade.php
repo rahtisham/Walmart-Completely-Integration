@@ -45,6 +45,11 @@
         border-color: #03c6ad;
         border: 1px solid #03c6ad;
     }
+    .header-left .dashboard_bar {
+    font-size: 20px !important;
+    font-weight: 600;
+    color: #000;
+    }
 
 </style>
 <body class="font-sans antialiased">
@@ -585,7 +590,7 @@
                 <div class="collapse navbar-collapse justify-content-between">
                     <div class="header-left">
                         <div class="dashboard_bar">
-                            Walmart Marketplace
+                            Amazon & Walmart Account Appeal Experts
                         </div>
                     </div>
                     <ul class="navbar-nav header-right">

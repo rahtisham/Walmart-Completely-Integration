@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
+use App\Models\plans;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 
@@ -24,30 +25,35 @@ class TestingCheckoutController extends Controller
             return redirect('user/marketplace');
         } else {
 
-            $amount = '';
-            $platform = '';
-            if ($subscription == 'walmart_option1') {
-                $amount = 97.00;
-                $platform = "walmart_option1";
-                $subscriptionName = "Walmart Account Protection Insurance";
-            }
-            if ($subscription == 'walmart_option2') {
-                $amount = 147.00;
-                $platform = "walmart_option2";
-                $subscriptionName = "Walmart & Amazon Account Protection Insurance";
-            }
-            if ($subscription == 'amazon_option1') {
-                $amount = 97.00;
-                $platform = "amazon_option1";
-                $subscriptionName = "Amazon Account Protection Insurance";
-            }
-            if ($subscription ==  'amazon_option2') {
-                $amount = 147.00;
-                $platform = "amazon_option2";
-                $subscriptionName = "Amazon & Walmart Account Protection Insurance";
-            }
+            $marketPlace = plans::where('marketPlace' , $subscription)->get();
+            $subscriptionName = $marketPlace[0]['planName'];
+            $amount = $marketPlace[0]['amount'];
+            $marketPlace = $marketPlace[0]['marketPlace'];
+
+            // $amount = '';
+            // $platform = '';
+            // if ($subscription == 'walmart_option1') {
+            //     $amount = 97.00;
+            //     $platform = "walmart_option1";
+            //     $subscriptionName = "Walmart Account Protection Insurance";
+            // }
+            // if ($subscription == 'walmart_option2') {
+            //     $amount = 147.00;
+            //     $platform = "walmart_option2";
+            //     $subscriptionName = "Walmart & Amazon Account Protection Insurance";
+            // }
+            // if ($subscription == 'amazon_option1') {
+            //     $amount = 97.00;
+            //     $platform = "amazon_option1";
+            //     $subscriptionName = "Amazon Account Protection Insurance";
+            // }
+            // if ($subscription ==  'amazon_option2') {
+            //     $amount = 147.00;
+            //     $platform = "amazon_option2";
+            //     $subscriptionName = "Amazon & Walmart Account Protection Insurance";
+            // }
             // Get aurgament from Appeal lab website
-            return view('checkout.test', ['amount' => $amount, 'platform' => $platform , 'subscriptionName' => $subscriptionName]);
+            return view('checkout.test', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
         }
     }
 

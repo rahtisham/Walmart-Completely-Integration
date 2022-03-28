@@ -18,44 +18,44 @@
         <div class="row">
             @foreach ($plans as $plan)
                 <div class="col-xl-4">
-                    <a href="{{ url('subscription/create-view' , $plan['planName'] ) }}">
+                    <a href="{{ url('subscription/create-view' , $plan['marketPlace'] ) }}">
                         <div class="card HoverCard bg-image-walmart">
                             <div class="card-header">
 
-                                @if ($plan['planName'] == "walmart_option1")
+                                @if ($plan['marketPlace'] == "walmart_option1")
                                 <li><button type="button" class="btn btn-success btn-xs mg5">Walmart</button></li>
                                 @endif
-                                @if ($plan['planName'] == "walmart_option2")
+                                @if ($plan['marketPlace'] == "walmart_option2")
                                 <li><button type="button" class="btn btn-success btn-xs mg5">Walmart</button></li>
                                 @endif
-                                @if ($plan['planName'] == "amazon_option1")
+                                @if ($plan['marketPlace'] == "amazon_option1")
                                 <li><button type="button" class="btn btn-primary btn-xs mg5">Amazon</button></li>
                                 @endif
-                                @if ($plan['planName'] == "amazon_option2")
+                                @if ($plan['marketPlace'] == "amazon_option2")
                                 <li><button type="button" class="btn btn-success btn-xs mg5">Amazon</button></li>
                                 @endif
                             </div>
                             <div class="pdleft">
 
-                                @if ($plan['planName'] == "walmart_option1")
+                                @if ($plan['marketPlace'] == "walmart_option1")
                                     <img class="mg5" src="{{ asset('AppealLab/images/walmart-logo.png') }}" width="60px" alt="">
                                     <h3 class="mg5"><b>${{ $plan['amount'] }} / Month</b></h3>
-                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> Account Protection - Walmart Dropshipping + Walmart Wholesale</li>
+                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $plan['planName'] }}</li>
                                 @endif
-                                @if ($plan['planName'] == "walmart_option2")
+                                @if ($plan['marketPlace'] == "walmart_option2")
                                     <img class="mg5" src="{{ asset('AppealLab/images/walmart-logo.png') }}" width="60px" alt="">
                                     <h3 class="mg5"><b>${{ $plan['amount'] }} / Month</b></h3>
-                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale</li>
+                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $plan['planName'] }}</li>
                                 @endif
-                                @if ($plan['planName'] == "amazon_option1")
+                                @if ($plan['marketPlace'] == "amazon_option1")
                                     <img class="mg5" src="{{ asset('AppealLab/images/amazon-logo.png') }}" width="60px" alt="">
                                     <h3 class="mg5"><b>${{ $plan['amount'] }} / Month</b></h3>
-                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> Account Protection - Amazon Dropshipping + Amazon FBA Wholesale</li>
+                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $plan['planName'] }}</li>
                                 @endif
-                                @if ($plan['planName'] == "amazon_option2")
+                                @if ($plan['marketPlace'] == "amazon_option2")
                                     <img class="mg5" src="{{ asset('AppealLab/images/amazon-logo.png') }}" width="60px" alt="">
                                     <h3 class="mg5"><b>${{ $plan['amount'] }} / Month</b></h3>
-                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale</li>
+                                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $plan['planName'] }}</li>
                                 @endif
                                 <br>
                                 <button type="button" style="background: #3EC2C2;" class="btn btn-info btn-xs mg5">GET INSURED NOW! (MONTHLY)  <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
