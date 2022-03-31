@@ -83,7 +83,7 @@ class MarketPlaceController extends Controller
                 ];
                 $market = WalmartMarketPlace::updateWalmartStore($integration, $marketPlace[0]->id);
 
-                return redirect('user/marketplace/walmart')->with(['success' => 'Walmart Market Place Has Been Updated Successfully.']);
+                return redirect('user/marketplace')->with(['success' => 'Walmart Market Place Has Been Updated Successfully.']);
 
             }else{
 

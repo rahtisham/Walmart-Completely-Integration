@@ -56,20 +56,14 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <x-jet-input type="text" id="city" name="city" placeholder="City" class="marginTop form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
-                                @error('city')
+                                <x-jet-input type="number" id="postal" name="postal" placeholder="Postcode / Zip" class="form-control name-form" value="{{ old('postal') }}" autofocus autocomplete="postal" />
+                                @error('postal')
                                 <span class="text-danger"> {{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="row mt-3">
-                            <div class="col-md-4">
-                                <x-jet-input type="number" id="postal" name="postal" placeholder="Postcode / Zip" class="form-control name-form" value="{{ old('postal') }}" autofocus autocomplete="postal" />
-                                @error('postal')
-                                <span class="text-danger"> {{ $message }}</span>
-                                @enderror
-                            </div>
                             <div class="col-md-4">
                                 <select id="country" name="country" class="marginTop" style="width: 100%; border: 1px solid #ced4da;">
                                     <option value="">Select Country</option>
@@ -325,6 +319,12 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
+                                <x-jet-input type="text" id="city" name="city" placeholder="City" class="marginTop form-control lname name-form" value="{{ old('city') }}" autofocus autocomplete="city" />
+                                @error('city')
+                                <span class="text-danger"> {{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-4">
                                 <x-jet-input type="text" id="state" name="state" placeholder="State" class="marginTop form-control name-form" value="{{ old('state') }}" autofocus autocomplete="state" />
                                 @error('state')
                                 <span class="text-danger"> {{ $message }}</span>
@@ -408,7 +408,7 @@
                                         {{--                                    <label class="card-labels" for="card-cvc">Card Code (CVC)</label>--}}
                                         <input type="number" id="cvv" name="cvv" placeholder="CVC" class="form-control lname card-cvc name-form" value="{{ old('cvv') }}" >
                                         <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
-                                        <input type="hidden" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $platform }}"  readonly>
+                                        <input type="hidden" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $marketPlace }}"  readonly>
                                         <input type="hidden" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
                                         @error('cvv')
                                         <span class="text-danger"> {{ $message }}</span>
@@ -485,16 +485,16 @@
                     <div class="col-md-9 pull-left" style="display: flex;">
                         <img src="{{ asset('AppealLab/images/checkout.jpg') }}">
                         <p class="txtColor">
-                            @if($platform == "walmart_option1")
+                            @if($marketPlace == "walmart_option1")
                                 <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale $97/month</span>
                             @endif
-                            @if($platform == "walmart_option2" )
+                            @if($marketPlace == "walmart_option2" )
                                 <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale $147/month</span>
                             @endif
-                            @if($platform == "amazon_option1")
+                            @if($marketPlace == "amazon_option1")
                                 <br><span class="txtColor">Account Protection - Amazon Dropshipping + Amazon FBA Wholesale $97/month</span>
                             @endif
-                            @if($platform == "amazon_option2")
+                            @if($marketPlace == "amazon_option2")
                                 <br><span class="txtColor">Account Protection - Walmart Dropshipping + Walmart Wholesale + Amazon Dropshipping + Amazon FBA Wholesale $147/month</span>
                             @endif
                         </p>

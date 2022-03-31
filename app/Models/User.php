@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\WalmartMarketPlace;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\PaymentLogs;
 
 class User extends Authenticatable
 {
@@ -74,4 +76,10 @@ class User extends Authenticatable
         $user = User::create($userData);
         return $user;
     }
+
+    public function marketPlace()
+    {
+        return $this->belongsTo(WalmartMarketPlace::class , 'id' , 'user_id');
+    }
+
 }

@@ -13,6 +13,7 @@ use Laravel\Jetstream\Jetstream;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 use Carbon\Carbon;
+use App\Models\plans;
 
 class CheckoutController extends Controller
 {
@@ -42,34 +43,45 @@ class CheckoutController extends Controller
             return redirect('dashboard/marketplace');
         }else{
 
-            $amount = '';
-            $platform = '';
-            $subscriptionName = '';
+            $marketPlace = plans::where('marketPlace' , $subscription)->get();
+            if($marketPlace[0]['marketPlace'] == $subscription){
+                $subscriptionName = $marketPlace[0]['planName'];
+                $amount = $marketPlace[0]['amount'];
+                $marketPlace = $marketPlace[0]['marketPlace'];
 
-            if($subscription == 'walmart_option1'){
-                $amount = 97;
-                $platform = "walmart_option1";
-                $subscriptionName = "Walmart Account Protection Insurance";
+                // $amount = '';
+                // $platform = '';
+                // $subscriptionName = '';
+
+                // if($subscription == 'walmart_option1'){
+                //     $amount = 97;
+                //     $platform = "walmart_option1";
+                //     $subscriptionName = "Walmart Account Protection Insurance";
+                // }
+                // if($subscription == 'walmart_option2'){
+                //     $amount = 147;
+                //     $platform = "walmart_option2";
+                //     $subscriptionName = "Walmart & Amazon Account Protection Insurance";
+                // }
+                // if($subscription == 'amazon_option1'){
+                //     $amount = 97;
+                //     $platform = "amazon_option1";
+                //     $subscriptionName = "Amazon Account Protection Insurance";
+                // }
+                // if($subscription ==  'amazon_option2')
+                // {
+                //     $amount = 147;
+                //     $platform = "amazon_option2";
+                //     $subscriptionName = "Amazon & Walmart Account Protection Insurance";
+                // }
+                // Get aurgament from Appeal lab website
+
+            return view('checkout.checkout' , ['amount' => $amount , 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
             }
-            if($subscription == 'walmart_option2'){
-                $amount = 147;
-                $platform = "walmart_option2";
-                $subscriptionName = "Walmart & Amazon Account Protection Insurance";
-            }
-            if($subscription == 'amazon_option1'){
-                $amount = 97;
-                $platform = "amazon_option1";
-                $subscriptionName = "Amazon Account Protection Insurance";
-            }
-            if($subscription ==  'amazon_option2')
+            else
             {
-                $amount = 147;
-                $platform = "amazon_option2";
-                $subscriptionName = "Amazon & Walmart Account Protection Insurance";
+                return "Url is not match";
             }
-            // Get aurgament from Appeal lab website
-            return view('checkout.checkout' , ['amount' => $amount , 'platform' => $platform , 'subscriptionName' => $subscriptionName]);
-
         }
 
     }

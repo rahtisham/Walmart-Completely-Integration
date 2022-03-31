@@ -90,7 +90,7 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('create-view/{subscribtion}', [SubscriptionController::class, 'subscription'])->name('create-view');
         Route::post('subscription-create', [SubscriptionController::class, 'subscriptionAdded'])->name('subscription-create');
 
-    }); // end of admin access route
+    }); // end of subscription access route
 
 
     Route::group(['middleware' => 'CheckAuthPermission:password' , 'prefix' => 'password' , 'as' => 'password'], function(){
@@ -98,7 +98,7 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('update-password', [UserController::class, 'show'])->name('password.update-password');
         Route::post('password-updated', [UserController::class, 'store'])->name('password.password-updated');
 
-    }); // end of admin access route
+    }); // end of password access route
 
 
     Route::prefix('dashboard')->group(function () {
@@ -117,6 +117,8 @@ Route::group(['middleware' => 'auth'] , function(){
 
             Route::get('plans-view', [SubscriptionController::class, 'planView'])->name('dashboard.admin.plans-view');
             Route::post('create-plan', [SubscriptionController::class, 'createPlan'])->name('dashboard.admin.create-plan');
+
+            Route::get('user-profile/{id}', [UserController::class, 'userProfile'])->name('dashboard.admin.user-profile');
 
         }); // end of admin access
 

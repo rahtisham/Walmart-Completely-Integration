@@ -62,7 +62,7 @@ class TestingCheckoutController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'fname' => 'required', 'alpha', 'max:255',
+            'fname' => 'required', 'max:255',
             'email' => 'required|email|max:255|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix|unique:users',
             'lname' => ['required', 'alpha', 'max:255'],
             'address' => ['required', 'string', 'max:255'],

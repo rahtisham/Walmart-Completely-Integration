@@ -54,12 +54,12 @@ class SubscriptionController extends Controller
         if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
         {
             $successMessages = $response->getMessages()->getMessage();
-            echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
+            // echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
 
             $active_user_id = auth()->user()->id;
             $user = User::where('id' , $active_user_id)->update(['roles' => '4']);
             $paymentLog = Payment::where('user_id' , $active_user_id)->update(['status' => 'cancel']);
-            // return redirect('logout')->with(['success' => 'Subscription Has Been Cancel !']);
+            return redirect('/login');
         }
         else
         {

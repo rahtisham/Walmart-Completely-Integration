@@ -56,7 +56,8 @@
             </div>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-xl-8 col-lg-8">
+                    <div class="col-xl-1 col-lg-1"></div>
+                    <div class="col-xl-10 col-lg-10">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Walmart Marketplace</h4>
@@ -67,27 +68,27 @@
                                         <div class="form-group">
                                             <label class="text-label">Name</label>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
+                                                {{-- <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                                                </div>
+                                                </div> --}}
                                                 <input type="text" disabled class="form-control" value="{{ $marketPlace['name'] }}" id="name" name="val-username" placeholder="Enter a username..">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="text-label">Client ID</label>
                                             <div class="input-group transparent-append">
-                                                <div class="input-group-prepend">
+                                                {{-- <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                                                </div>
+                                                </div> --}}
                                                 <input type="text" disabled class="form-control" id="clientID" value="{{ $marketPlace['client_id'] }}" name="val-password" placeholder="Choose a safe one..">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="text-label">Client Secret</label>
                                             <div class="input-group transparent-append">
-                                                <div class="input-group-prepend">
+                                                {{-- <div class="input-group-prepend">
                                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                                                </div>
+                                                </div> --}}
                                                 <input type="text" disabled class="form-control" id="clientSecret" value="{{ $marketPlace['client_secret'] }}" name="val-password" placeholder="Choose a safe one..">
                                             </div>
                                         </div>
@@ -96,29 +97,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4">
-                        <div class="card">
-{{--                            @if($integrations->platform == "Walmart")--}}
-                                <div class="card-header" style="background: #3EC2C2;">
-                                    <span class="text-white"><i class="" aria-hidden="true">Walmart</i> </span>
-                                </div>
-                                <div class="card-body justify-content-center align-items-center flex border-info">
-                                    <img class="" src="{{ asset('AppealLab/images/walmartLogo.png') }}" alt="">
-                                </div>
-{{--                            @elseif($integrations->platform == "Amazone")--}}
-{{--                                <div class="card-header bg-blue-light">--}}
-{{--                                    <span class="text-white"><i class="fa fa-amazon" aria-hidden="true"></i> </span>--}}
-{{--                                </div>--}}
-{{--                                <div class="card-body justify-content-center align-items-center flex border-info">--}}
-{{--                                    <img class="" src="{{ asset('AppealLab/images/amazon-logo.png') }}" alt="">--}}
-{{--                                </div>--}}
-{{--                            @else--}}
-{{--                                {{ data_not_found  }}--}}
-{{--                            @endif--}}
-                            <div class="card-header align-content-center">
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-xl-1 col-lg-1"></div>
                 </div>
             </div>
         </div>

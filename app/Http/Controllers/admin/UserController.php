@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Mail\updatePassword;
+use App\Models\WalmartMarketPlace;
+use App\Models\PaymentLogs;
+
 
 class UserController extends Controller
 {
@@ -40,6 +43,18 @@ class UserController extends Controller
             return redirect('/login')->with(['success' => 'Your Password Has Been Updated !']);
         }
 
+
+    }
+
+
+    public function userProfile($id)
+    {
+
+        $user = User::where('id' , $id)->first();
+        $marketplace = WalmartMarketPlace::where('user_id' , $id)->first();
+        $paymentLogs = PaymentLogs::where('user_id' , $id)->get();
+
+        return view('admin.user.user-profile' , ['user' => $user , 'paymentLogs' => $paymentLogs , 'marketplace' => $marketplace]);
 
     }
 
