@@ -7,7 +7,7 @@
                 <li class="breadcrumb-item"><a href="javascript:void(0)"><h4>Dashboard / Plans</h4></a></li>
             </ol>
             <div class="text-right">
-                <input type="button" data-toggle="modal" data-target="#modalGrid" class="btn btn-info" value="CREATE A NEW PLAN">
+                <input type="button" data-toggle="modal" data-target="#modalGrid" class="btn btn-info btn-style" value="CREATE A NEW PLAN">
             </div>
         </div>
 
@@ -73,7 +73,7 @@
                             </form> <!--end of form-->
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger light btn-style" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -199,6 +199,18 @@
     {
         margin-top: 56px;
     }
-
+    input.btn.btn-info
+    {
+    border-radius: 0.25rem !important;
+    }
+    button.btn.btn-primary.light {
+    border-radius: 0.25rem !important;
+    color: white;
+    }
+    .btn-style
+    {
+        border-radius: 0.25rem !important;
+        color: white;
+    }
 
 </style>

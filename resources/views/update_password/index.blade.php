@@ -56,6 +56,10 @@
     .btn {
     border-radius: 0.35rem !important;
     }
+    .p-6
+    {
+        padding: 30px;
+    }
 
 </style>
 <body class="font-sans antialiased">
@@ -86,7 +90,6 @@
                 <div class="collapse navbar-collapse justify-content-between">
                     <div class="header-left">
                         <div class="dashboard_bar">
-{{--                            Walmart Marketplace--}}
                         </div>
                     </div>
                     <ul class="navbar-nav header-right">
@@ -100,8 +103,8 @@
                             <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                                 <img src="{{ asset('AppealLab/images/profile/user.png') }}" width="20" alt=""/>
                                 <div class="header-info">
-                                    <span class="text-black"><strong>{{ auth()->user()->name; }}</strong></span>
-                                    <p class="fs-12 mb-0">{{ auth()->user()->last_name; }}</p>
+                                    <span class="text-black"><strong>{{ auth()->user()->name }}</strong></span>
+                                    <p class="fs-12 mb-0">{{ auth()->user()->last_name }}</p>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
@@ -140,57 +143,67 @@
 <!-- Page Content -->
     <main>
         <!--**********************************
-      Content body start
-      ***********************************-->
-        <div class="content-body" style="margin-top: 0px !important;">
+            Content body start
+        ***********************************-->
+        <div class="content-bodys" style="margin-top: 185px !important;">
             <div class="min-h-screen">
                 <!-- <div class="content-body"> -->
-    <div class="authincation h-100">
-        <div class="container h-100">
-            <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-6">
+                <div class="authincation h-100">
+                    <div class="container h-100">
+                        <div class="row justify-content-center h-100 align-items-center">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
 
-                    <div class="authincation-content">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="auth-form">
-                                    @foreach ($errors->all() as $error)
-                                        <p class="text-danger">{{ $error }}</p>
-                                    @endforeach
-                                    <form action="{{ url('password/password-updated') }}" method="post">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>Current Password</strong></label>
-                                            <input type="password" name="current_password" class="form-control" placeholder="Current Password">
+                                <div class="authincation-content">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="auth-form">
+                                                {{-- @foreach ($errors->all() as $error)
+                                                    <p class="text-danger">{{ $error }}</p>
+                                                @endforeach --}}
+                                                <form action="{{ url('password/password-updated') }}" method="post">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label class="mb-1 text-white"><strong>Current Password</strong></label>
+                                                        <input type="password" name="current_password" class="form-control" placeholder="Current Password">
+                                                        @error('current_password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="mb-1 text-white"><strong>New Password</strong></label>
+                                                        <input type="password" name="new_password" class="form-control" placeholder="New Password">
+                                                        @error('new_password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="mb-1 text-white"><strong>Confirm Password</strong></label>
+                                                        <input type="password" name="new_confirm_password" placeholder="Confirm Password" class="form-control" >
+                                                        @error('new_confirm_password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="text-center mt-4">
+                                                        <button type="submit" class="btn bg-white text-primary btn-block">RESET PASSWORD</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>New Password</strong></label>
-                                            <input type="password" name="new_password" class="form-control" placeholder="New Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>Confirm Password</strong></label>
-                                            <input type="password" name="new_confirm_password" placeholder="Confirm Password" class="form-control" >
-                                        </div>
-                                        <div class="text-center mt-4">
-                                            <button type="submit" class="btn bg-white text-primary btn-block">RESET PASSWORD</button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-md-3"></div>
                         </div>
                     </div>
                 </div>
+                <!-- </div> -->
             </div>
         </div>
-    </div>
-
-     <!-- </div> -->
-    </div>
-</div>
-<!--**********************************
-    Content body end
-***********************************-->
-</main>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+    </main>
 </div>
 <!--**********************************
 Main wrapper end

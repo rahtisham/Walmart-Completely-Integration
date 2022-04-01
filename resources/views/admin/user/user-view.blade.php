@@ -18,7 +18,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            <a href="{{ url('dashboard/admin/user-registration') }}" class="btn rounded btn-primary">Create New User</a>
+                            <a href="{{ url('dashboard/admin/user-registration') }}" style="border-radius: 0.25rem !important;" class="btn rounded btn-primary">Create New User</a>
                         </h4><br>
 
                         @if(Session::has('success'))

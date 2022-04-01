@@ -50,6 +50,17 @@
     font-weight: 600;
     color: #000;
     }
+    .form-control {
+    border-radius: 0.25rem !important;
+    background: #fff;
+    border: 1px solid #f0f1f5;
+    color: #B1B1B1;
+    height: 56px;
+    }
+    .btn-submit
+    {
+        border-radius: 0.25rem !important;
+    }
 
 </style>
 <body class="font-sans antialiased">

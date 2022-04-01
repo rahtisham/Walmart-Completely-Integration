@@ -97,29 +97,30 @@ class WalmartRatingReview extends Command
 
                    // Retrieve rating review percentage from database
 
+                }
 
-                   if(!empty($email))
-                   {
-                       if($ratingRaview)
-                       {
-                        $mailSenderArray[] = [
+                if(!empty($email)){
+                    if($ratingRaview)
+                        {
+                            $mailSenderArray[] = [
 
-                            'offerScore'        => $ratingRaview['offerScore'],
-                            'ratingReviewScore' => $ratingRaview['ratingReviewScore'],
-                            'contentScore'      => $ratingRaview['contentScore'],
-                            'itemDefectCnt'     => $ratingRaview['itemDefectCnt'],
-                            'defectRatio'       => $ratingRaview['defectRatio'],
-                            'listingQuality'    => $ratingRaview['listingQuality'],
-                            'status'            => $ratingRaview['status'],
-                            'email'             => $email
-                        ];
-                           Mail::to($email)->send(new RatingReview($mailSenderArray));
-                       }
-                   }
+                                'offerScore'        => $ratingRaview['offerScore'],
+                                'ratingReviewScore' => $ratingRaview['ratingReviewScore'],
+                                'contentScore'      => $ratingRaview['contentScore'],
+                                'itemDefectCnt'     => $ratingRaview['itemDefectCnt'],
+                                'defectRatio'       => $ratingRaview['defectRatio'],
+                                'listingQuality'    => $ratingRaview['listingQuality'],
+                                'status'            => $ratingRaview['status'],
+                                'email'             => $email
+                            ];
+                            Mail::to($email)->send(new RatingReview($mailSenderArray));
+                            unset($mailSenderArray);
+                        }
+                }
 
-                   $manager = ShippingManager::updateStatus($ratingReview->id, "Completed");
-                   \Log::info("Rating and Review Performance Done");
-               }
+                $manager = ShippingManager::updateStatus($ratingReview->id, "Completed");
+                \Log::info("Rating and Review Performance Done");
+
            }
 
         }
