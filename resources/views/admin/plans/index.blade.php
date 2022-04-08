@@ -120,9 +120,8 @@
                                 <li><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $plan['planName'] }}</li>
                             @endif
                             <br>
-                            <button type="button" id="{{ $plan['planName'] }}" class="btn btn-success btn-xs mg5">Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-                            <button type="button" id="{{ $plan['planName'] }}" class="btn btn-danger btn-xs mg5">Delete <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-                            <button type="button" id="{{ $plan['planName'] }}" class="btn btn-primary btn-xs mg5">View <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+                            <a href="{{ url('dashboard/admin/plan-edit-view' , ['id' => $plan['id']] ) }}" class="btn btn-success btn-xs mg5">Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-danger btn-xs mg5">Delete <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>

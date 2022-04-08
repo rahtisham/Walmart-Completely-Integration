@@ -278,4 +278,38 @@ class SubscriptionController extends Controller
 
     }
 
+    public function planEditView($id)
+    {
+        $plans = plans::where('id' , $id)->first();
+        return view('admin.plans.edit-view' , ['plans' => $plans]);
+    }
+
+    public function editPlan(Request $request , $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'plan' => ['required', 'min:10' , 'max:45'],
+            'marketplace' => ['required', 'string'],
+            'amount' => ['required', 'string', 'max:255'],
+        ], [
+            'plan.required' => 'Plan is required',
+            'marketplace.required' => 'Marketplace is required',
+            'amount.required' => 'Amount name is required',
+        ])->validate();
+
+        $plan = [
+
+            'planName' => $request['plan'],
+            'marketPlace' => $request['marketplace'],
+            'amount' => $request['amount'],
+
+        ];
+
+        $update = plans::updatePlan($plan , $id);
+
+        if($update !='')
+        {
+            return redirect()->back()->with('success' , 'Plan Has Been Updated Successfully!');
+        }
+    }
+
 }

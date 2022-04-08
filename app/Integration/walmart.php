@@ -137,7 +137,8 @@ class Walmart{
 
             curl_close($curl);
 
-        return  $response = json_decode($response,true);
+         $response = json_decode($response,true);
+         return $response;
 
 
     }
@@ -180,7 +181,8 @@ class Walmart{
 
         curl_close($curl);
 
-        return  $response = json_decode($response,true);
+        $response = json_decode($response,true);
+        return $response['anOrder'];
 
 
     }

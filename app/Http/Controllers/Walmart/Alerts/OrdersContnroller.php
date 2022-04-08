@@ -44,8 +44,8 @@ class OrdersContnroller extends Controller
 
             $token = Walmart::getToken($client_id, $secret);
 
-            $response[] = Walmart::getItemOrder($client_id, $secret, $token ,$createdStartDate);
-//            return $response;
+            $response = Walmart::getItemOrder($client_id, $secret, $token ,$createdStartDate);
+           return $response;
 
             if ($response[0]) {
 
@@ -95,7 +95,8 @@ class OrdersContnroller extends Controller
 
             $token = Walmart::getToken($client_id, $secret);
 
-            $response[] = Walmart::getItemOrder($client_id, $secret , $token ,$createdStartDate = 0);
+            $response = Walmart::getItemOrder($client_id, $secret , $token ,$createdStartDate = 0);
+            return $response;
 
             if (count($response) > 0) {
 

@@ -58,4 +58,57 @@ class UserController extends Controller
 
     }
 
+    public function userEdit(Request $request , $id)
+    {
+        $user = User::where('id' , $id)->first();
+        return view('admin.user.edit' , ['user' => $user]);
+    }
+
+    public function edit(Request $request , $id)
+    {
+        $validator = validator()->make($request->all() , [
+            'fname' => 'required', 'alpha', 'max:255',
+            'email' => 'required|email|max:255',
+            'lname' => ['required', 'alpha', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'alpha', 'max:255'],
+            'postal' => ['required', 'max:7'],
+            'country' => ['required', 'max:255'],
+            'state' => ['required', 'alpha', 'max:255'],
+            'contact' => ['required', 'string', 'max:255'],
+            'roles' => ['required', 'max:255'],
+        ],[
+            'email.required' => 'Email is required',
+            'fname.required' => 'First name is required',
+            'fname.alpha' => 'First name must only contain letters',
+            'lname.required' => 'First name is required',
+            'lname.alpha' => 'Last name must only contain letters',
+            'address.required' => 'Address is required',
+            'city.required' => 'City is required',
+            'state.required' => 'State is required',
+            'contact.required' => 'Phone number is required',
+            'postal.required' => 'Postal code is required',
+            'country.required' => 'Country is required',
+            'roles.required' => 'Roles is required',
+        ])->validate();
+
+        $updated = [
+            'name' => $request['fname'],
+            'email' => $request['email'],
+            'last_name' => $request['lname'],
+            'address' => $request['address'],
+            'city' => $request['city'],
+            'roles' => $request['roles'],
+            'postal' => $request['postal'],
+            'country' => $request['country'],
+            'state' => $request['state'],
+            'contact' => $request['contact'],
+        ];
+
+        $user = User::userUpdate($updated , $id);
+
+         return redirect()->back()->with('success' , 'User Has Been Updated Successfully');
+
+    }
+
 }

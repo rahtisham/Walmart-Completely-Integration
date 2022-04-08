@@ -82,4 +82,10 @@ class User extends Authenticatable
         return $this->belongsTo(WalmartMarketPlace::class , 'id' , 'user_id');
     }
 
+    public static function userUpdate($updated , $id)
+    {
+        $user = User::where('id' , $id)->update($updated);
+        return $user;
+    }
+
 }

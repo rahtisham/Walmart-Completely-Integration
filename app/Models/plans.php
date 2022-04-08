@@ -15,4 +15,10 @@ class plans extends Model
         $plans = plans::create($store);
         return $plans;
     }
+
+    public static function updatePlan($updated , $id)
+    {
+         $plans = plans::where('id' , $id)->update($updated);
+         return $plans;
+    }
 }

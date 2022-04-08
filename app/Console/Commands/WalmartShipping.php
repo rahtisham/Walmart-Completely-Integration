@@ -109,6 +109,7 @@ class WalmartShipping extends Command
                         }
 
                         Mail::to($email)->send(new OnTimeShipping($report_generate));
+                        unset($report_generate);
 
                     }
 

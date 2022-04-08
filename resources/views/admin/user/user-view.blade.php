@@ -46,6 +46,8 @@
                                     <th>State</th>
                                     <th>Postal Code</th>
                                     <th>Edit</th>
+                                    <th>View</th>
+                                    <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -66,8 +68,9 @@
                                         <td>{{ $user['country'] }}</td>
                                         <td>{{ $user['state'] }}</td>
                                         <td>{{ $user['postal'] }}</td>
-                                        <td><a href="{{ url('dashboard/admin/user-profile' , ['id' => $user['id'] ]) }}" class=""><i class="fa fa-pencil-square-o"></i></a></td>
-
+                                        <td><a href="{{ url('dashboard/admin/user-edit-view' , ['id' => $user['id'] ]) }}" class=""><i class="fa fa-pencil-square-o"></i></a></td>
+                                        <td> <a href="{{ url('dashboard/admin/user-profile' , ['id' => $user['id'] ]) }}" c><i class="fa fa-eye"></i></a> </td>
+                                        <td> <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a> </td>
                                     </tr>
                                 @endforeach
                             </table>

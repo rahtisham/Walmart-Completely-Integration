@@ -24,6 +24,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Controllers\TestingCheckoutController;
+use App\Http\Controllers\StripePaymentController;
 
 
 
@@ -53,6 +54,9 @@ Route::get('registration-form', function () {
     Route::get('testing-checkout/{subscribtion}', [TestingCheckoutController::class, 'index'])->name('testing-checkout');
     Route::post('create-subscription', [TestingCheckoutController::class, 'SubscriptionCreateTesting'])->name('create-subscription');
     Route::get('cancel-subscription', [TestingCheckoutController::class, 'cancelSubscription'])->name('cancel-subscription');
+
+    Route::get('stripe-chekout/{subscribtion}', [StripePaymentController::class, 'index'])->name('stripe-chekout');
+    Route::post('create-stripe-subscription', [StripePaymentController::class, 'stripePayment'])->name('create-stripe-subscription');
 
     //For Testing checkout page
 
@@ -117,8 +121,12 @@ Route::group(['middleware' => 'auth'] , function(){
 
             Route::get('plans-view', [SubscriptionController::class, 'planView'])->name('dashboard.admin.plans-view');
             Route::post('create-plan', [SubscriptionController::class, 'createPlan'])->name('dashboard.admin.create-plan');
+            Route::get('plan-edit-view/{id}', [SubscriptionController::class, 'planEditView'])->name('dashboard.admin.plan-edit-view');
+            Route::post('plan-edit/{id}', [SubscriptionController::class, 'editPlan'])->name('dashboard.admin.plan-edit');
 
             Route::get('user-profile/{id}', [UserController::class, 'userProfile'])->name('dashboard.admin.user-profile');
+            Route::get('user-edit-view/{id}', [UserController::class, 'userEdit'])->name('dashboard.admin.user-edit-view');
+            Route::post('edit/{id}', [UserController::class, 'edit'])->name('dashboard.admin.edit');
 
         }); // end of admin access
 
@@ -168,6 +176,10 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
         Route::get('authorize', [AuthorizeNetController::class, 'index'])->name('dashboard.authorize');
+
+
+        Route::get('stripe', [StripePaymentController::class, 'stripe'])->name('dashboard.stripe');
+        Route::post('stripes/post', [StripePaymentController::class, 'stripePost'])->name('dashboard.stripes.post');
 
 
 
