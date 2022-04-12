@@ -19,12 +19,12 @@ use phpDocumentor\Reflection\Types\Null_;
 class StripePaymentController extends Controller
 {
 
-    protected $stripe;
+    // protected $stripe;
 
-    public function __construct()
-    {
-        Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
-    }
+    // public function __construct()
+    // {
+    //     Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
+    // }
 
     /**
      * success response method.
@@ -129,6 +129,7 @@ class StripePaymentController extends Controller
 
         try {
 
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
             if (is_null($user->stripe_id)) {
                  $stripeCustomer = $user->createAsStripeCustomer();
