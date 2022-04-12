@@ -6,11 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\plans;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Jetstream\Jetstream;
+use App\Models\PaymentLogs;
+use App\Mail\RegisteredNotification;
+use App\Models\User;
 use Session;
 use Stripe;
+use Exception;
+use phpDocumentor\Reflection\Types\Null_;
 
 class StripePaymentController extends Controller
 {
+
+    protected $stripe;
+
+    public function __construct()
+    {
+        Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
+    }
 
     /**
      * success response method.
@@ -36,18 +50,19 @@ class StripePaymentController extends Controller
         } else {
 
             $marketPlace = plans::where('marketPlace' , $subscription)->get();
+            $stripe_plan = $marketPlace[0]['stripe_plan'];
             $subscriptionName = $marketPlace[0]['planName'];
             $amount = $marketPlace[0]['amount'];
             $marketPlace = $marketPlace[0]['marketPlace'];
 
-            return view('checkout.stripecheckout', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
+
+            return view('checkout.stripecheckout', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName , 'stripePlan' => $stripe_plan ]);
         }
      }
 
 
      public function stripePayment(Request $request)
      {
-         return $request;
 
         $validator = Validator::make($request->all(), [
             'fname' => 'required', 'max:255',
@@ -89,22 +104,128 @@ class StripePaymentController extends Controller
             'agreement.required' => 'Agreement is required',
             'password_confirmation.required' => 'Confirm password is required',
         ])->validate();
+
+
+        $userData = [
+            'name' => $request->fname,
+            'email' => $request->email,
+            'last_name' => $request->lname,
+            'address' => $request->address,
+            'city' => $request->city,
+            'roles' => "1",
+            'postal' => $request->postal,
+            'country' => $request->country,
+            'state' => $request->state,
+            'contact' => $request->contact,
+            'password' => Hash::make($request->password),
+        ];
+
+        $user = User::store($userData);
+
+        $plan = $request->stripePlan;
+        $token =  $request->stripeToken;
+        $paymentMethod = $request->paymentMethod;
+
+
+        try {
+
+
+            if (is_null($user->stripe_id)) {
+                 $stripeCustomer = $user->createAsStripeCustomer();
+            }
+
+            \Stripe\Customer::createSource(
+                $user->stripe_id,
+                ['source' => $token]
+            );
+
+
+            $subscription = $user->newSubscription('Cashier' , $plan)
+                ->create($paymentMethod, [
+                'email' => $user->email,
+            ]);
+
+
+            $paymentlog = [
+                'amount' => $request->amount,
+                'name_on_card' => $request->owner,
+                'message_code' => $request->platform,
+                'subscriptionName' => $request->subscriptionName,
+                'status' => 'active',
+                'subscription' => 'Subscription Create',
+            ];
+
+             $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
+
+
+
+            $payment = PaymentLogs::where('id', $paymentLog->id)->update(['user_id' => $user->id]);
+
+            $registredNotification =
+                [
+                    'name' => $user->name,
+                    'lname' => $user->last_name,
+                    'email' => $user->email,
+                    'name_on_card' => $paymentLog->name_on_card,
+                    'amount' => $paymentLog->amount,
+                    'address' => $user->address,
+                    'contact' => $user->contact
+                ];
+
+
+            Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($registredNotification));
+
+            return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+
+        } catch ( \Stripe\Error\Card $e ) {
+
+            return back()->withErrors(['error' => 'Unable to create subscription due to this' . $e->get_message()]);
+
+        }
+
+
      }
+
 
     public function stripePost(Request $request)
     {
 
-        // return $request;
-        Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
-        Stripe\Charge::create ([
-                "amount" => 147*100,
-                "currency" => "USD",
-                "source" => $request->stripeToken,
-                "description" => "This payment is testing purpose of websolutionstuff.com",
-        ]);
 
-        Session::flash('success', 'Payment Successful !');
+        $plan = 'plan_LUjBbvMxEWFEl7';
 
-        return back();
+         $user = auth()->user();
+         $input = $request->all();
+         $token =  $request->stripeToken;
+         $paymentMethod = $request->paymentMethod;
+
+        try {
+
+
+            if (is_null($user->stripe_id)) {
+                  return $stripeCustomer = $user->createAsStripeCustomer();
+            }
+            // Stirpe id should be null in user table
+
+            \Stripe\Customer::createSource(
+                $user->stripe_id,
+                ['source' => $token]
+            );
+            // Token to create subscription
+
+
+            $subscription = $user->newSubscription('Cashier' , $plan)
+                ->create($paymentMethod, [
+                'email' => $user->email,
+            ]);
+            // Subsription created with plan
+
+
+            return back()->with('success','Subscription is completed.');
+        } catch (Exception $e) {
+            return back()->with('success',$e->getMessage());
+        }
+
+
+
     }
 }

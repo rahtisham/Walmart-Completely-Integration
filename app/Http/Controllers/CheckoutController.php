@@ -14,9 +14,21 @@ use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 use Carbon\Carbon;
 use App\Models\plans;
+use Session;
+use Stripe;
+use Exception;
 
 class CheckoutController extends Controller
 {
+
+    protected $stripe;
+
+    public function __construct()
+    {
+        Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
+    }
+
+
     public function login()
     {
         if(auth()->user()){
@@ -27,15 +39,6 @@ class CheckoutController extends Controller
 
     }
 
-//    public function home()
-//    {
-//        if(auth()->user()){
-//            return redirect('dashboard/marketplace');
-//        }else{
-//            return view('auth.login');
-//        }
-
-//    }
 
     public function index($subscription)
     {
@@ -45,6 +48,7 @@ class CheckoutController extends Controller
 
             $marketPlace = plans::where('marketPlace' , $subscription)->get();
             if($marketPlace[0]['marketPlace'] == $subscription){
+                $stripe_plan = $marketPlace[0]['stripe_plan'];
                 $subscriptionName = $marketPlace[0]['planName'];
                 $amount = $marketPlace[0]['amount'];
                 $marketPlace = $marketPlace[0]['marketPlace'];
@@ -76,7 +80,7 @@ class CheckoutController extends Controller
                 // }
                 // Get aurgament from Appeal lab website
 
-            return view('checkout.checkout' , ['amount' => $amount , 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
+            return view('checkout.checkout' , ['amount' => $amount , 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName , 'stripePlan' => $stripe_plan]);
             }
             else
             {
@@ -494,8 +498,7 @@ class CheckoutController extends Controller
             'password_confirmation.required' => 'Confirm password is required',
         ])->validate();
 
-        $paymentLogId = $this->createSubscription($request);
-
+        // $paymentLogId = $this->createSubscription($request);
 
         $userData = [
             'name' => $request->fname,
@@ -513,23 +516,66 @@ class CheckoutController extends Controller
 
         $user = User::store($userData);
 
-        $payment = PaymentLogs::where('id', $paymentLogId->id)->update(['user_id' => $user->id]);
-
-        $registredNotification =
-            [
-                'name' => $user->name,
-                'lname' => $user->last_name,
-                'email' => $user->email,
-                'name_on_card' => $paymentLogId->name_on_card,
-                'amount' => $paymentLogId->amount,
-                'address' => $user->address,
-                'contact' => $user->contact
-            ];
+        $plan = $request->stripePlan;
+        $token =  $request->stripeToken;
+        $paymentMethod = $request->paymentMethod;
 
 
-        Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
+        try {
 
-        return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+
+                if (is_null($user->stripe_id)) {
+                    $stripeCustomer = $user->createAsStripeCustomer();
+                }
+
+                \Stripe\Customer::createSource(
+                    $user->stripe_id,
+                    ['source' => $token]
+                );
+
+
+                $subscription = $user->newSubscription('Cashier' , $plan)
+                    ->create($paymentMethod, [
+                    'email' => $user->email,
+                ]);
+
+
+                $paymentlog = [
+                    'amount' => $request->amount,
+                    'name_on_card' => $request->owner,
+                    'message_code' => $request->platform,
+                    'subscriptionName' => $request->subscriptionName,
+                    'status' => 'active',
+                    'subscription' => 'Subscription Create',
+                ];
+
+                $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
+
+
+
+                $payment = PaymentLogs::where('id', $paymentLog->id)->update(['user_id' => $user->id]);
+
+                $registredNotification =
+                    [
+                        'name' => $user->name,
+                        'lname' => $user->last_name,
+                        'email' => $user->email,
+                        'name_on_card' => $paymentLog->name_on_card,
+                        'amount' => $paymentLog->amount,
+                        'address' => $user->address,
+                        'contact' => $user->contact
+                    ];
+
+
+                Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($registredNotification));
+
+                return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+
+            } catch ( \Stripe\Error\Card $e ) {
+
+            return back()->withErrors(['error' => 'Unable to create subscription due to this' . $e->get_message()]);
+
+        }
     }
 
 

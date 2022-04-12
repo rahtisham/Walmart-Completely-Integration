@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\WalmartMarketPlace;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Cashier\Billable;
 use App\Models\PaymentLogs;
 
 class User extends Authenticatable
@@ -21,6 +22,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
+    use Billable;
 
     /**
      * The attributes that are mass assignable.

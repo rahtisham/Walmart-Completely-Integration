@@ -17,6 +17,15 @@ use net\authorize\api\controller as AnetController;
 
 class SubscriptionController extends Controller
 {
+
+    protected $stripe;
+
+    public function __construct()
+    {
+        $this->stripe = new \Stripe\StripeClient('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
+    }
+
+
     public function index()
     {
         $auth_session_id = auth()->user()->id;
@@ -90,8 +99,9 @@ class SubscriptionController extends Controller
 
       public function createPlan(Request $request)
       {
+
         $validator = Validator::make($request->all(), [
-            'plan' => ['required', 'min:10' , 'max:45'],
+            'plan' => ['required'],
             'marketplace' => ['required', 'string'],
             'amount' => ['required', 'string', 'max:255'],
         ], [
@@ -100,24 +110,38 @@ class SubscriptionController extends Controller
             'amount.required' => 'Amount name is required',
         ])->validate();
 
+        $data = $request->except('_token');
+
+        $price = $data['amount'] *100;
+
+          //create stripe product
+        $stripeProduct = $this->stripe->products->create([
+            'name' => $data['plan'],
+        ]);
+
+        //Stripe Plan Creation
+        $stripePlanCreation = $this->stripe->plans->create([
+            'amount' => $price,
+            'currency' => 'usd',
+            'interval' => 'month', //  it can be day,week,month or year
+            'product' => $stripeProduct->id,
+        ]);
+        // return $stripePlanCreation;
+
+        $stripe_plan = $stripePlanCreation->id;
         $plan = [
 
             'planName' => $request['plan'],
+            'stripe_plan' => $stripe_plan,
             'marketPlace' => $request['marketplace'],
-            'amount' => $request['amount'],
+            'amount' => $price,
 
         ];
 
         $store = plans::store($plan);
-        if($store)
-        {
-            return "Inserted";
-        }
-        else{
-            return "didn't inserted";
-        }
 
-          return back()->with('success' , 'Plan Has Been Created');
+        return back()->with('success' , 'Plan Has Been Created');
+
 
       }
 

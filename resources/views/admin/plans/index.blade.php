@@ -54,9 +54,6 @@
                         <div class="modal-body">
                             <form action="{{ url('dashboard/admin/create-plan') }}" method="post">
                                 @csrf
-                                <div class="form-group">
-                                    <input type="text" name="plan" class="form-control" placeholder="Plan Name">
-                                </div>
                                 <div class="form-group" >
                                     <select name="marketplace" class="form-control">
                                     <option value="">Select a Plan</option>
@@ -68,6 +65,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input type="text" name="amount" class="form-control" placeholder="Amount">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="plan" class="form-control" placeholder="Description">
                                 </div>
                                 <button type="submit" class="btn btn-primary light">Submit</button>
                             </form> <!--end of form-->

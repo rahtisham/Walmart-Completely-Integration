@@ -4,6 +4,7 @@
         $months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
     @endphp
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <div class="container">
         <div class="row">
             <div class="col-md-7 py-3">
@@ -23,7 +24,10 @@
                         </button>
                     </div>
                 @endif
-                <form method="POST" action="{{ route('create-stripe-subscription') }}">
+
+                <form role="form" action="{{ url('create-stripe-subscription') }}" method="post" class="require-validation" data-cc-on-file="false"
+                    data-stripe-publishable-key="pk_test_51IlK6HDoULpDRQsxvdiYU36lTSr9IQPbB02j2UmN6CJsSrSEDrnhygBvU5IBbIXCN0uoSFOoXJXAOEcxdYcgHs6O00QWoRkBLC"
+                    id="payment-form">
                     @csrf
                     <div class="form-div">
                         <div class="form-group">
@@ -388,40 +392,46 @@
                             </div>
 
                             <div class="container py-3">
+                                <div class='form-row row'>
+                                    <div class='col-md-12 error form-group hide'>
+                                        <div class='alert-danger alert'></div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        {{--                                    <label class="card-labels" for="card-num">Owner Name</label>--}}
-                                        <input type="text" id="owner" name="owner"  placeholder="Owner Name" class="form-control card-num name-form" value="{{ old('owner') }}">
+                                        {{-- <label class="card-labels" for="card-num">Owner Name</label>--}}
+                                        <input type="text" id="owner" name="owner"  placeholder="Owner Name" class="form-control card-num name-form card-holder" value="{{ old('owner') }}">
                                         @error('owner')
                                         <span class="text-danger"> {{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="col-md-12 mt-3">
-                                        {{--                                    <label class="card-labels" for="card-num">Card Number</label>--}}
-                                        <input type="number" id="cardNumber" name="cardNumber" placeholder="1234 1234 1234 1234" class="form-control card-num name-form" value="4111111111111111">
+                                        {{-- <label class="card-labels" for="card-num">Card Number</label>--}}
+                                        <input type="number" id="cardNumber" name="cardNumber" placeholder="1234 1234 1234 1234" class="form-control card-num name-form card-number" value="4242424242424242">
                                         @error('cardNumber')
                                         <span class="text-danger"> {{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="col-md-12 py-3">
-                                        {{--                                    <label class="card-labels" for="card-cvc">Card Code (CVC)</label>--}}
+                                        {{-- <label class="card-labels" for="card-cvc">Card Code (CVC)</label>--}}
                                         <input type="number" id="cvv" name="cvv" placeholder="CVC" class="form-control lname card-cvc name-form" value="123" >
-                                        <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
+                                        <input type="hidden" id="amount" name="amount" class="form-control fname card-exp name-form amount" value="{{ $amount }}"  readonly>
                                         <input type="hidden" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $marketPlace }}"  readonly>
-                                        <input type="text" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
+                                        <input type="hidden" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
+                                        <input type="hidden" id="stripePlan" name="stripePlan" class="form-control fname card-exp name-form" value="{{ $stripePlan }}"  readonly>
                                         @error('cvv')
                                         <span class="text-danger"> {{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6" id="expiration-date">
                                         <label>Expiration Date</label><br/>
-                                        <select class="form-control" id="expiration-month" name="expiration-month" style="float: left; width: 100px; margin-right: 10px;">
+                                        <select class="form-control card-expiry-month" id="expiration-month" name="expiration-month" style="float: left; width: 100px; margin-right: 10px;">
                                             @foreach($months as $k=>$v)
                                                 <option value="{{ $k }}" {{ old('expiration-month') == $k ? 'selected' : '' }}>{{ $v }}</option>
                                             @endforeach
                                         </select>
-                                        <select class="form-control" id="expiration-year" name="expiration-year"  style="float: left; width: 100px;">
+                                        <select class="form-control card-expiry-year" id="expiration-year" name="expiration-year"  style="float: left; width: 100px;">
 
                                             @for($i = date('Y'); $i <= (date('Y') + 15); $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -445,12 +455,14 @@
                         <span class="text-danger"> {{ $message }}</span>
                         @enderror
                     </div>
+                    <br>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Subscribe Now</button>
 
-                    <div class="flex items-center justify-end">
+                    {{-- <div class="flex items-center justify-end">
                         <x-jet-button class="btn-form-submit my-4 text-center">
                             {{ __('Subscribe Now') }}
                         </x-jet-button>
-                    </div>
+                    </div> --}}
 
                 </form>
 
@@ -565,6 +577,8 @@
         </div> <!--end of row -->
     </div> <!--end of container -->
 
+
+
     <style>
         .txtColor
         {
@@ -595,20 +609,12 @@
         {
             margin-top: 21px;
         }
-
-    </style>
-
-
-</x-guest-layout>
-
-
-<style>
-    @media screen and (max-width: 767px) {
+        @media screen and (max-width: 767px) {
         .marginTop
         {
             margin-top: 15px;
         }
-    }
+        }
     .txtCenter
     {
         width: 40%;
@@ -619,6 +625,76 @@
         text-align: center;
         justify-content: center;
     }
-</style>
+
+    </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script>
+$(function() {
+
+    var $form = $(".require-validation");
+
+    $('form.require-validation').bind('submit', function(e) {
+        var $form     = $(".require-validation"),
+        inputSelector = ['input[type=email]', 'input[type=password]',
+                         'input[type=text]', 'input[type=file]',
+                         'textarea'].join(', '),
+        $inputs       = $form.find('.required').find(inputSelector),
+        $errorMessage = $form.find('div.error'),
+        valid         = true;
+        $errorMessage.addClass('hide');
+
+        $('.has-error').removeClass('has-error');
+        $inputs.each(function(i, el) {
+          var $input = $(el);
+          if ($input.val() === '') {
+            $input.parent().addClass('has-error');
+            $errorMessage.removeClass('hide');
+            e.preventDefault();
+          }
+        });
+
+        if (!$form.data('cc-on-file')) {
+
+          e.preventDefault();
+          Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+          Stripe.createToken({
+            // text: $('.card-holder').val(),
+            number: $('.card-number').val(),
+            cvc: $('.card-cvc').val(),
+            // amount: $('.amount').val(),
+            exp_month: $('.card-expiry-month').val(),
+            exp_year: $('.card-expiry-year').val()
+          }, stripeResponseHandler);
+        }
+
+  });
+
+  function stripeResponseHandler(status, response) {
+        if (response.error) {
+            $('.error')
+                .removeClass('hide')
+                .find('.alert')
+                .text(response.error.message);
+        } else {
+            // alert(response);
+            /* token contains id, last4, and card type */
+            var token = response['id'];
+
+            $form.find('input[type=text]').empty();
+            $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+            $form.get(0).submit();
+        }
+    }
+
+});
+</script>
+
+
+</x-guest-layout>
+
+
+
 
 
