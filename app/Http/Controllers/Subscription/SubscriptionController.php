@@ -114,8 +114,7 @@ class SubscriptionController extends Controller
 
         $price = $data['amount'] * 100;
 
-        Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
-        // Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         //create stripe product
         $stripeProduct = $this->stripe->products->create([
