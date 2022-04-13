@@ -19,12 +19,7 @@ use phpDocumentor\Reflection\Types\Null_;
 class StripePaymentController extends Controller
 {
 
-    // protected $stripe;
 
-    // public function __construct()
-    // {
-    //     Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
-    // }
 
     /**
      * success response method.
@@ -129,7 +124,7 @@ class StripePaymentController extends Controller
 
         try {
 
-            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
 
             if (is_null($user->stripe_id)) {
                  $stripeCustomer = $user->createAsStripeCustomer();
@@ -153,7 +148,7 @@ class StripePaymentController extends Controller
                 'message_code' => $request->platform,
                 'subscriptionName' => $request->subscriptionName,
                 'status' => 'active',
-                'subscription' => 'Subscription Create',
+                'subscription' => $plan,
             ];
 
              $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
@@ -192,18 +187,21 @@ class StripePaymentController extends Controller
     {
 
 
-        $plan = 'plan_LUjBbvMxEWFEl7';
+        $plan = 'plan_LV9UJoA40RmWsr';
 
          $user = auth()->user();
          $input = $request->all();
-         $token =  $request->stripeToken;
+          $token =  $request->stripeToken;
          $paymentMethod = $request->paymentMethod;
 
         try {
 
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            // Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
 
+            $stripeCustomer = null;
             if (is_null($user->stripe_id)) {
-                  return $stripeCustomer = $user->createAsStripeCustomer();
+                  $stripeCustomer = $user->createAsStripeCustomer();
             }
             // Stirpe id should be null in user table
 

@@ -21,13 +21,6 @@ use Exception;
 class CheckoutController extends Controller
 {
 
-    // protected $stripe;
-
-    // public function __construct()
-    // {
-    //     Stripe\Stripe::setApiKey('sk_test_51IlK6HDoULpDRQsxvnaIQ4mSksoxJwlTMfAcxmpOUnWmuODvX8MWQkcKildVidhh9Cb8c4XRWvIvlmA2DYjozWoK00E5m9lbdk');
-    // }
-
 
     public function login()
     {
@@ -523,7 +516,7 @@ class CheckoutController extends Controller
 
         try {
 
-                Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
                 if (is_null($user->stripe_id)) {
                     $stripeCustomer = $user->createAsStripeCustomer();
@@ -547,7 +540,7 @@ class CheckoutController extends Controller
                     'message_code' => $request->platform,
                     'subscriptionName' => $request->subscriptionName,
                     'status' => 'active',
-                    'subscription' => 'Subscription Create',
+                    'subscription' => $plan,
                 ];
 
                 $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
