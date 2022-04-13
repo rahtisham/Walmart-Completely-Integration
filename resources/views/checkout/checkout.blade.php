@@ -23,8 +23,9 @@
                         </button>
                     </div>
                 @endif
+
                 <form role="form" action="{{ route('create') }}" method="post" class="require-validation" data-cc-on-file="false"
-                    data-stripe-publishable-key="pk_test_51JLDlJJFs9GUB8DUhKQDEODLsIpsHrFB2SuYhxpKch4OKdlYqwBsZL8Zuao5z0MvNtUC2cfgoWrjwQEPgwVaYYso00CcOlXbOU"
+                    data-stripe-publishable-key="pk_live_51JLDlJJFs9GUB8DUeyt4kNIuDglWbzgv60nVYGQTLzxkVLxnoJYkiy43S3rvuvIGreq0Huo2AXyXtuUXJMaKge6p00zAyK34zC"
                     id="payment-form">
                     @csrf
                     <div class="form-div">

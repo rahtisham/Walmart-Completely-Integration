@@ -561,7 +561,7 @@ class CheckoutController extends Controller
                     ];
 
 
-                Mail::to('ahtisham@amzonestep.com')->send(new RegisteredNotification($registredNotification));
+                Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
                 return redirect('/login')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
 
@@ -586,8 +586,10 @@ class CheckoutController extends Controller
         /* Create a merchantAuthenticationType object with authentication details
            retrieved from the constants file */
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName('7LfUeM3n5r');
-        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
+//        $merchantAuthentication->setName('7LfUeM3n5r');
+//        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
+        $merchantAuthentication->setName('4r764PscJQTG');
+        $merchantAuthentication->setTransactionKey('4KJ3834hRLqvr6vb');
 
         // Set the transaction's refId
         $refId = 'ref' . time();
@@ -637,7 +639,7 @@ class CheckoutController extends Controller
         $request->setSubscription($subscription);
         $controller = new AnetController\ARBCreateSubscriptionController($request);
 
-        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
 
         if (($response != null) && ($response->getMessages()->getResultCode() == "Ok")) {
 

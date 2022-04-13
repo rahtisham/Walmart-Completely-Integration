@@ -18,12 +18,12 @@ use net\authorize\api\controller as AnetController;
 class SubscriptionController extends Controller
 {
 
-    // protected $stripe;
+    protected $stripe;
 
-    // public function __construct()
-    // {
-    //     $this->stripe = new \Stripe\StripeClient('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
-    // }
+    public function __construct()
+    {
+        $this->stripe = new \Stripe\StripeClient('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+    }
 
 
     public function index()
@@ -113,8 +113,6 @@ class SubscriptionController extends Controller
         $data = $request->except('_token');
 
         $price = $data['amount'] * 100;
-
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         //create stripe product
         $stripeProduct = $this->stripe->products->create([
