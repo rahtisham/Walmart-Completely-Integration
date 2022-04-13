@@ -516,7 +516,8 @@ class CheckoutController extends Controller
 
         try {
 
-            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+            // Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
                 if (is_null($user->stripe_id)) {
                     $stripeCustomer = $user->createAsStripeCustomer();

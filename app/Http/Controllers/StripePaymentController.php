@@ -124,7 +124,9 @@ class StripePaymentController extends Controller
 
         try {
 
-            Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+              // Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+              Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+
 
             if (is_null($user->stripe_id)) {
                  $stripeCustomer = $user->createAsStripeCustomer();
@@ -187,7 +189,7 @@ class StripePaymentController extends Controller
     {
 
 
-        $plan = 'plan_LV9UJoA40RmWsr';
+        $plan = 'plan_LVAK3nrBHUFDdg';
 
          $user = auth()->user();
          $input = $request->all();
@@ -196,8 +198,8 @@ class StripePaymentController extends Controller
 
         try {
 
-            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-            // Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+            // Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
 
             $stripeCustomer = null;
             if (is_null($user->stripe_id)) {
