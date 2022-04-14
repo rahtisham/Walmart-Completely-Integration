@@ -59,6 +59,8 @@ class StripePaymentController extends Controller
      public function stripePayment(Request $request)
      {
 
+
+
         $validator = Validator::make($request->all(), [
             'fname' => 'required', 'max:255',
             'email' => 'required|email|max:255|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix|unique:users',
@@ -119,6 +121,7 @@ class StripePaymentController extends Controller
 
         $plan = $request->stripePlan;
         $token =  $request->stripeToken;
+        $subscriptionName = $request->subscriptionName;
         $paymentMethod = $request->paymentMethod;
 
 
@@ -137,7 +140,7 @@ class StripePaymentController extends Controller
             );
 
 
-            $subscription = $user->newSubscription('Cashier' , $plan)
+            $subscription = $user->newSubscription($subscriptionName , $plan)
                 ->create($paymentMethod, [
                 'email' => $user->email,
             ]);
@@ -188,7 +191,7 @@ class StripePaymentController extends Controller
     {
 
 
-        $plan = 'plan_LVAX9qlLZkxRmF';
+        $plan = 'plan_LVYTSyaxjgPUX5';
 
          $user = auth()->user();
          $input = $request->all();

@@ -22,7 +22,7 @@ class SubscriptionController extends Controller
 
     public function __construct()
     {
-        $this->stripe = new \Stripe\StripeClient('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
+        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
 
 
