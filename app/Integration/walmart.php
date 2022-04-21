@@ -182,7 +182,7 @@ class Walmart{
         curl_close($curl);
 
         $response = json_decode($response,true);
-        return $response['anOrder'];
+        return $response;
 
 
     }

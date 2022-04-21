@@ -1,5 +1,5 @@
 <x-app-layout>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     @php
         $months = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
     @endphp
@@ -37,65 +37,73 @@
                                     <div class="panel panel-primary">
                                         <div class="creditCardForm">
                                             <div class="payment">
-                                                <form id="payment-card-info" method="post" action="{{ url('subscription/subscription-create') }}">
+                                                <form role="form" action="{{ url('subscription/subscription-create') }}" method="post" class="require-validation" data-cc-on-file="false"
+                                                        data-stripe-publishable-key="pk_test_51JLDlJJFs9GUB8DUhKQDEODLsIpsHrFB2SuYhxpKch4OKdlYqwBsZL8Zuao5z0MvNtUC2cfgoWrjwQEPgwVaYYso00CcOlXbOU"
+                                                        id="payment-form">
                                                     @csrf
-                                                    <div class="row">
-                                                        <div class="form-group owner col-md-8">
-                                                            <label for="owner">Owner</label>
-                                                            <input type="text" class="form-control" id="owner" name="owner" value="{{ old('owner') }}" >
+
+                                                    <div class='form-row row'>
+                                                        <div class='col-xs-12 form-group required'>
+                                                            <label class='control-label'>Name on Card</label>
+                                                            <input class='form-control card-holder' size='4' type='text' value="asif ali" name="owner">
                                                             @error('owner')
                                                             <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group CVV col-md-4">
-                                                            <label for="cvv">CVV</label>
-                                                            <input type="number" class="form-control" id="cvv" name="cvv" value="{{ old('cvv') }}" >
-                                                            @error('cvv')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-md-8" id="card-number-field">
-                                                            <label for="cardNumber">Card Number</label>
-                                                            <input type="text" class="form-control" id="cardNumber" name="cardNumber" value="{{ old('cardNumber') }}" >
-                                                            @error('cardNumber')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group col-md-4" >
-                                                            <input type="text" id="amount" name="amount" class="form-control fname card-exp name-form" value="{{ $amount }}"  readonly>
-                                                            <input type="text" id="platform" name="platform" class="form-control fname card-exp name-form" value="{{ $marketPlace }}"  readonly>
-                                                            <input type="text" id="subscriptionName" name="subscriptionName" class="form-control fname card-exp name-form" value="{{ $subscriptionName }}"  readonly>
-                                                            {{--<span id="amount-error" class="error text-red">Please enter amount</span>--}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6" id="expiration-date">
-                                                            <label>Expiration Date</label><br/>
-                                                            <select class="form-control" id="expiration-month" name="expiration-month" style="float: left; width: 100px; margin-right: 10px;">
-                                                                @foreach($months as $k=>$v)
-                                                                    <option value="{{ $k }}" {{ old('expiration-month') == $k ? 'selected' : '' }}>{{ $v }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <select class="form-control" id="expiration-year" name="expiration-year"  style="float: left; width: 100px;">
 
-                                                                @for($i = date('Y'); $i <= (date('Y') + 15); $i++)
-                                                                    <option value="{{ $i }}">{{ $i }}</option>
-                                                                @endfor
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-6" id="credit_cards" style="margin-top: 22px;">
-                                                            <img src="{{ asset('images/visa.jpg') }}" id="visa">
-                                                            <img src="{{ asset('images/mastercard.jpg') }}" id="mastercard">
-                                                            <img src="{{ asset('images/amex.jpg') }}" id="amex">
+                                                    <div class='form-row row'>
+                                                        <div class='col-xs-12 form-group card required'>
+                                                            <label class='control-label'>Card Number</label> <input
+                                                                autocomplete='off' class='form-control card-number' value="4242424242424242" name="cardNumber" size='20'
+                                                                type='text'>
+                                                                @error('cardNumber')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                         </div>
                                                     </div>
 
-                                                    <br/>
-                                                    <div class="form-group" id="pay-now">
-                                                        <button type="submit" class="btn btn-primary themeButton" id="confirm-purchase">Confirm Payment</button>
+                                                    <div class='form-row row'>
+                                                        <div class='col-xs-12 col-md-4 form-group cvc required'>
+                                                            <label class='control-label'>CVC</label>
+                                                            <input autocomplete='off' class='form-control card-cvc' value="123" name="cvc" placeholder='ex. 311' size='4' type='text'>
+                                                            @error('cvc')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                                            <label class='control-label'>Expiration Month</label>
+                                                            <input class='form-control card-expiry-month' name="expiration-month" value="09" placeholder='MM' size='2' type='text'>
+                                                            @error('expiration-month')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                                            <label class='control-label'>Expiration Year</label> <input
+                                                                class='form-control card-expiry-year' name="expiration-year" value="2022" placeholder='YYYY' size='4'
+                                                                type='text'>
+                                                                @error('expiration-year')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                                <input type="hidden" value="{{ $amount }}" name="amount">
+                                                                <input type="hidden" value="{{ $Stripe_plan }}" name="stripePlan">
+                                                                <input type="hidden" value="{{ $subscriptionName }}" name="subscriptionName">
+                                                        </div>
                                                     </div>
+
+                                                    {{-- <div class='form-row row'>
+                                                        <div class='col-md-12 error form-group hide'>
+                                                            <div class='alert-danger alert'>Please correct the errors and try
+                                                                again.</div>
+                                                        </div>
+                                                    </div><br> --}}
+                                                        <br>
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <button class="btn btn-primary btn-lg btn-block"  type="submit">Pay Now ($100)</button>
+                                                        </div>
+                                                    </div>
+
                                                 </form>
                                             </div>
                                         </div>
@@ -110,4 +118,78 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+
+
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+        <script type="text/javascript">
+        $(function() {
+
+            var $form = $(".require-validation");
+
+            $('form.require-validation').bind('submit', function(e) {
+
+                var $form     = $(".require-validation"),
+                inputSelector = ['input[type=email]', 'input[type=password]',
+                                'input[type=text]', 'input[type=file]',
+                                'textarea'].join(', '),
+                $inputs       = $form.find('.required').find(inputSelector),
+                $errorMessage = $form.find('div.error'),
+                valid         = true;
+                $errorMessage.addClass('hide');
+
+                $('.has-error').removeClass('has-error');
+                $inputs.each(function(i, el) {
+                var $input = $(el);
+                if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorMessage.removeClass('hide');
+                    e.preventDefault();
+                }
+                });
+
+                if (!$form.data('cc-on-file')) {
+                e.preventDefault();
+                Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                Stripe.createToken({
+                    // text: $('.card-holder').val(),
+                    number: $('.card-number').val(),
+                    cvc: $('.card-cvc').val(),
+                    exp_month: $('.card-expiry-month').val(),
+                    exp_year: $('.card-expiry-year').val()
+                }, stripeResponseHandler);
+                }
+
+        });
+
+        function stripeResponseHandler(status, response) {
+            // alert('testin');
+                if (response.error) {
+                    $('.error')
+                        .removeClass('hide')
+                        .find('.alert')
+                        .text(response.error.message);
+                } else {
+                    /* token contains id, last4, and card type */
+                    var token = response['id'];
+
+                    $form.find('input[type=text]').empty();
+                    $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+                    $form.get(0).submit();
+                }
+            }
+
+        });
+        </script>
+
+        <style>
+
+element.style {
+}
+.form-row > .col, .form-row > [class*="col-"] {
+    padding-right: 5px;
+    width: 100% !important;
+    padding-left: 5px;
+}
+        </style>
 </x-app-layout>

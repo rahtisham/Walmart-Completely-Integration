@@ -9,10 +9,14 @@ use Illuminate\Http\Request;
 use App\Models\PaymentLogs;
 use App\Models\User;
 use App\Models\plans;
+use App\Models\subscription;
 use App\Mail\RegisteredNotification;
 use Illuminate\Support\Facades\Validator;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
+use Session;
+use Stripe;
+use Exception;
 
 
 class SubscriptionController extends Controller
@@ -29,8 +33,8 @@ class SubscriptionController extends Controller
     public function index()
     {
         $auth_session_id = auth()->user()->id;
-        $paymentLog = PaymentLogs::where('user_id' , $auth_session_id)->get();
-        return view('subscription.index' , ['paymentLog' => $paymentLog]);
+        $subscriptions = subscription::where('user_id' , $auth_session_id)->get();
+        return view('subscription.index' , ['subscriptions' => $subscriptions]);
     }
 
     public function subscriptionView()
@@ -42,41 +46,60 @@ class SubscriptionController extends Controller
     public function cancelSubscription($subscriptionId)
     {
 
-        /* Create a merchantAuthenticationType object with authentication details
-           retrieved from the constants file */
-        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName('7LfUeM3n5r');
-        $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
 
-        // Set the transaction's refId
-        $refId = 'ref' . time();
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        $request = new AnetAPI\ARBCancelSubscriptionRequest();
-        $request->setMerchantAuthentication($merchantAuthentication);
-        $request->setRefId($refId);
-        $request->setSubscriptionId($subscriptionId);
+        $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+        $cancelSubscription = $subscription->cancel();
 
-        $controller = new AnetController\ARBCancelSubscriptionController($request);
-
-        $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
-
-        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
+        if($cancelSubscription)
         {
-            $successMessages = $response->getMessages()->getMessage();
-            // echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
-
             $active_user_id = auth()->user()->id;
             $user = User::where('id' , $active_user_id)->update(['roles' => '4']);
-            $paymentLog = Payment::where('user_id' , $active_user_id)->update(['status' => 'cancel']);
+            $paymentLog = subscription::where('user_id' , $active_user_id)->update(['stripe_status' => 'cancel']);
             return redirect('/login');
         }
+
         else
         {
-            echo "ERROR :  Invalid response\n";
-            $errorMessages = $response->getMessages()->getMessage();
-            echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
-
+            return redirect()->back();
         }
+
+        /* Create a merchantAuthenticationType object with authentication details
+           retrieved from the constants file */
+        // $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        // $merchantAuthentication->setName('7LfUeM3n5r');
+        // $merchantAuthentication->setTransactionKey('52Z8Tf9QsM7Twq23');
+
+        // // Set the transaction's refId
+        // $refId = 'ref' . time();
+
+        // $request = new AnetAPI\ARBCancelSubscriptionRequest();
+        // $request->setMerchantAuthentication($merchantAuthentication);
+        // $request->setRefId($refId);
+        // $request->setSubscriptionId($subscriptionId);
+
+        // $controller = new AnetController\ARBCancelSubscriptionController($request);
+
+        // $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        // if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
+        // {
+        //     $successMessages = $response->getMessages()->getMessage();
+        //     // echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
+
+        //     $active_user_id = auth()->user()->id;
+        //     $user = User::where('id' , $active_user_id)->update(['roles' => '4']);
+        //     $paymentLog = Payment::where('user_id' , $active_user_id)->update(['status' => 'cancel']);
+        //     return redirect('/login');
+        // }
+        // else
+        // {
+        //     echo "ERROR :  Invalid response\n";
+        //     $errorMessages = $response->getMessages()->getMessage();
+        //     echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
+
+        // }
 
         // return $response;
 
@@ -111,7 +134,6 @@ class SubscriptionController extends Controller
         ])->validate();
 
         $data = $request->except('_token');
-
         $price = $data['amount'] * 100;
 
         //create stripe product
@@ -149,35 +171,23 @@ class SubscriptionController extends Controller
       {
         if (!empty($subscription)) {
 
-            $marketPlace = plans::where('marketPlace' , $subscription)->get();
-            $subscriptionName = $marketPlace[0]['planName'];
-            $amount = $marketPlace[0]['amount'];
-            $marketPlace = $marketPlace[0]['marketPlace'];
+            // Here aurgament marketplace from database
+            // $marketPlace = plans::where('marketPlace' , $subscription)->get();
+            // $subscriptionName = $marketPlace[0]['planName'];
+            // $amount = $marketPlace[0]['amount'];
+            // $marketPlace = $marketPlace[0]['marketPlace'];
 
-            // $amount = '';
-            // $platform = '';
-            // if ($subscription == 'walmart_option1') {
-            //     $amount = 97.00;
-            //     $platform = "walmart_option1";
-            //     $subscriptionName = "Walmart Account Protection Insurance";
-            // }
-            // if ($subscription == 'walmart_option2') {
-            //     $amount = 147.00;
-            //     $platform = "walmart_option2";
-            //     $subscriptionName = "Walmart & Amazon Account Protection Insurance";
-            // }
-            // if ($subscription == 'amazon_option1') {
-            //     $amount = 97.00;
-            //     $platform = "amazon_option1";
-            //     $subscriptionName = "Amazon Account Protection Insurance";
-            // }
-            // if ($subscription ==  'amazon_option2') {
-            //     $amount = 147.00;
-            //     $platform = "amazon_option2";
-            //     $subscriptionName = "Amazon & Walmart Account Protection Insurance";
-            // }
-            // Get aurgament from Appeal lab website
-            return view('subscription.create-subscription', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
+            // return view('subscription.create-subscription', ['amount' => $amount, 'marketPlace' => $marketPlace , 'subscriptionName' => $subscriptionName]);
+
+            // This is for authorize.net
+
+              $subscriptions = plans::where('Stripe_plan' , $subscription)->get();
+              $Stripe_plan = $subscriptions[0]['stripe_plan'];
+              $amount = $subscriptions[0]['amount'];
+              $subscriptionName = $subscriptions[0]['planName'];
+
+            return view('subscription.create-subscription', ['amount' => $amount, 'Stripe_plan' => $Stripe_plan, 'subscriptionName' => $subscriptionName]);
+            // This is for stripe subscription create
         }
 
       }
@@ -185,30 +195,83 @@ class SubscriptionController extends Controller
       public function subscriptionAdded(Request $request)
       {
 
-
         $validator = Validator::make($request->all(), [
             'owner' => ['required', 'max:255'],
             'cardNumber' => ['required', 'min:16', 'max:16'],
             'expiration-year' => ['required', 'string', 'max:255'],
             'expiration-month' => ['required', 'string', 'max:255'],
-            'cvv' => ['required', 'max:3', 'min:3'],
+            'cvc' => ['required', 'max:3', 'min:3'],
             'subscriptionName' => ['required', 'string'],
         ], [
-            'cvv.required' => 'CVV is required',
+            'cvc.required' => 'CVV is required',
             'cardNumber.required' => 'Card number is required',
             'owner.required' => 'Card holder name is required',
+            'expiration-month.required'=> 'Expiration-Month name is required',
+            'expiration-year.required'=> 'Expiration-Year name is required',
             'subscriptionName.required' => 'Subscription name is required',
         ])->validate();
 
-        $createSubscribtion = $this->createSubscription($request);
+        $user = User::where('id' , auth()->user()->id)->first();
 
-        $session_id = auth()->user()->id;
-        $user_id = User::where('id' , $session_id)->update(['roles' => '1']);
+        $plan = $request->stripePlan;
+        $token =  $request->stripeToken;
+        $subscriptionName = $request->subscriptionName;
+        $paymentMethod = $request->paymentMethod;
 
-        $payment = PaymentLogs::where('id', $createSubscribtion->id)->update(['user_id' => $session_id]);
+        try {
+
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+
+          if (is_null($user->stripe_id)) {
+               $stripeCustomer = $user->createAsStripeCustomer();
+          }
+
+          \Stripe\Customer::createSource(
+              $user->stripe_id,
+              ['source' => $token]
+          );
+
+
+           $subscription = $user->newSubscription($subscriptionName , $plan)
+              ->create($paymentMethod, [
+              'email' => $user->email,
+          ]);
+
+
+          $paymentlog = [
+              'amount' => $request->amount,
+              'name_on_card' => $request->owner,
+              'message_code' => $request->platform,
+              'subscriptionName' => $request->subscriptionName,
+              'status' => 'active',
+              'subscription' => $plan,
+          ];
+
+           $paymentLog = PaymentLogs::createPaymentLog($paymentlog);
+
+           $session_id = auth()->user()->id;
+           $user_id = User::where('id' , $session_id)->update(['roles' => '1']);
+
+          return redirect('/')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+
+        } catch ( \Stripe\Error\Card $e ) {
+
+            return back()->withErrors(['error' => 'Unable to create subscription due to this' . $e->get_message()]);
+
+        }
+
+
+        // $createSubscribtion = $this->createSubscription($request);
+
+        // $payment = PaymentLogs::where('id', $createSubscribtion->id)->update(['user_id' => $session_id]);
         // Mail::to('info@appeallab.com')->send(new RegisteredNotification($registredNotification));
 
-        return redirect('/')->with(['success' => 'Your Appeal Lab Account Has Been Created !']);
+        // $session_id = auth()->user()->id;
+        // $user_id = User::where('id' , $session_id)->update(['roles' => '1']);
+
+        // authorize created by this query using static function
+
       }
 
       public function createSubscription($data){
@@ -320,9 +383,32 @@ class SubscriptionController extends Controller
             'amount.required' => 'Amount name is required',
         ])->validate();
 
+         \Stripe\Stripe::setApiKey('STRIPE_SECRET');
+
+        $data = $request->except('_token');
+
+         $price = $data['amount'] * 100;
+
+         //create stripe product
+         $stripeProduct = $this->stripe->products->create([
+             'name' => $data['plan'],
+         ]);
+
+         //Stripe Plan Creation
+         $stripePlanCreation = $this->stripe->plans->create([
+             'amount' => $price,
+             'currency' => 'usd',
+             'interval' => 'month', //  it can be day,week,month or year
+             'product' => $stripeProduct->id,
+         ]);
+         // return $stripePlanCreation;
+
+        $stripe_plan = $stripePlanCreation->id;
+
         $plan = [
 
             'planName' => $request['plan'],
+            'stripe_plan' => $stripe_plan,
             'marketPlace' => $request['marketplace'],
             'amount' => $request['amount'],
 
@@ -334,6 +420,8 @@ class SubscriptionController extends Controller
         {
             return redirect()->back()->with('success' , 'Plan Has Been Updated Successfully!');
         }
+
+
     }
 
 }

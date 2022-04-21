@@ -18,7 +18,7 @@
         <div class="row">
             @foreach ($plans as $plan)
                 <div class="col-xl-4">
-                    <a href="{{ url('subscription/create-view' , $plan['marketPlace'] ) }}">
+                    <a href="{{ url('subscription/create-view' , $plan['stripe_plan'] ) }}">
                         <div class="card HoverCard bg-image-walmart">
                             <div class="card-header">
 

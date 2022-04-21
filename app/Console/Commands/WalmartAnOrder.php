@@ -138,8 +138,8 @@ class WalmartAnOrder extends Command
                 }
             }
         }
-        OrderManager::where('status', 'Completed')
-                        ->where('module', 'An_Order')
-                        ->update(['status' => 'Pending']);
+        // OrderManager::where('status', 'Completed')
+        //                 ->where('module', 'An_Order')
+        //                 ->update(['status' => 'Pending']);
     }
 }

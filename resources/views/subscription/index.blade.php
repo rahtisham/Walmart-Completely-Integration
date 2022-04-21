@@ -37,73 +37,47 @@
                             <table id="example" class="display min-w850">
                                 <thead>
                                 <tr>
-                                    <th>Card Holder Name</th>
-                                    <th>Amount</th>
-                                    <th>Subscription</th>
-                                    <th>Marketplace</th>
+                                    <th>Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($paymentLog as $paymentLogs)
+                                    @foreach ($subscriptions as $subscription)
                                     <tr>
-                                        <td>{{ $paymentLogs['name_on_card'] }}</td>
-                                        <td>{{ $paymentLogs['amount'] }}.00</td>
-                                        <td>{{ $paymentLogs['subscriptionName'] }}</td>
+                                        <td>{{ $subscription['name'] }}</td>
                                         <td>
-                                            @if ($paymentLogs['message_code'] == "walmart_option1")
-                                            <span class="badge light badge-success">
-                                                <i class="fa fa-circle text-success mr-1"></i>
-                                                Walmart
-                                            </span>
-                                            @endif
-                                            @if ($paymentLogs['message_code'] == "walmart_option2")
-                                            <span class="badge light badge-success">
-                                                <i class="fa fa-circle text-success mr-1"></i>
-                                                Walmart
-                                            </span>
-                                                @endif
-                                            @if ($paymentLogs['message_code'] == "amazon_option1")
-                                            <span class="badge light badge-info">
-                                                <i class="fa fa-circle text-info mr-1"></i>
-                                                Amazon
-                                            </span>
-                                                @endif
-                                            @if ($paymentLogs['message_code'] == "amazon_option2")
-                                            <span class="badge light badge-info">
-                                                <i class="fa fa-circle text-info mr-1"></i>
-                                                Amazon
-                                            </span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($paymentLogs['status'] == "cancel")
+                                            @if ($subscription['stripe_status'] == "cancel")
                                             <span class="badge light badge-warning">
                                                 <i class="fa fa-circle text-warning mr-1"></i>
-                                                {{ $paymentLogs['status'] }}
+                                                {{ $subscription['stripe_status'] }}
                                             </span>
                                             @endif
 
-                                            @if ($paymentLogs['status'] == "active")
+                                            @if ($subscription['stripe_status'] == "active")
                                             <span class="badge light badge-primary">
                                                 <i class="fa fa-circle text-primary mr-1"></i>
-                                                {{ $paymentLogs['status'] }}
+                                                {{ $subscription['stripe_status'] }}
                                             </span>
                                             @endif
                                         </td>
-                                        @if ($paymentLogs['status'] == "cancel")
+                                        @if ($subscription['stripe_status'] == "cancel")
                                         <td>
                                             -------
                                         </td>
                                         @endif
-                                        @if ($paymentLogs['status'] == "active")
+                                        @if ($subscription['stripe_status'] == "active")
                                         <td><br>
-                                            <form method="post" action="{{ url('user/cancel' , $paymentLogs->subscription ) }}">
+                                            <form method="post" action="{{ url('user/cancel' , $subscription->stripe_id ) }}">
                                                 @csrf
                                                 {{-- <input name="_method" type="hidden" value="DELETE"> --}}
                                                 <button type="submit" class="btn btn-xs btn-danger show_confirm" data-toggle="tooltip" title='Delete'>Cancel</button>
                                             </form>
+                                            {{-- <form method="post" action="{{ url('user/cancel' , $paymentLogs->subscription ) }}">
+                                                @csrf
+                                                 <input name="_method" type="hidden" value="DELETE">
+                                                <button type="submit" class="btn btn-xs btn-danger show_confirm" data-toggle="tooltip" title='Delete'>Cancel</button>
+                                            </form> --}}
                                         </td>
                                         @endif
                                     </tr>

@@ -511,6 +511,7 @@ class CheckoutController extends Controller
 
         $plan = $request->stripePlan;
         $token =  $request->stripeToken;
+        $subscriptionName = $request->subscriptionName;
         $paymentMethod = $request->paymentMethod;
 
 
@@ -528,7 +529,7 @@ class CheckoutController extends Controller
                 );
 
 
-                $subscription = $user->newSubscription('Cashier' , $plan)
+                $subscription = $user->newSubscription($subscriptionName , $plan)
                     ->create($paymentMethod, [
                     'email' => $user->email,
                 ]);

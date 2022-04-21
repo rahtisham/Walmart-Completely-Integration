@@ -30,8 +30,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        // $schedule->command('command:walmartItems')->everyMinute();
-        $schedule->command('command:walmartOrder')->everyMinute();
+        $schedule->command('command:walmartItems')->everyMinute();
+        // $schedule->command('command:walmartOrder')->everyMinute();
         // $schedule->command('command:WalmartAnOrder')->everyMinute();
         // $schedule->command('command:walmartDelivery')->everyMinute();
         // $schedule->command('command:WalmartShipping')->everyMinute();

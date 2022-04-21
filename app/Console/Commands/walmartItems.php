@@ -50,7 +50,7 @@ class walmartItems extends Command
                                     ->count();
         if($itemsCount > 0){
 
-            for ($i=0; $i<=$itemsCount;  $i++)
+            for ($i=0; $i<$itemsCount;  $i++)
             {
 
                 $itemManager = ItemsManager::where('status' , 'Pending')
@@ -75,9 +75,9 @@ class walmartItems extends Command
                         $per_page = Config::get('constants.walmart.per_page');  // 100 Records on per page
                         $no_of_pages = $total_records / $per_page; // Total record divided into per page
 
-                        for ($i = 0; $i < $no_of_pages; $i++) {
+                        for ($j = 0; $j < $no_of_pages; $j++) {
 
-                            $offset = $i * $per_page;
+                            $offset = $j * $per_page;
                             $url = "https://marketplace.walmartapis.com/v3/items?offset=" . $offset . "&limit=" . $per_page;
                             $requestID = uniqid();
                             $authorization = base64_encode($client_id . ":" . $client_secret);
@@ -251,15 +251,19 @@ class walmartItems extends Command
                     }
                     // End of total items condition
 
-                    $manager = ItemsManager::updateStatus($itemManager->id, "completed");
-                    \Log::info("Walmart Items Has Beem submited");
+
 
                 }
 
+                $manager = ItemsManager::updateStatus($itemManager->id, "completed");
+                \Log::info("Walmart Items Has Beem Completed " .$itemManager->id);
+
             }
+
+
         }
-        ItemsManager::where('status', 'Completed')
-                    ->where('module', 'Items')
-                    ->update(['status' => 'Pending']);
+        // ItemsManager::where('status', 'Completed')
+        //             ->where('module', 'Items')
+        //             ->update(['status' => 'Pending']);
     }
 }
