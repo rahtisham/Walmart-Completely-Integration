@@ -71,7 +71,7 @@ class WalmartDelivery extends Command
                     $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days");
                     $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
 
-                    $reportDelivery = order_details::whereBetween('actualDeliveryDate', [$ten_days_ago_delivery_Date , $to])->get();
+                    $reportDelivery = order_details::where('user_id' , '=' , $user_id)->whereBetween('actualDeliveryDate', [$ten_days_ago_delivery_Date , $to])->get();
 
                     $user = User::where('id' , '=' , $user_id)->get();
                     $email = $user[0]['email'];

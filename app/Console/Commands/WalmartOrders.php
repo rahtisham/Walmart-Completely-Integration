@@ -172,8 +172,8 @@ class WalmartOrders extends Command
                 \Log::info("All Orders has been submited");
             }
         }
-        // OrderManager::where('status', 'Completed')
-        //                 ->where('module', 'All_Order')
-        //                 ->update(['status' => 'Pending']);
+        OrderManager::where('status', 'Completed')
+                        ->where('module', 'All_Order')
+                        ->update(['status' => 'Pending']);
     }
 }

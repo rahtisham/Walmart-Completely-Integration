@@ -35,7 +35,7 @@ class ItemsController extends Controller
 
         $token = Walmart::getToken($client_id, $secret);
 
-        $total_records = Walmart::getItemTotal($client_id, $secret, $token);
+        return $total_records = Walmart::getItemTotal($client_id, $secret, $token);
 
         if($total_records > 0){
 

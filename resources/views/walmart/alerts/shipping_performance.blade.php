@@ -21,7 +21,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Shipping Performance</h4>
-                        <a href="#" class="btn btn-warning">Shipping Performance</a>
+                        <a href="{{ route('dashboard.shipping-performance-add') }}" class="btn btn-warning">Shipping Performance Items</a>
+                        <a href="{{ route('dashboard.shipping-performance-order') }}" class="btn btn-success">Shipping Performance Order</a>
                     </div>
 
                 </div>

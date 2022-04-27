@@ -133,7 +133,9 @@ Route::group(['middleware' => 'auth'] , function(){
 
 
         Route::get('shipping-performance', [ShippingPerformanceController::class, 'index'])->name('dashboard.shipping-performance');
-        Route::post('shipping-performance-add', [ShippingPerformanceController::class, 'ratingReview'])->name('dashboard.shipping-performance-add');
+        Route::get('shipping-performance-add', [ShippingPerformanceController::class, 'shippingPerformance'])->name('dashboard.shipping-performance-add');
+        Route::get('shipping-performance-order', [ShippingPerformanceController::class, 'shippingPerformanceOrder'])->name('dashboard.shipping-performance-order');
+        // Route::post('shipping-performance-add', [ShippingPerformanceController::class, 'ratingReview'])->name('dashboard.shipping-performance-add');
 
 
         Route::get('rating-review', [RatingRaviewController::class, 'index'])->name('dashboard.rating-review');

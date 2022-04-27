@@ -48,6 +48,7 @@ class WalmartShipping extends Command
                                     ->count();
 
         if($shipmentCount > 0){
+
             for ($i = 0; $i < $shipmentCount;  $i++) {
 
 
@@ -70,7 +71,7 @@ class WalmartShipping extends Command
                     $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
 
 
-                    $reportShipment = Order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
+                    $reportShipment = Order_details::where('user_id' , '=' , $user_session_id)->whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
 
                     $user = User::where('id' , '=' , $user_session_id)->get();
                     $email = $user[0]['email'];
