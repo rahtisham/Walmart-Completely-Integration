@@ -57,6 +57,7 @@ class WalmartRatingReview extends Command
 
 
                 if ($ratingReview) {
+
                     $user_id = $ratingReview->marketPlace->user_id;
                     $m_id = $ratingReview->marketPlace->id;
 
