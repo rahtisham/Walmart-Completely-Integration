@@ -120,7 +120,12 @@ class ShippingPerformanceController extends Controller
                     $carrierStatus = [];
 
 
-                    $on_time_shipping_performance = Order_details::select('actualShipStatus')->distinct('actualShipStatus')->where('actualShipStatus' , '!=' , null)->where('user_id' , $user[$i]['id'])->whereBetween('order_date', [$ten_days_ago_order_Date , $to])->pluck('actualShipStatus');
+                    $on_time_shipping_performance = Order_details::select('actualShipStatus')
+                                                                        ->distinct('actualShipStatus')
+                                                                        ->where('actualShipStatus' , '!=' , null)
+                                                                        ->where('user_id' , $user[$i]['id'])
+                                                                        ->whereBetween('order_date', [$ten_days_ago_order_Date , $to])
+                                                                        ->pluck('actualShipStatus');
                     foreach($on_time_shipping_performance as $ontimeshiping)
                     {
 
@@ -199,7 +204,7 @@ class ShippingPerformanceController extends Controller
 
                     } // End of delivery performance
 
-                    echo "Delivery Performance";
+                    echo "Delivery Performance the cobra is found in india and pakistan";
 
 
                     $cities = Order_details::select('city')->distinct('city')->where('user_id' , $user[$i]['id'])->whereBetween('order_date', [$ten_days_ago_order_Date , $to])->pluck('city');

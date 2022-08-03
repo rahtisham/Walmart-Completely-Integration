@@ -26,7 +26,7 @@ class SubscriptionController extends Controller
 
     public function __construct()
     {
-        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+        $this->stripe = new \Stripe\StripeClient('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
     }
 
 
@@ -39,6 +39,7 @@ class SubscriptionController extends Controller
 
     public function subscriptionView()
     {
+
         $subscriptions = PaymentLogs::all();
         return view('admin.subscription.index' , ['subscriptions' => $subscriptions]);
     }
@@ -47,7 +48,7 @@ class SubscriptionController extends Controller
     {
 
 
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        \Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
 
         $subscription = \Stripe\Subscription::retrieve($subscriptionId);
         $cancelSubscription = $subscription->cancel();
@@ -115,7 +116,7 @@ class SubscriptionController extends Controller
 
       public function planView()
       {
-        $plans = plans::all();
+        return $plans = plans::all();
         return view('admin.plans.index' , ['plans' => $plans]);
       }
       // For admin access
@@ -220,7 +221,7 @@ class SubscriptionController extends Controller
 
         try {
 
-            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe\Stripe::setApiKey('sk_test_51JLDlJJFs9GUB8DUfljuNoy6mWMZn7Fq7EqvUQkv2p5Ts8L6tpkkU7nnAiACqZwHmiLVYW12tnZbQM8aYZW1sTBK00rYagYsXE');
 
 
           if (is_null($user->stripe_id)) {

@@ -41,8 +41,6 @@ use App\Http\Controllers\StripePaymentController;
 //
 
 
-
-
 Route::get('registration-form', function () {
     return view('payment');
 });
@@ -131,7 +129,6 @@ Route::group(['middleware' => 'auth'] , function(){
         }); // end of admin access
 
 
-
         Route::get('shipping-performance', [ShippingPerformanceController::class, 'index'])->name('dashboard.shipping-performance');
         Route::get('shipping-performance-add', [ShippingPerformanceController::class, 'shippingPerformance'])->name('dashboard.shipping-performance-add');
         Route::get('shipping-performance-order', [ShippingPerformanceController::class, 'shippingPerformanceOrder'])->name('dashboard.shipping-performance-order');
@@ -142,25 +139,20 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::post('rating-review-add', [RatingRaviewController::class, 'ratingReview'])->name('dashboard.rating-review-add');
 
 
-
         Route::get('on-time-delivery', [OnTimeDeliveryController::class, 'index'])->name('dashboard.on-time-delivery');
         Route::get('on-time-delivery-add', [OnTimeDeliveryController::class, 'OnTimeDelivered'])->name('dashboard.on-time-delivery-add');
-
 
 
         Route::get('on-time-shipment', [OnTimeShipmentController::class, 'index'])->name('dashboard.on-time-shipment');
         Route::get('on-time-shipment-add', [OnTimeShipmentController::class, 'OnTimeShipment'])->name('dashboard.on-time-shipment-add');
 
 
-
         Route::get('carrier-performance', [CarrierPerformanceController::class, 'index'])->name('dashboard.carrier-performance');
         Route::get('carrier-performance-add', [CarrierPerformanceController::class, 'carrierPerformance'])->name('dashboard.carrier-performance-add');
 
 
-
         Route::get('regional-performance', [RegionalPerformanceController::class, 'index'])->name('dashboard.regional-performance');
         Route::get('regional-performance-add', [RegionalPerformanceController::class, 'regionalPerformance'])->name('dashboard.regional-performance-add');
-
 
 
         Route::get('order', [OrdersContnroller::class, 'index'])->name('dashboard.order');
@@ -182,9 +174,6 @@ Route::group(['middleware' => 'auth'] , function(){
 
         Route::get('stripe', [StripePaymentController::class, 'stripe'])->name('dashboard.stripe');
         Route::post('stripes/post', [StripePaymentController::class, 'stripePost'])->name('dashboard.stripes.post');
-
-
-
 
 
     }); // End of dashboard prefix
